@@ -30,6 +30,10 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Date;
 
+import android.app.AlertDialog;
+import android.text.InputType;
+import android.widget.EditText;
+
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
@@ -113,9 +117,7 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        findViewById(R.id.tvForgotPassword).setOnClickListener(v -> {
-            Toast.makeText(this, "Forgot password feature coming soon!", Toast.LENGTH_SHORT).show();
-        });
+        findViewById(R.id.tvForgotPassword).setOnClickListener(v -> showForgotPasswordDialog());
     }
 
     private void signInWithGoogle() {
@@ -249,20 +251,53 @@ public class LoginActivity extends AppCompatActivity {
 
         showProgress(true);
 
-        // Regular login with your own DB
-        new Thread(() -> {
-            User user = userRepository.loginUser(email, password);
-            runOnUiThread(() -> {
+        mAuth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this, task -> {
                 showProgress(false);
-                if (user != null) {
-                    Toast.makeText(LoginActivity.this, "Welcome back, " + user.getFirstName() + "!", Toast.LENGTH_LONG).show();
-                    // You might want to navigate to MainActivity here too
-                    // navigateToMainActivity(); 
+                if (task.isSuccessful()) {
+                    // Đăng nhập Firebase thành công
+                    FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                    if (firebaseUser != null) {
+                        // Kiểm tra user trong MySQL
+                        new Thread(() -> {
+                            User user = userRepository.getUserByEmail(firebaseUser.getEmail());
+                            if (user == null) {
+                                // Nếu chưa có, tạo mới user trong MySQL
+                                User newUser = new User();
+                                newUser.setEmail(firebaseUser.getEmail());
+                                String displayName = firebaseUser.getDisplayName();
+                                if (displayName != null && !displayName.isEmpty()) {
+                                    String[] nameParts = displayName.split(" ", 2);
+                                    if (nameParts.length >= 2) {
+                                        newUser.setFirstName(nameParts[0]);
+                                        newUser.setLastName(nameParts[1]);
+                                    } else {
+                                        newUser.setFirstName(displayName);
+                                        newUser.setLastName("");
+                                    }
+                                } else {
+                                    String emailPrefix = firebaseUser.getEmail().split("@")[0];
+                                    newUser.setFirstName(emailPrefix);
+                                    newUser.setLastName("");
+                                }
+                                newUser.setGender("Other");
+                                newUser.setPhone("");
+                                newUser.setAddress("");
+                                newUser.setDob(new java.util.Date());
+                                newUser.setPassword("firebase_auth_" + System.currentTimeMillis());
+                                newUser.setRole("customer");
+                                userRepository.registerUser(newUser);
+                            }
+                            runOnUiThread(() -> {
+                                Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_LONG).show();
+                                navigateToMainActivity();
+                            });
+                        }).start();
+                    }
                 } else {
-                    Toast.makeText(LoginActivity.this, "Invalid email or password", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "Login failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
-        }).start();
     }
 
     private boolean validateInput(String email, String password) {
@@ -299,5 +334,40 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void showForgotPasswordDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Reset Password");
+        builder.setMessage("Enter your email to receive a password reset link:");
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        input.setHint("Email");
+        builder.setView(input);
+
+        builder.setPositiveButton("Send", (dialog, which) -> {
+            String email = input.getText().toString().trim();
+            if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                Toast.makeText(this, "Please enter a valid email address", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            sendPasswordResetEmail(email);
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        builder.show();
+    }
+
+    private void sendPasswordResetEmail(String email) {
+        showProgress(true);
+        FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+            .addOnCompleteListener(task -> {
+                showProgress(false);
+                if (task.isSuccessful()) {
+                    Toast.makeText(this, "Check your email to reset your password.", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "Email not found or error occurred.", Toast.LENGTH_LONG).show();
+                }
+            });
     }
 } 
