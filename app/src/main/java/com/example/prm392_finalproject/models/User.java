@@ -2,7 +2,7 @@ package com.example.prm392_finalproject.models;
 
 import java.util.Date;
 
-public class User {
+public class User implements java.io.Serializable {
     private int customer_id;
     private String gender;
     private String first_name;

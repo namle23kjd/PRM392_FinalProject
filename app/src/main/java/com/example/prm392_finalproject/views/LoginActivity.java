@@ -331,9 +331,28 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void navigateToMainActivity() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        // Lấy user hiện tại từ MySQL (theo email Firebase)
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        if (firebaseUser != null) {
+            new Thread(() -> {
+                User user = userRepository.getUserByEmail(firebaseUser.getEmail());
+                runOnUiThread(() -> {
+                    if (user != null && "admin".equalsIgnoreCase(user.getRole())) {
+                        Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
+                        intent.putExtra("currentUser", user);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                    finish();
+                });
+            }).start();
+        } else {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     private void showForgotPasswordDialog() {
