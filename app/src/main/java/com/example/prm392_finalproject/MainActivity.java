@@ -1,7 +1,10 @@
 package com.example.prm392_finalproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -10,13 +13,28 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.prm392_finalproject.controllers.UserRepository;
 import com.example.prm392_finalproject.db.ConnectionClass;
+import com.example.prm392_finalproject.models.User;
+import com.example.prm392_finalproject.views.LoginActivity;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.sql.Connection;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    private UserRepository userRepository;
+    private FirebaseAuth mAuth;
+    private GoogleSignInClient mGoogleSignInClient;
+    private Button btnSignOut;
+    private TextView welcomeText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +46,31 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Initialize UserRepository
+        userRepository = new UserRepository();
+
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        // Initialize Google Sign In Client
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        // Initialize views
+        btnSignOut = findViewById(R.id.btnSignOut);
+        welcomeText = findViewById(R.id.textView);
+
+        if (currentUser != null) {
+            welcomeText.setText("Welcome, " + currentUser.getDisplayName() + "!");
+        }
+
+        // Set on-click listener for sign-out button
+        btnSignOut.setOnClickListener(v -> signOut());
 
         // Test database connection when app starts
         testDatabaseConnection();
@@ -78,5 +121,20 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }).start();
+    }
+
+    private void signOut() {
+        // Sign out from Firebase
+        mAuth.signOut();
+
+        // Sign out from Google
+        mGoogleSignInClient.signOut().addOnCompleteListener(this,
+                task -> {
+                    // After signing out, navigate to LoginActivity
+                    Toast.makeText(MainActivity.this, "You have been signed out.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish(); // Close MainActivity
+                });
     }
 }
