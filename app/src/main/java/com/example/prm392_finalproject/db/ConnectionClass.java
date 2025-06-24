@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class ConnectionClass {
     protected static String db = "technology_device_store";
-    protected static String ip = "10.0.2.2";
+    protected static String ip = "127.0.0.1";
     protected static String port = "3306";
     protected static String username = "root";
     protected  static String password = "12345";

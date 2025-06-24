@@ -54,4 +54,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation(files("libs/mysql-connector-java-9.2.0.jar"))
+
 }
