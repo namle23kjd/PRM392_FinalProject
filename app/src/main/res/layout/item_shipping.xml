@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="#FFFFFF"
+    android:layout_marginVertical="4dp"
+    android:layout_marginHorizontal="8dp"
+    android:elevation="2dp">
+
+    <!-- Header Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/tvShippingId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ID: 001"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#1976D2"
+            android:background="#E3F2FD"
+            android:padding="4dp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đang giao hàng"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:background="#FF9800"
+            android:padding="6dp"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+
+    <!-- Order and Tracking Info -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="6dp">
+
+        <TextView
+            android:id="@+id/tvOrderId"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="📦 Đơn hàng: #12345"
+            android:textSize="13sp"
+            android:textColor="#333333"
+            android:gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/tvTrackingNumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="🏷️ Tracking: TN1234567890"
+            android:textSize="11sp"
+            android:textColor="#666666"
+            android:gravity="center_vertical" />
+
+    </LinearLayout>
+
+    <!-- Customer Info -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="6dp">
+
+        <TextView
+            android:id="@+id/tvPersonName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="👤 Người nhận: Nguyễn Văn A"
+            android:textSize="13sp"
+            android:textColor="#333333"
+            android:textStyle="bold"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📍 Địa chỉ: 123 Đường ABC, Quận 1, TP.HCM"
+            android:textSize="12sp"
+            android:textColor="#555555"
+            android:gravity="top"
+            android:maxLines="2"
+            android:ellipsize="end" />
+
+    </LinearLayout>
+
+    <!-- Delivery Info -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/tvShippingMethod"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="🚚 Phương thức: Giao hàng nhanh"
+            android:textSize="11sp"
+            android:textColor="#666666"
+            android:gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/tvExpectedDelivery"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="📅 Dự kiến: 25/12/2024"
+            android:textSize="11sp"
+            android:textColor="#666666"
+            android:gravity="center_vertical" />
+
+    </LinearLayout>
+
+    <!-- Overdue Warning -->
+    <TextView
+        android:id="@+id/tvOverdueWarning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="⚠️ TRỄ HẠN GIAO HÀNG"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:background="#F44336"
+        android:padding="8dp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_marginTop="4dp" />
+
+    <!-- Action Buttons (Optional - for quick actions) -->
+    <LinearLayout
+        android:id="@+id/layoutQuickActions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/btnQuickEdit"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:text="✏️ Sửa"
+            android:textSize="10sp"
+            android:textColor="#FFFFFF"
+            android:background="#1976D2"
+            android:layout_marginEnd="4dp" />
+
+        <Button
+            android:id="@+id/btnQuickTrack"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:text="🗺️ Theo dõi"
+            android:textSize="10sp"
+            android:textColor="#FFFFFF"
+            android:background="#9C27B0"
+            android:layout_marginStart="4dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
