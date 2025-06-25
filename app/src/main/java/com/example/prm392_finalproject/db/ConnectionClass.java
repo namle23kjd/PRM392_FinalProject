@@ -11,7 +11,7 @@ public class ConnectionClass {
     protected static String ip = "10.0.2.2";
     protected static String port = "3306";
     protected static String username = "root";
-    protected  static String password = "12345";
+    protected  static String password = "1234";
 
 
     public Connection CONN(){
