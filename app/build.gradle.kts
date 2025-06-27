@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -32,11 +33,24 @@ android {
 }
 
 dependencies {
-
+    implementation("mysql:mysql-connector-java:5.1.49")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+
+    // Firebase BoM (Bill of Materials)
+    implementation(platform("com.google.firebase:firebase-bom:33.15.0"))
+
+    // Firebase Authentication for Google Sign-In
+    implementation("com.google.firebase:firebase-auth-ktx")
+
+    // Google Sign-In SDK
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
+
+    // Firebase Analytics (optional but recommended)
+    implementation("com.google.firebase:firebase-analytics")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
