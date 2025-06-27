@@ -38,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
     private Button btnCategory;
     private Button btnSupplier;
 
+    private Button btnProduct;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +86,13 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, com.example.prm392_finalproject.views.SupplierActivity.class);
             startActivity(intent);
         });
+        btnProduct = findViewById(R.id.btnProduct);
+
+        btnProduct.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, com.example.prm392_finalproject.adapters.ProductAdapter.class);
+            startActivity(intent);
+        });
+
 
         // Test database connection when app starts
         testDatabaseConnection();

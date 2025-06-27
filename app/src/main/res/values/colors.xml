@@ -10,4 +10,39 @@
     <color name="gray_dark">#757575</color>
     <color name="background">#FAFAFA</color>
     <color name="surface">#FFFFFF</color>
-</resources>
+
+        <!-- Primary Colors -->
+        <color name="colorPrimary">#2196F3</color>
+        <color name="colorPrimaryDark">#1976D2</color>
+        <color name="colorAccent">#FF4081</color>
+
+        <!-- Text Colors -->
+        <color name="primary_text">#212121</color>
+        <color name="secondary_text">#757575</color>
+        <color name="white_text">#FFFFFF</color>
+
+        <!-- Status Colors -->
+        <color name="status_active">#4CAF50</color>
+        <color name="status_inactive">#F44336</color>
+        <color name="price_text">#FF5722</color>
+
+        <!-- Background Colors -->
+        <color name="background_light">#FAFAFA</color>
+        <color name="card_background">#FFFFFF</color>
+        <color name="status_background">#E8F5E8</color>
+        <color name="stock_background">#FFF3E0</color>
+        <color name="image_background">#F5F5F5</color>
+
+        <!-- Stock Level Colors -->
+        <color name="stock_low">#F44336</color>
+        <color name="stock_medium">#FF9800</color>
+        <color name="stock_high">#4CAF50</color>
+
+        <!-- Other Colors -->
+        <color name="divider_color">#E0E0E0</color>
+        <color name="ripple_color">#E3F2FD</color>
+
+        <!-- Transparent Colors -->
+        <color name="black_overlay">#66000000</color>
+        <color name="white_overlay">#66FFFFFF</color>
+    </resources>
