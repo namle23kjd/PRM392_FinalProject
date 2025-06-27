@@ -2,13 +2,18 @@ package com.example.prm392_finalproject.views;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,17 +31,23 @@ import com.example.prm392_finalproject.controllers.CategoryController;
 import com.example.prm392_finalproject.models.CategoryRequest;
 import com.example.prm392_finalproject.models.CategoryResponse;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.text.Normalizer;
 
 public class CategoryActivity extends AppCompatActivity {
     private RecyclerView rvCategoryList;
     private FloatingActionButton fabAddCategory;
+    private Button btnBackToHome;
     private CategoryController categoryController;
     private CategoryAdapter categoryAdapter;
     private List<CategoryResponse> categoryList = new ArrayList<>();
+    private TextInputEditText etSearch;
+    private List<CategoryResponse> fullCategoryList = new ArrayList<>();
+    private static String searchKeyword = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +62,14 @@ public class CategoryActivity extends AppCompatActivity {
 
         rvCategoryList = findViewById(R.id.rvCategoryList);
         fabAddCategory = findViewById(R.id.fabAddCategory);
+        btnBackToHome = findViewById(R.id.btnBackToHome);
+        etSearch = findViewById(R.id.etSearch);
+        btnBackToHome.setOnClickListener(v -> {
+            Intent intent = new Intent(CategoryActivity.this, com.example.prm392_finalproject.MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+        });
         categoryController = new CategoryController();
         categoryAdapter = new CategoryAdapter(categoryList, new CategoryAdapter.OnCategoryActionListener() {
             @Override
@@ -67,6 +86,18 @@ public class CategoryActivity extends AppCompatActivity {
 
         fabAddCategory.setOnClickListener(v -> showCategoryDialog(null));
         loadCategories();
+
+        // Xử lý search realtime
+        etSearch.addTextChangedListener(new android.text.TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterCategories(s.toString());
+            }
+            @Override
+            public void afterTextChanged(android.text.Editable s) {}
+        });
     }
 
     private void loadCategories() {
@@ -74,11 +105,41 @@ public class CategoryActivity extends AppCompatActivity {
             List<CategoryResponse> categories = categoryController.getAllCategories();
             categories.sort(Comparator.comparingInt(CategoryResponse::getCategory_id).reversed());
             runOnUiThread(() -> {
+                fullCategoryList.clear();
+                fullCategoryList.addAll(categories);
                 categoryList.clear();
                 categoryList.addAll(categories);
                 categoryAdapter.notifyDataSetChanged();
             });
         }).start();
+    }
+
+    private void filterCategories(String keyword) {
+        searchKeyword = keyword;
+        categoryList.clear();
+        if (keyword == null || keyword.trim().isEmpty()) {
+            categoryList.addAll(fullCategoryList);
+        } else {
+            String lower = keyword.toLowerCase();
+            String lowerNoAccent = removeAccent(lower);
+            for (CategoryResponse c : fullCategoryList) {
+                String name = c.getName() != null ? c.getName() : "";
+                String desc = c.getDescription() != null ? c.getDescription() : "";
+                String nameNoAccent = removeAccent(name.toLowerCase());
+                String descNoAccent = removeAccent(desc.toLowerCase());
+                if (nameNoAccent.contains(lowerNoAccent) || descNoAccent.contains(lowerNoAccent)) {
+                    categoryList.add(c);
+                }
+            }
+        }
+        categoryAdapter.notifyDataSetChanged();
+    }
+
+    // Loại bỏ dấu tiếng Việt
+    private static String removeAccent(String s) {
+        if (s == null) return "";
+        String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
+        return temp.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
     }
 
     private void showCategoryDialog(CategoryResponse category) {
@@ -179,8 +240,9 @@ public class CategoryActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
             CategoryResponse category = categories.get(position);
-            holder.tvName.setText(category.getName());
-            holder.tvDescription.setText(category.getDescription());
+            // Highlight từ khóa trong tên và mô tả
+            holder.tvName.setText(getHighlightedText(category.getName(), searchKeyword));
+            holder.tvDescription.setText(getHighlightedText(category.getDescription(), searchKeyword));
             holder.btnEdit.setOnClickListener(v -> listener.onEdit(category));
             holder.btnDelete.setOnClickListener(v -> listener.onDelete(category));
         }
@@ -190,7 +252,7 @@ public class CategoryActivity extends AppCompatActivity {
         }
         static class CategoryViewHolder extends RecyclerView.ViewHolder {
             TextView tvName, tvDescription;
-            Button btnEdit, btnDelete;
+            ImageButton btnEdit, btnDelete;
             public CategoryViewHolder(@NonNull View itemView) {
                 super(itemView);
                 tvName = itemView.findViewById(R.id.tvCategoryName);
@@ -198,6 +260,18 @@ public class CategoryActivity extends AppCompatActivity {
                 btnEdit = itemView.findViewById(R.id.btnEditCategory);
                 btnDelete = itemView.findViewById(R.id.btnDeleteCategory);
             }
+        }
+        // Highlight từ khóa search trong text
+        private Spannable getHighlightedText(String text, String keyword) {
+            if (text == null || keyword == null || keyword.trim().isEmpty()) return new SpannableString(text == null ? "" : text);
+            String textNoAccent = removeAccent(text.toLowerCase());
+            String keywordNoAccent = removeAccent(keyword.toLowerCase());
+            int start = textNoAccent.indexOf(keywordNoAccent);
+            SpannableString spannable = new SpannableString(text);
+            if (start >= 0) {
+                spannable.setSpan(new ForegroundColorSpan(0xFFFF9800), start, start + keyword.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            return spannable;
         }
     }
 }

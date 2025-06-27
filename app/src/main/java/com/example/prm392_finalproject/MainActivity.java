@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnSignOut;
     private TextView welcomeText;
     private Button btnCategory;
+    private Button btnSupplier;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         btnSignOut = findViewById(R.id.btnSignOut);
         welcomeText = findViewById(R.id.textView);
         btnCategory = findViewById(R.id.btnCategory);
+        btnSupplier = findViewById(R.id.btnSupplier);
 
         if (currentUser != null) {
             welcomeText.setText("Welcome, " + currentUser.getDisplayName() + "!");
@@ -75,6 +77,10 @@ public class MainActivity extends AppCompatActivity {
         btnSignOut.setOnClickListener(v -> signOut());
         btnCategory.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, com.example.prm392_finalproject.views.CategoryActivity.class);
+            startActivity(intent);
+        });
+        btnSupplier.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, com.example.prm392_finalproject.views.SupplierActivity.class);
             startActivity(intent);
         });
 

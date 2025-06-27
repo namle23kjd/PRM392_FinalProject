@@ -1,12 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp"
+    app:cardBackgroundColor="@color/surface">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@android:drawable/ic_menu_manage"
+            android:tint="@color/primary"
+            android:background="@drawable/circle_bg"
+            android:padding="8dp"
+            android:contentDescription="icon" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
     android:orientation="vertical"
-    android:padding="12dp"
-    android:background="@android:color/white"
-    android:layout_marginBottom="8dp"
-    android:elevation="2dp">
+            android:layout_marginStart="16dp">
 
     <TextView
         android:id="@+id/tvCategoryName"
@@ -15,7 +38,7 @@
         android:text="Tên danh mục"
         android:textStyle="bold"
         android:textSize="18sp"
-        android:textColor="#222" />
+                android:textColor="@color/primary" />
 
     <TextView
         android:id="@+id/tvCategoryDescription"
@@ -23,32 +46,27 @@
         android:layout_height="wrap_content"
         android:text="Mô tả danh mục"
         android:textSize="14sp"
-        android:textColor="#666" />
+                android:textColor="@color/gray_dark" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
-
-        <Button
+        <ImageButton
             android:id="@+id/btnEditCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sửa"
-            android:textAllCaps="false"
-            android:backgroundTint="#FF9800"
-            android:textColor="@android:color/white"
-            android:layout_marginEnd="8dp" />
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_edit"
+            android:tint="@color/accent"
+            android:contentDescription="Sửa" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnDeleteCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Xóa"
-            android:textAllCaps="false"
-            android:backgroundTint="#F44336"
-            android:textColor="@android:color/white" />
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_delete"
+            android:tint="#F44336"
+            android:contentDescription="Xóa"
+            android:layout_marginStart="4dp" />
     </LinearLayout>
 
-</LinearLayout> 
+</androidx.cardview.widget.CardView> 
