@@ -21,7 +21,7 @@ public class CategoryDAO {
     public List<CategoryResponse> getAllCategories() {
         List<CategoryResponse> categories = new ArrayList<>();
         try {
-            String query = "SELECT * FROM category";
+            String query = "SELECT * FROM Category";
             PreparedStatement preparedStatement = connectionClass.CONN().prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -42,7 +42,7 @@ public class CategoryDAO {
     public CategoryResponse getCategoryById(int category_id) {
         CategoryResponse category = null;
         try {
-            String query = "SELECT * FROM category WHERE category_id = ?";
+            String query = "SELECT * FROM Category WHERE category_id = ?";
             PreparedStatement preparedStatement = connectionClass.CONN().prepareStatement(query);
             preparedStatement.setInt(1, category_id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -66,7 +66,7 @@ public class CategoryDAO {
 
     public void addCategory(CategoryRequest category) {
         try {
-            String query = "INSERT INTO category (name, description, is_deleted) VALUES (?, ?, ?)";
+            String query = "INSERT INTO Category (name, description, is_deleted) VALUES (?, ?, ?)";
             PreparedStatement preparedStatement = connectionClass.CONN().prepareStatement(query);
             preparedStatement.setString(1, category.getName());
             preparedStatement.setString(2, category.getDescription());
@@ -79,7 +79,7 @@ public class CategoryDAO {
 
     public void updateCategory(CategoryRequest category, int category_id) {
         try {
-            String query = "UPDATE category SET name = ?, description = ? WHERE category_id = ?";
+            String query = "UPDATE Category SET name = ?, description = ? WHERE category_id = ?";
             PreparedStatement preparedStatement = connectionClass.CONN().prepareStatement(query);
             preparedStatement.setString(1, category.getName());
             preparedStatement.setString(2, category.getDescription());
@@ -92,7 +92,7 @@ public class CategoryDAO {
 
     public void deleteCategory(int category_id) {
         try {
-            String query = "UPDATE category SET is_deleted = true WHERE category_id = ?";
+            String query = "UPDATE Category SET is_deleted = true WHERE category_id = ?";
             PreparedStatement preparedStatement = connectionClass.CONN().prepareStatement(query);
             preparedStatement.setInt(1, category_id);
             preparedStatement.executeUpdate();

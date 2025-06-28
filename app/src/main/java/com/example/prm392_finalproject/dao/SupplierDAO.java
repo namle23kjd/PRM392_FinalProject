@@ -21,7 +21,7 @@ public class SupplierDAO {
     public List<SupplierResponse> getAllSuppliers() {
         List<SupplierResponse> suppliers = new ArrayList<>();
         try {
-            String query = "SELECT * FROM suppliers";
+            String query = "SELECT * FROM Suppliers";
             PreparedStatement preparedStatement = connectionClass.CONN().prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -45,7 +45,7 @@ public class SupplierDAO {
         SupplierResponse supplier = new SupplierResponse();
 
         try {
-            String query = "SELECT * FROM suppliers WHERE supplier_id = ?";
+            String query = "SELECT * FROM Suppliers WHERE supplier_id = ?";
             PreparedStatement preparedStatement = connectionClass.CONN().prepareStatement(query);
             preparedStatement.setInt(1, supplier_id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -68,7 +68,7 @@ public class SupplierDAO {
 
     public void addSupplier(SupplierRequest supplier) {
         try {
-            String query = "INSERT INTO suppliers (name, address, contact_info, phone, email, isActive) VALUES (?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Suppliers (name, address, contact_info, phone, email, isActive) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = connectionClass.CONN().prepareStatement(query);
             preparedStatement.setString(1, supplier.getName());
             preparedStatement.setString(2, supplier.getAddress());
@@ -85,7 +85,7 @@ public class SupplierDAO {
 
     public void updateSupplier(SupplierRequest supplier, int supplier_id) {
         try {
-            String query = "UPDATE suppliers SET name = ?, address = ?, contact_info = ?, phone = ?, email = ?, isActive = ? WHERE supplier_id = ?";
+            String query = "UPDATE Suppliers SET name = ?, address = ?, contact_info = ?, phone = ?, email = ?, isActive = ? WHERE supplier_id = ?";
             PreparedStatement preparedStatement = connectionClass.CONN().prepareStatement(query);
             preparedStatement.setString(1, supplier.getName());
             preparedStatement.setString(2, supplier.getAddress());
@@ -103,7 +103,7 @@ public class SupplierDAO {
 
     public void deleteSupplier(int supplier_id) {
         try {
-            String query = "UPDATE suppliers SET isActive = 0 WHERE supplier_id = ?";
+            String query = "UPDATE Suppliers SET isActive = 0 WHERE supplier_id = ?";
             PreparedStatement preparedStatement = connectionClass.CONN().prepareStatement(query);
             preparedStatement.setInt(1, supplier_id);
             preparedStatement.executeUpdate();
