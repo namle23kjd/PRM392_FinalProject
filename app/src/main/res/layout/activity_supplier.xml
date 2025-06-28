@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_supplier"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".views.SupplierActivity">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnBackToHomeSupplier"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Quay về trang chủ"
+        android:textAllCaps="false"
+        android:icon="@drawable/ic_search"
+        android:iconTint="@color/primary"
+        android:textColor="@color/primary"
+        app:backgroundTint="@color/surface"
+        app:cornerRadius="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilSearchSupplier"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        app:layout_constraintTop_toBottomOf="@id/btnBackToHomeSupplier"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="4dp"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:boxStrokeColor="@color/gray_dark"
+        app:boxBackgroundColor="@color/surface"
+        app:boxStrokeWidth="1dp"
+        app:hintEnabled="false">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etSearchSupplier"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:hint="Tìm kiếm nhà cung cấp..."
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="6dp"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textSize="14sp"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSupplierList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/tilSearchSupplier"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddSupplier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Thêm nhà cung cấp"
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="24dp"
+        app:backgroundTint="@color/accent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout> 
