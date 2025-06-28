@@ -1,3 +1,77 @@
 <resources>
     <string name="app_name">PRM392_FinalProject</string>
+    <!-- ===== GOOGLE MAPS API KEY ===== -->
+    <!-- QUAN TRỌNG: Thay YOUR_API_KEY_HERE bằng API key thực của bạn -->
+    <string name="google_maps_api_key">AIzaSyBkiuiWJBnSbjMVJ9H86IoCca_i6oyxTQ4</string>
+
+    <!-- Google Maps Error Messages -->
+    <string name="google_play_services_error">Google Play Services không khả dụng</string>
+    <string name="location_permission_denied">Cần quyền truy cập vị trí</string>
+    <string name="location_not_available">Không thể lấy vị trí hiện tại</string>
+    <string name="directions_not_found">Không tìm thấy đường đi</string>
+    <string name="geocoding_failed">Không tìm thấy địa chỉ</string>
+
+    <!-- Map UI -->
+    <string name="my_location">Vị trí của tôi</string>
+    <string name="delivery_location">Điểm giao hàng</string>
+    <string name="route_info">Thông tin đường đi</string>
+    <string name="distance">Khoảng cách: %s</string>
+    <string name="duration">Thời gian: %s</string>
+    <string name="navigate_with_google_maps">Mở Google Maps</string>
+
+    <!-- Shipping Status for Map -->
+    <string name="status_on_the_way">Đang trên đường giao hàng</string>
+    <string name="status_arrived">Đã đến điểm giao hàng</string>
+    <string name="status_delivered_success">Giao hàng thành công</string>
+
+    <!-- ===== SHIPPING MANAGEMENT ===== -->
+    <string name="shipping_management">Quản lý giao hàng</string>
+    <string name="add_shipping">Thêm giao hàng</string>
+    <string name="edit_shipping">Sửa giao hàng</string>
+    <string name="track_shipping">Theo dõi giao hàng</string>
+    <string name="shipping_details">Chi tiết giao hàng</string>
+
+    <!-- Status -->
+    <string name="status_pending">Chờ xử lý</string>
+    <string name="status_preparing">Đang chuẩn bị</string>
+    <string name="status_shipping">Đang giao hàng</string>
+    <string name="status_delivered">Đã giao hàng</string>
+    <string name="status_cancelled">Đã hủy</string>
+
+    <!-- Messages -->
+    <string name="shipping_created_success">Thêm chuyến giao hàng thành công</string>
+    <string name="shipping_updated_success">Cập nhật thông tin giao hàng thành công</string>
+    <string name="shipping_not_found">Không tìm thấy thông tin giao hàng</string>
+    <string name="location_permission_required">Cần quyền truy cập vị trí để sử dụng tính năng này</string>
+
+    <!-- Form Labels -->
+    <string name="order_id">Mã đơn hàng</string>
+    <string name="shipping_address">Địa chỉ giao hàng</string>
+    <string name="person_name">Tên người nhận</string>
+    <string name="shipping_method">Phương thức giao hàng</string>
+    <string name="expected_delivery">Ngày dự kiến giao hàng</string>
+    <string name="tracking_number">Mã tracking</string>
+    <string name="description">Ghi chú</string>
+
+    <!-- Menu items -->
+    <string name="menu_shipping">Giao hàng</string>
+    <string name="menu_map">Bản đồ</string>
+    <string name="menu_refresh">Làm mới</string>
+
+    <!-- Shipping Methods -->
+    <string-array name="shipping_methods">
+        <item>Giao hàng tiêu chuẩn</item>
+        <item>Giao hàng nhanh</item>
+        <item>Giao hàng siêu tốc</item>
+    </string-array>
+
+    <!-- Status Array -->
+    <string-array name="status_array">
+        <item>Tất cả</item>
+        <item>Chờ xử lý</item>
+        <item>Đang chuẩn bị</item>
+        <item>Đang giao hàng</item>
+        <item>Đã giao hàng</item>
+        <item>Đã hủy</item>
+    </string-array>
 </resources>

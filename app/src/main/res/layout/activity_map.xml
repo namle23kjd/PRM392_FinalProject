@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_light">
+
+    <!-- Header Information -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/primary_color"
+        android:padding="16dp"
+        android:elevation="4dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🗺️ Theo dõi giao hàng"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_white"
+            android:gravity="center"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvShippingInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Đang tải thông tin..."
+            android:textSize="14sp"
+            android:textColor="@color/text_white"
+            android:background="@color/primary_dark_color"
+            android:padding="12dp"
+            android:minHeight="80dp"
+            android:gravity="top" />
+
+    </LinearLayout>
+
+    <!-- Control Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:background="@color/background_white"
+        android:elevation="2dp">
+
+        <Button
+            android:id="@+id/btnUpdateLocation"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="📍 Cập nhật vị trí"
+            android:textSize="12sp"
+            android:textColor="@color/text_white"
+            android:background="@color/info_color"
+            android:layout_marginEnd="4dp"
+            android:minHeight="48dp" />
+
+        <Button
+            android:id="@+id/btnNavigate"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="🧭 Dẫn đường"
+            android:textSize="12sp"
+            android:textColor="@color/text_white"
+            android:background="@color/success_color"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:minHeight="48dp" />
+
+        <Button
+            android:id="@+id/btnRefresh"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="🔄 Làm mới"
+            android:textSize="12sp"
+            android:textColor="@color/text_white"
+            android:background="@color/warning_color"
+            android:layout_marginStart="4dp"
+            android:minHeight="48dp" />
+
+    </LinearLayout>
+
+    <!-- Map Container -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- Map Overlay Info -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="bottom|start"
+            android:layout_margin="16dp"
+            android:background="@color/background_white"
+            android:padding="8dp"
+            android:elevation="4dp"
+            android:alpha="0.9">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📍 Vị trí hiện tại: Màu xanh"
+                android:textSize="10sp"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="2dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🎯 Điểm giao hàng: Màu đỏ"
+                android:textSize="10sp"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="2dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📏 Đường đi: Màu tím"
+                android:textSize="10sp"
+                android:textColor="@color/text_primary" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <!-- Status Footer -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/background_white"
+        android:padding="12dp"
+        android:elevation="2dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="💡 Nhấn vào bản đồ để xem tọa độ"
+            android:textSize="11sp"
+            android:textColor="@color/text_secondary"
+            android:gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/tvConnectionStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🟢 Kết nối"
+            android:textSize="11sp"
+            android:textColor="@color/success_color"
+            android:gravity="center_vertical" />
+
+    </LinearLayout>
+
+</LinearLayout>

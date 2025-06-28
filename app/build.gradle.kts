@@ -54,4 +54,18 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    // ===== MATERIAL DESIGN =====
+    implementation ("com.google.android.material:material:1.9.0")
+
+    // ===== GOOGLE MAPS & LOCATION =====
+    implementation ("com.google.android.gms:play-services-maps:18.1.0")
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
+    implementation ("com.google.android.gms:play-services-places:17.0.0")
+
+    // ===== RETROFIT & NETWORKING =====
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
+
 }

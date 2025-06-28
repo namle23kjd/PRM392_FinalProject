@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#F5F5F5">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="16dp"
+        android:background="#0D47A1"
+        android:layout_marginBottom="16dp"
+        android:minHeight="56dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="📦 Quản lý giao hàng"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🚚"
+            android:textSize="32sp"
+            android:layout_marginStart="8dp" />
+    </LinearLayout>
+
+    <!-- Search and Filter Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#FFFFFF"
+        android:padding="16dp"
+        android:layout_marginBottom="16dp"
+        android:elevation="4dp">
+
+        <!-- Tracking Search -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <EditText
+                android:id="@+id/etSearchTracking"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:hint="🔍 Nhập mã tracking..."
+                android:padding="12dp"
+                android:background="#F5F5F5"
+                android:inputType="text"
+                android:maxLines="1"
+                android:minHeight="48dp"
+                android:textColor="#212121"
+                android:textColorHint="#757575" />
+
+            <Button
+                android:id="@+id/btnTrackShipping"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="Tìm kiếm"
+                android:textColor="#FFFFFF"
+                android:background="#0D47A1"
+                android:layout_marginStart="8dp"
+                android:paddingHorizontal="16dp"
+                android:minWidth="88dp"
+                android:minHeight="48dp" />
+        </LinearLayout>
+
+        <!-- Status Filter -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:minHeight="48dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📊 Lọc theo trạng thái:"
+                android:textSize="14sp"
+                android:textColor="#212121"
+                android:layout_marginEnd="8dp"
+                android:minHeight="48dp"
+                android:gravity="center_vertical" />
+
+            <Spinner
+                android:id="@+id/spinnerStatusFilter"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:background="#F5F5F5"
+                android:minHeight="48dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+        <Button
+            android:id="@+id/btnAddShipping"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="➕ Thêm giao hàng"
+            android:textColor="#FFFFFF"
+            android:background="#2E7D32"
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            android:minHeight="48dp"
+            android:minWidth="88dp" />
+
+        <Button
+            android:id="@+id/btnRefresh"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="🔄 Làm mới"
+            android:textColor="#FFFFFF"
+            android:background="#5D4037"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:minHeight="48dp"
+            android:minWidth="88dp" />
+    </LinearLayout>
+
+    <!-- Shipping List -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="#FFFFFF"
+        android:elevation="4dp">
+
+        <!-- List Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#E3F2FD"
+            android:padding="16dp"
+            android:minHeight="48dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📋 Danh sách giao hàng"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#0D47A1"
+                android:gravity="center_vertical" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tvTotalShippingCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 chuyến"
+                android:textSize="12sp"
+                android:textColor="#424242"
+                android:gravity="center_vertical"
+                android:minHeight="48dp" />
+        </LinearLayout>
+
+        <!-- ListView -->
+        <ListView
+            android:id="@+id/listViewShippings"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:divider="#E0E0E0"
+            android:dividerHeight="1dp"
+            android:padding="8dp"
+            android:scrollbars="vertical"
+            android:smoothScrollbar="true"
+            android:minHeight="48dp"
+            android:clipToPadding="false" />
+
+        <!-- Empty State -->
+        <LinearLayout
+            android:id="@+id/emptyStateLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone"
+            android:padding="32dp"
+            android:minHeight="200dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📭"
+                android:textSize="64sp"
+                android:layout_marginBottom="16dp"
+                android:alpha="0.5" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chưa có chuyến giao hàng nào"
+                android:textSize="16sp"
+                android:textColor="#424242"
+                android:layout_marginBottom="8dp"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nhấn 'Thêm giao hàng' để tạo chuyến giao hàng mới"
+                android:textSize="12sp"
+                android:textColor="#757575"
+                android:gravity="center" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Quick Stats -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        android:background="#FFFFFF"
+        android:padding="16dp"
+        android:elevation="2dp"
+        android:minHeight="80dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp"
+            android:minHeight="64dp">
+
+            <TextView
+                android:id="@+id/tvPendingCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#E65100" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⏳ Chờ xử lý"
+                android:textSize="10sp"
+                android:textColor="#424242"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#E0E0E0"
+            android:layout_marginHorizontal="8dp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp"
+            android:minHeight="64dp">
+
+            <TextView
+                android:id="@+id/tvShippingCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#6A1B9A" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🚛 Đang giao"
+                android:textSize="10sp"
+                android:textColor="#424242"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#E0E0E0"
+            android:layout_marginHorizontal="8dp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp"
+            android:minHeight="64dp">
+
+            <TextView
+                android:id="@+id/tvDeliveredCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#2E7D32" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="✅ Đã giao"
+                android:textSize="10sp"
+                android:textColor="#424242"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#E0E0E0"
+            android:layout_marginHorizontal="8dp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp"
+            android:minHeight="64dp">
+
+            <TextView
+                android:id="@+id/tvOverdueCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#C62828" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⚠️ Trễ hạn"
+                android:textSize="10sp"
+                android:textColor="#424242"
+                android:gravity="center" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
