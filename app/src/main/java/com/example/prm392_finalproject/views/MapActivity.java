@@ -30,6 +30,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -49,7 +50,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private ShippingRepository shippingRepository;
 
     // UI Components
-    private TextView tvShippingInfo;
+    private TextView tvShippingInfo, tvConnectionStatus;
     private Button btnUpdateLocation, btnNavigate, btnRefresh;
 
     // Data
@@ -74,6 +75,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private void initViews() {
         tvShippingInfo = findViewById(R.id.tvShippingInfo);
+        tvConnectionStatus = findViewById(R.id.tvConnectionStatus);
         btnUpdateLocation = findViewById(R.id.btnUpdateLocation);
         btnNavigate = findViewById(R.id.btnNavigate);
         btnRefresh = findViewById(R.id.btnRefresh);
@@ -115,12 +117,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // Configure map settings
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(false); // We have our own button
+
+        // Set map style
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         // Set map click listener
         mMap.setOnMapClickListener(latLng -> {
-            Toast.makeText(this, "Lat: " + latLng.latitude + ", Lng: " + latLng.longitude,
-                    Toast.LENGTH_SHORT).show();
+            String coordinates = String.format(Locale.getDefault(),
+                    "📍 Lat: %.6f, Lng: %.6f", latLng.latitude, latLng.longitude);
+            Toast.makeText(this, coordinates, Toast.LENGTH_SHORT).show();
+        });
+
+        // Set marker click listeners
+        mMap.setOnMarkerClickListener(marker -> {
+            marker.showInfoWindow();
+            return true;
         });
 
         // Load shipping location
@@ -130,6 +142,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         // Get current location
         getCurrentLocation();
+
+        updateConnectionStatus(true);
     }
 
     private void checkLocationPermission() {
@@ -152,6 +166,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             } else {
                 Toast.makeText(this, "Cần quyền truy cập vị trí để sử dụng tính năng này",
                         Toast.LENGTH_LONG).show();
+                updateConnectionStatus(false);
             }
         }
     }
@@ -166,7 +181,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             return;
         }
 
-        mMap.setMyLocationEnabled(true);
+        if (mMap != null) {
+            mMap.setMyLocationEnabled(true);
+        }
 
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -178,18 +195,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                             // Move camera to current location if no destination set
                             if (destinationLocation == null) {
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
                             } else {
                                 showBothLocations();
                             }
+                            updateConnectionStatus(true);
                         } else {
                             // Default to Ho Chi Minh City if can't get location
                             currentLocation = new LatLng(10.8231, 106.6297);
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 12));
-                            Toast.makeText(MapActivity.this, "Không thể lấy vị trí hiện tại",
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 12));
+                            Toast.makeText(MapActivity.this, "Không thể lấy vị trí hiện tại. Sử dụng vị trí mặc định.",
                                     Toast.LENGTH_SHORT).show();
+                            updateConnectionStatus(false);
                         }
                     }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Failed to get location: " + e.getMessage());
+                    updateConnectionStatus(false);
                 });
     }
 
@@ -210,38 +233,44 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         currentLocationMarker = mMap.addMarker(new MarkerOptions()
                 .position(currentLocation)
-                .title("Vị trí hiện tại")
-                .snippet("Shipper đang ở đây")
+                .title("🚚 Vị trí shipper")
+                .snippet("Đang ở đây")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
     }
 
     private void updateDestinationMarker() {
-        if (mMap == null || destinationLocation == null) return;
+        if (mMap == null || destinationLocation == null || currentShipping == null) return;
 
         if (destinationMarker != null) {
             destinationMarker.remove();
         }
 
+        String snippet = "👤 " + currentShipping.getShippingPersonName() + "\n📱 " +
+                currentShipping.getTrackingNumber();
+
         destinationMarker = mMap.addMarker(new MarkerOptions()
                 .position(destinationLocation)
-                .title("Điểm giao hàng")
-                .snippet(currentShipping.getShippingPersonName())
+                .title("🎯 Điểm giao hàng")
+                .snippet(snippet)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
     }
 
     private void showBothLocations() {
-        if (currentLocation != null && destinationLocation != null) {
+        if (currentLocation != null && destinationLocation != null && mMap != null) {
             // Calculate bounds to show both locations
-            double minLat = Math.min(currentLocation.latitude, destinationLocation.latitude);
-            double maxLat = Math.max(currentLocation.latitude, destinationLocation.latitude);
-            double minLng = Math.min(currentLocation.longitude, destinationLocation.longitude);
-            double maxLng = Math.max(currentLocation.longitude, destinationLocation.longitude);
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            builder.include(currentLocation);
+            builder.include(destinationLocation);
 
-            LatLng southwest = new LatLng(minLat - 0.01, minLng - 0.01);
-            LatLng northeast = new LatLng(maxLat + 0.01, maxLng + 0.01);
+            LatLngBounds bounds = builder.build();
+            int padding = 150; // padding in pixels
 
-            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(
-                    new com.google.android.gms.maps.model.LatLngBounds(southwest, northeast), 100));
+            try {
+                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
+            } catch (Exception e) {
+                Log.e(TAG, "Error moving camera: " + e.getMessage());
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 12));
+            }
 
             // Draw route line
             drawRoute();
@@ -249,7 +278,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void drawRoute() {
-        if (currentLocation == null || destinationLocation == null) return;
+        if (currentLocation == null || destinationLocation == null || mMap == null) return;
 
         if (routePolyline != null) {
             routePolyline.remove();
@@ -260,7 +289,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .add(currentLocation)
                 .add(destinationLocation)
                 .width(8)
-                .color(getResources().getColor(R.color.route_color))
+                .color(ContextCompat.getColor(this, R.color.route_color))
                 .geodesic(true);
 
         routePolyline = mMap.addPolyline(polylineOptions);
@@ -286,13 +315,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         } else {
-            Toast.makeText(this, "Cần cài đặt Google Maps để dẫn đường", Toast.LENGTH_SHORT).show();
+            // Fallback to browser
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                    android.net.Uri.parse("https://www.google.com/maps/dir/?api=1&destination=" +
+                            destinationLocation.latitude + "," + destinationLocation.longitude));
+            startActivity(browserIntent);
         }
     }
 
     private void refreshData() {
         loadShippingData();
         getCurrentLocation();
+        Toast.makeText(this, "Đã làm mới dữ liệu", Toast.LENGTH_SHORT).show();
     }
 
     private void updateShippingInfo() {
@@ -307,11 +341,36 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         tvShippingInfo.setText(info);
     }
 
+    private void updateConnectionStatus(boolean connected) {
+        if (tvConnectionStatus != null) {
+            if (connected) {
+                tvConnectionStatus.setText("🟢 Kết nối");
+                tvConnectionStatus.setTextColor(ContextCompat.getColor(this, R.color.success_color));
+            } else {
+                tvConnectionStatus.setText("🔴 Mất kết nối");
+                tvConnectionStatus.setTextColor(ContextCompat.getColor(this, R.color.danger_color));
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (currentShipping != null) {
+            updateShippingInfo();
+        }
+    }
+
     // AsyncTask classes
     private class LoadShippingTask extends AsyncTask<Integer, Void, Shipping> {
         @Override
         protected Shipping doInBackground(Integer... shippingIds) {
-            return shippingRepository.getShippingById(shippingIds[0]);
+            try {
+                return shippingRepository.getShippingById(shippingIds[0]);
+            } catch (Exception e) {
+                Log.e(TAG, "Error loading shipping data: " + e.getMessage());
+                return null;
+            }
         }
 
         @Override
@@ -319,7 +378,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             if (shipping != null) {
                 currentShipping = shipping;
                 updateShippingInfo();
-                loadDestinationLocation();
+                if (mMap != null) {
+                    loadDestinationLocation();
+                }
             } else {
                 Toast.makeText(MapActivity.this, "Không tìm thấy thông tin giao hàng",
                         Toast.LENGTH_SHORT).show();
@@ -353,8 +414,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             if (currentLocation != null) {
                 showBothLocations();
-            } else {
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(destinationLocation, 15));
+            } else if (mMap != null) {
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(destinationLocation, 15));
             }
         }
     }

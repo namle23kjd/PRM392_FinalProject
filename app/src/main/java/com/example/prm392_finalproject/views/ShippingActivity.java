@@ -9,8 +9,10 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -31,17 +33,27 @@ import java.util.Locale;
 public class ShippingActivity extends AppCompatActivity {
     private static final String TAG = "ShippingActivity";
 
+    // UI Components
     private ListView listViewShippings;
     private Button btnAddShipping, btnRefresh, btnTrackShipping;
     private EditText etSearchTracking;
     private Spinner spinnerStatusFilter;
+    private LinearLayout emptyStateLayout;
 
+    // Statistics TextViews
+    private TextView tvTotalShippingCount;
+    private TextView tvPendingCount;
+    private TextView tvShippingCount;
+    private TextView tvDeliveredCount;
+    private TextView tvOverdueCount;
+
+    // Data and Repository
     private ShippingRepository shippingRepository;
     private ShippingAdapter shippingAdapter;
     private List<Shipping> shippingList;
 
-    private String[] statusOptions = {"Tất cả", "pending", "preparing", "shipping", "delivered", "cancelled"};
-    private String[] shippingMethods = {"Giao hàng tiêu chuẩn", "Giao hàng nhanh", "Giao hàng siêu tốc"};
+    private String[] statusOptions = {"Tất cả", "Pending", "Shipped", "Delivered", "Cancelled"};
+    private String[] shippingMethods = {"Standard", "Express"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +67,21 @@ public class ShippingActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+        // Main UI components
         listViewShippings = findViewById(R.id.listViewShippings);
         btnAddShipping = findViewById(R.id.btnAddShipping);
         btnRefresh = findViewById(R.id.btnRefresh);
         btnTrackShipping = findViewById(R.id.btnTrackShipping);
         etSearchTracking = findViewById(R.id.etSearchTracking);
         spinnerStatusFilter = findViewById(R.id.spinnerStatusFilter);
+        emptyStateLayout = findViewById(R.id.emptyStateLayout);
+
+        // Statistics TextViews
+        tvTotalShippingCount = findViewById(R.id.tvTotalShippingCount);
+        tvPendingCount = findViewById(R.id.tvPendingCount);
+        tvShippingCount = findViewById(R.id.tvShippingCount);
+        tvDeliveredCount = findViewById(R.id.tvDeliveredCount);
+        tvOverdueCount = findViewById(R.id.tvOverdueCount);
 
         // Setup status filter spinner
         ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(this,
@@ -122,11 +143,10 @@ public class ShippingActivity extends AppCompatActivity {
 
     private String getStatusFromPosition(int position) {
         switch (position) {
-            case 1: return "pending";
-            case 2: return "preparing";
-            case 3: return "shipping";
-            case 4: return "delivered";
-            case 5: return "cancelled";
+            case 1: return "Pending";
+            case 2: return "Shipped";
+            case 3: return "Delivered";
+            case 4: return "Cancelled";
             default: return "";
         }
     }
@@ -163,32 +183,44 @@ public class ShippingActivity extends AppCompatActivity {
 
         builder.setView(dialogView)
                 .setTitle("Thêm chuyến giao hàng")
-                .setPositiveButton("Thêm", (dialog, which) -> {
-                    String orderIdStr = etOrderId.getText().toString().trim();
-                    String address = etShippingAddress.getText().toString().trim();
-                    String personName = etPersonName.getText().toString().trim();
-                    String description = etDescription.getText().toString().trim();
-                    String expectedDeliveryStr = etExpectedDelivery.getText().toString().trim();
-                    String method = shippingMethods[spinnerMethod.getSelectedItemPosition()];
+                .setPositiveButton("Thêm", null) // Set to null initially
+                .setNegativeButton("Hủy", null);
 
-                    if (validateShippingInput(orderIdStr, address, personName, expectedDeliveryStr)) {
-                        try {
-                            int orderId = Integer.parseInt(orderIdStr);
-                            Date expectedDelivery = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-                                    .parse(expectedDeliveryStr);
+        AlertDialog dialog = builder.create();
 
-                            Shipping shipping = new Shipping(orderId, address, method, personName,
-                                    expectedDelivery, description);
+        // Override positive button click to prevent dialog from closing on validation error
+        dialog.setOnShowListener(dialogInterface -> {
+            Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            button.setOnClickListener(view -> {
+                String orderIdStr = etOrderId.getText().toString().trim();
+                String address = etShippingAddress.getText().toString().trim();
+                String personName = etPersonName.getText().toString().trim();
+                String description = etDescription.getText().toString().trim();
+                String expectedDeliveryStr = etExpectedDelivery.getText().toString().trim();
+                String method = shippingMethods[spinnerMethod.getSelectedItemPosition()];
 
-                            new AddShippingTask().execute(shipping);
+                if (validateShippingInput(orderIdStr, address, personName, expectedDeliveryStr)) {
+                    try {
+                        int orderId = Integer.parseInt(orderIdStr);
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                        Date expectedDelivery = sdf.parse(expectedDeliveryStr);
 
-                        } catch (Exception e) {
-                            Toast.makeText(this, "Lỗi định dạng dữ liệu", Toast.LENGTH_SHORT).show();
-                        }
+                        Shipping shipping = new Shipping(orderId, address, method, personName,
+                                expectedDelivery, description);
+
+                        new AddShippingTask().execute(shipping);
+                        dialog.dismiss();
+
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error creating shipping: " + e.getMessage());
+                        Toast.makeText(this, "Lỗi định dạng dữ liệu: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                })
-                .setNegativeButton("Hủy", null)
-                .show();
+                }
+                // Don't dismiss dialog if validation fails
+            });
+        });
+
+        dialog.show();
     }
 
     private void showEditShippingDialog(Shipping shipping) {
@@ -218,7 +250,7 @@ public class ShippingActivity extends AppCompatActivity {
         methodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerMethod.setAdapter(methodAdapter);
 
-        String[] statusArray = {"pending", "preparing", "shipping", "delivered", "cancelled"};
+        String[] statusArray = {"Pending", "Shipped", "Delivered", "Cancelled"};
         ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, statusArray);
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -349,7 +381,11 @@ public class ShippingActivity extends AppCompatActivity {
         }
 
         try {
-            Integer.parseInt(orderId);
+            int orderIdInt = Integer.parseInt(orderId);
+            if (orderIdInt <= 0) {
+                Toast.makeText(this, "Mã đơn hàng phải là số dương", Toast.LENGTH_SHORT).show();
+                return false;
+            }
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Mã đơn hàng phải là số", Toast.LENGTH_SHORT).show();
             return false;
@@ -358,11 +394,98 @@ public class ShippingActivity extends AppCompatActivity {
         return true;
     }
 
+    // Update statistics display
+    private void updateShippingStats() {
+        if (shippingList == null || shippingList.isEmpty()) {
+            // Reset all counts to 0
+            updateStatCount(tvTotalShippingCount, 0, " chuyến");
+            updateStatCount(tvPendingCount, 0, "");
+            updateStatCount(tvShippingCount, 0, "");
+            updateStatCount(tvDeliveredCount, 0, "");
+            updateStatCount(tvOverdueCount, 0, "");
+
+            // Show empty state
+            if (emptyStateLayout != null) {
+                emptyStateLayout.setVisibility(View.VISIBLE);
+                listViewShippings.setVisibility(View.GONE);
+            }
+            return;
+        }
+
+        // Hide empty state
+        if (emptyStateLayout != null) {
+            emptyStateLayout.setVisibility(View.GONE);
+            listViewShippings.setVisibility(View.VISIBLE);
+        }
+
+        int pendingCount = 0;    // ⏳ Chờ xử lý (Pending)
+        int shippingCount = 0;   // 🚛 Đang giao (Shipped)
+        int deliveredCount = 0;  // ✅ Đã giao (Delivered)
+        int overdueCount = 0;    // ⚠️ Trễ hạn
+
+        for (Shipping shipping : shippingList) {
+            String status = shipping.getStatus();
+
+            // Kiểm tra trễ hạn trước (chỉ với các đơn chưa giao và chưa hủy)
+            if (shipping.isOverdue() && !"Delivered".equals(status) && !"Cancelled".equals(status)) {
+                overdueCount++;
+            } else {
+                // Đếm theo database ENUM values (case-sensitive)
+                switch (status) {
+                    case "Pending":
+                        pendingCount++;
+                        break;
+                    case "Shipped":
+                        shippingCount++;
+                        break;
+                    case "Delivered":
+                        deliveredCount++;
+                        break;
+                    case "Cancelled":
+                        // Cancelled không hiển thị trong stats hiện tại
+                        // Có thể thêm riêng nếu cần
+                        break;
+                    default:
+                        // Handle unexpected status values
+                        Log.w(TAG, "Unknown status found: " + status);
+                        break;
+                }
+            }
+        }
+
+        // Update UI
+        updateStatCount(tvTotalShippingCount, shippingList.size(), " chuyến");
+        updateStatCount(tvPendingCount, pendingCount, "");
+        updateStatCount(tvShippingCount, shippingCount, "");
+        updateStatCount(tvDeliveredCount, deliveredCount, "");
+        updateStatCount(tvOverdueCount, overdueCount, "");
+
+        // Log để debug
+        Log.d(TAG, "=== SHIPPING STATS ===");
+        Log.d(TAG, "Total: " + shippingList.size());
+        Log.d(TAG, "Pending: " + pendingCount);
+        Log.d(TAG, "Shipped: " + shippingCount);
+        Log.d(TAG, "Delivered: " + deliveredCount);
+        Log.d(TAG, "Overdue: " + overdueCount);
+        Log.d(TAG, "====================");
+    }
+
+    private void updateStatCount(TextView textView, int count, String suffix) {
+        if (textView != null) {
+            textView.setText(String.valueOf(count) + suffix);
+        }
+    }
+
     // AsyncTask classes
     private class LoadShippingsTask extends AsyncTask<Void, Void, List<Shipping>> {
         @Override
         protected List<Shipping> doInBackground(Void... voids) {
-            return shippingRepository.getAllShippings();
+            try {
+                return shippingRepository.getAllShippings();
+            } catch (Exception e) {
+                Log.e(TAG, "Error loading shippings: " + e.getMessage());
+                return new ArrayList<>();
+            }
         }
 
         @Override
@@ -370,6 +493,7 @@ public class ShippingActivity extends AppCompatActivity {
             shippingList.clear();
             shippingList.addAll(shippings);
             shippingAdapter.notifyDataSetChanged();
+            updateShippingStats(); // Update statistics
 
             Toast.makeText(ShippingActivity.this,
                     "Đã tải " + shippings.size() + " chuyến giao hàng", Toast.LENGTH_SHORT).show();
@@ -379,7 +503,12 @@ public class ShippingActivity extends AppCompatActivity {
     private class FilterShippingsTask extends AsyncTask<String, Void, List<Shipping>> {
         @Override
         protected List<Shipping> doInBackground(String... status) {
-            return shippingRepository.getShippingsByStatus(status[0]);
+            try {
+                return shippingRepository.getShippingsByStatus(status[0]);
+            } catch (Exception e) {
+                Log.e(TAG, "Error filtering shippings: " + e.getMessage());
+                return new ArrayList<>();
+            }
         }
 
         @Override
@@ -387,39 +516,64 @@ public class ShippingActivity extends AppCompatActivity {
             shippingList.clear();
             shippingList.addAll(shippings);
             shippingAdapter.notifyDataSetChanged();
+            updateShippingStats(); // Update statistics
         }
     }
 
     private class AddShippingTask extends AsyncTask<Shipping, Void, Boolean> {
+        private String errorMessage = "";
+
         @Override
         protected Boolean doInBackground(Shipping... shippings) {
-            return shippingRepository.createShipping(shippings[0]);
+            try {
+                return shippingRepository.createShipping(shippings[0]);
+            } catch (Exception e) {
+                errorMessage = e.getMessage();
+                Log.e(TAG, "Error in AddShippingTask: " + e.getMessage());
+                return false;
+            }
         }
 
         @Override
         protected void onPostExecute(Boolean success) {
             if (success) {
                 Toast.makeText(ShippingActivity.this, "Thêm chuyến giao hàng thành công", Toast.LENGTH_SHORT).show();
-                loadShippings();
+                loadShippings(); // This will also update statistics
             } else {
-                Toast.makeText(ShippingActivity.this, "Thêm chuyến giao hàng thất bại", Toast.LENGTH_SHORT).show();
+                String message = "Thêm chuyến giao hàng thất bại";
+                if (!errorMessage.isEmpty()) {
+                    message += ": " + errorMessage;
+                }
+                Toast.makeText(ShippingActivity.this, message, Toast.LENGTH_LONG).show();
             }
         }
     }
 
     private class UpdateShippingTask extends AsyncTask<Shipping, Void, Boolean> {
+        private String errorMessage = "";
+
         @Override
         protected Boolean doInBackground(Shipping... shippings) {
-            return shippingRepository.updateShipping(shippings[0]);
+            try {
+                return shippingRepository.updateShipping(shippings[0]);
+            } catch (Exception e) {
+                errorMessage = e.getMessage();
+                Log.e(TAG, "Error in UpdateShippingTask: " + e.getMessage());
+                return false;
+            }
         }
 
         @Override
         protected void onPostExecute(Boolean success) {
             if (success) {
                 Toast.makeText(ShippingActivity.this, "Cập nhật thông tin giao hàng thành công", Toast.LENGTH_SHORT).show();
-                loadShippings();
+                loadShippings(); // This will also update statistics
             } else {
-                Toast.makeText(ShippingActivity.this, "Cập nhật thông tin giao hàng thất bại", Toast.LENGTH_SHORT).show();
+                String message = "Cập nhật thông tin giao hàng thất bại";
+                if (!errorMessage.isEmpty()) {
+                    message += ": " + errorMessage;
+                }
+                Toast.makeText(ShippingActivity.this, message, Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -427,7 +581,12 @@ public class ShippingActivity extends AppCompatActivity {
     private class TrackShippingTask extends AsyncTask<String, Void, Shipping> {
         @Override
         protected Shipping doInBackground(String... trackingNumbers) {
-            return shippingRepository.getShippingByTrackingNumber(trackingNumbers[0]);
+            try {
+                return shippingRepository.getShippingByTrackingNumber(trackingNumbers[0]);
+            } catch (Exception e) {
+                Log.e(TAG, "Error tracking shipping: " + e.getMessage());
+                return null;
+            }
         }
 
         @Override

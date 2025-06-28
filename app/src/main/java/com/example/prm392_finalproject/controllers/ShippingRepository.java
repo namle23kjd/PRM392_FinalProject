@@ -23,62 +23,111 @@ public class ShippingRepository {
     }
 
     // Create new shipping record
+    // Thêm method createShipping với debug logs chi tiết
     public boolean createShipping(Shipping shipping) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
         try {
+            Log.d(TAG, "=== DEBUG: Starting createShipping ===");
+            Log.d(TAG, "Input Shipping data:");
+            Log.d(TAG, "- OrderId: " + shipping.getOrderId());
+            Log.d(TAG, "- Address: " + shipping.getShippingAddress());
+            Log.d(TAG, "- Method: " + shipping.getShippingMethod());
+            Log.d(TAG, "- PersonName: " + shipping.getShippingPersonName());
+            Log.d(TAG, "- TrackingNumber: " + shipping.getTrackingNumber());
+            Log.d(TAG, "- ExpectedDelivery: " + shipping.getExpectedDelivery());
+            Log.d(TAG, "- Description: " + shipping.getDescription());
+            Log.d(TAG, "- Status: " + shipping.getStatus());
+
+            // Test database connection
+            Log.d(TAG, "Attempting to connect to database...");
             connection = connectionClass.CONN();
+
             if (connection == null) {
-                Log.e(TAG, "Database connection failed");
+                Log.e(TAG, "❌ Database connection is NULL");
                 return false;
             }
+
+            Log.d(TAG, "✅ Database connection successful");
+            Log.d(TAG, "Connection info: " + connection.toString());
 
             String query = "INSERT INTO shipping (order_id, shipping_address, shipping_method, " +
                     "shipping_person_name, tracking_number, expected_delivery, description, status) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
+            Log.d(TAG, "SQL Query: " + query);
+
             preparedStatement = connection.prepareStatement(query);
+
+            // Set parameters với log
+            Log.d(TAG, "Setting parameters...");
             preparedStatement.setInt(1, shipping.getOrderId());
+            Log.d(TAG, "✅ Param 1 (order_id): " + shipping.getOrderId());
+
             preparedStatement.setString(2, shipping.getShippingAddress());
+            Log.d(TAG, "✅ Param 2 (shipping_address): " + shipping.getShippingAddress());
+
             preparedStatement.setString(3, shipping.getShippingMethod());
+            Log.d(TAG, "✅ Param 3 (shipping_method): " + shipping.getShippingMethod());
+
             preparedStatement.setString(4, shipping.getShippingPersonName());
+            Log.d(TAG, "✅ Param 4 (shipping_person_name): " + shipping.getShippingPersonName());
+
             preparedStatement.setString(5, shipping.getTrackingNumber());
+            Log.d(TAG, "✅ Param 5 (tracking_number): " + shipping.getTrackingNumber());
 
             // Format date for MySQL
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String expectedDeliveryString = shipping.getExpectedDelivery() != null ?
                     sdf.format(shipping.getExpectedDelivery()) : null;
             preparedStatement.setString(6, expectedDeliveryString);
+            Log.d(TAG, "✅ Param 6 (expected_delivery): " + expectedDeliveryString);
 
             preparedStatement.setString(7, shipping.getDescription());
-            preparedStatement.setString(8, shipping.getStatus());
+            Log.d(TAG, "✅ Param 7 (description): " + shipping.getDescription());
 
+            preparedStatement.setString(8, shipping.getStatus());
+            Log.d(TAG, "✅ Param 8 (status): " + shipping.getStatus());
+
+            Log.d(TAG, "Executing query...");
             int result = preparedStatement.executeUpdate();
+            Log.d(TAG, "Query execution result: " + result + " rows affected");
 
             if (result > 0) {
-                Log.d(TAG, "Shipping created successfully for order: " + shipping.getOrderId());
+                Log.d(TAG, "✅ Shipping created successfully for order: " + shipping.getOrderId());
                 return true;
             } else {
-                Log.e(TAG, "Failed to create shipping record");
+                Log.e(TAG, "❌ Failed to create shipping record - 0 rows affected");
                 return false;
             }
 
         } catch (SQLException e) {
-            Log.e(TAG, "SQL Error during shipping creation: " + e.getMessage());
+            Log.e(TAG, "❌ SQL Error during shipping creation:");
+            Log.e(TAG, "Error Code: " + e.getErrorCode());
+            Log.e(TAG, "SQL State: " + e.getSQLState());
+            Log.e(TAG, "Error Message: " + e.getMessage());
             e.printStackTrace();
             return false;
         } catch (Exception e) {
-            Log.e(TAG, "Error during shipping creation: " + e.getMessage());
+            Log.e(TAG, "❌ General Error during shipping creation: " + e.getMessage());
+            Log.e(TAG, "Exception type: " + e.getClass().getSimpleName());
             e.printStackTrace();
             return false;
         } finally {
             try {
-                if (preparedStatement != null) preparedStatement.close();
-                if (connection != null) connection.close();
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                    Log.d(TAG, "✅ PreparedStatement closed");
+                }
+                if (connection != null) {
+                    connection.close();
+                    Log.d(TAG, "✅ Connection closed");
+                }
             } catch (SQLException e) {
-                Log.e(TAG, "Error closing resources: " + e.getMessage());
+                Log.e(TAG, "❌ Error closing resources: " + e.getMessage());
             }
+            Log.d(TAG, "=== DEBUG: End createShipping ===");
         }
     }
 
@@ -402,5 +451,6 @@ public class ShippingRepository {
         shipping.setStatus(resultSet.getString("status"));
 
         return shipping;
+
     }
 }
