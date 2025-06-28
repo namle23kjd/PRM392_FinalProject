@@ -17,6 +17,8 @@ import com.example.prm392_finalproject.controllers.UserRepository;
 import com.example.prm392_finalproject.db.ConnectionClass;
 import com.example.prm392_finalproject.models.User;
 import com.example.prm392_finalproject.views.LoginActivity;
+import com.example.prm392_finalproject.views.OrderManagementActivity;
+import com.example.prm392_finalproject.views.PaymentHistoryActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -37,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView welcomeText;
     private Button btnCategory;
     private Button btnSupplier;
+    private Button btnOrderManagement;
+    private Button btnPaymentHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
         welcomeText = findViewById(R.id.textView);
         btnCategory = findViewById(R.id.btnCategory);
         btnSupplier = findViewById(R.id.btnSupplier);
+        btnOrderManagement = findViewById(R.id.btnOrderManagement);
+        btnPaymentHistory = findViewById(R.id.btnPaymentHistory);
 
         if (currentUser != null) {
             welcomeText.setText("Welcome, " + currentUser.getDisplayName() + "!");
@@ -81,6 +87,14 @@ public class MainActivity extends AppCompatActivity {
         });
         btnSupplier.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, com.example.prm392_finalproject.views.SupplierActivity.class);
+            startActivity(intent);
+        });
+        btnOrderManagement.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, OrderManagementActivity.class);
+            startActivity(intent);
+        });
+        btnPaymentHistory.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, PaymentHistoryActivity.class);
             startActivity(intent);
         });
 

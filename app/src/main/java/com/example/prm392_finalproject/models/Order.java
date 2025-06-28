@@ -1,8 +1,9 @@
 package com.example.prm392_finalproject.models;
 
 import java.util.Date;
+import java.io.Serializable;
 
-public class Order implements java.io.Serializable {
+public class Order implements Serializable {
     private int order_id;
     private int customer_id;
     private Date order_date;
@@ -91,6 +92,11 @@ public class Order implements java.io.Serializable {
             default:
                 return status;
         }
+    }
+
+    // Method to check if order is paid
+    public boolean isPaid() {
+        return "completed".equalsIgnoreCase(status) || "paid".equalsIgnoreCase(status);
     }
 
     @Override
