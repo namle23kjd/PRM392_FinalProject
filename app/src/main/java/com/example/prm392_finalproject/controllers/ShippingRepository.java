@@ -52,7 +52,7 @@ public class ShippingRepository {
             Log.d(TAG, "✅ Database connection successful");
             Log.d(TAG, "Connection info: " + connection.toString());
 
-            String query = "INSERT INTO shipping (order_id, shipping_address, shipping_method, " +
+            String query = "INSERT INTO Shipping (order_id, shipping_address, shipping_method, " +
                     "shipping_person_name, tracking_number, expected_delivery, description, status) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -140,7 +140,7 @@ public class ShippingRepository {
             connection = connectionClass.CONN();
             if (connection == null) return false;
 
-            String query = "UPDATE shipping SET shipping_address=?, shipping_method=?, " +
+            String query = "UPDATE Shipping SET shipping_address=?, shipping_method=?, " +
                     "shipping_person_name=?, expected_delivery=?, description=?, status=? " +
                     "WHERE shipping_id=?";
 
@@ -189,7 +189,7 @@ public class ShippingRepository {
             connection = connectionClass.CONN();
             if (connection == null) return false;
 
-            String query = "UPDATE shipping SET status=?" +
+            String query = "UPDATE Shipping SET status=?" +
                     (status.equals("delivered") ? ", delivered_date=NOW()" : "") +
                     " WHERE shipping_id=?";
 
@@ -229,7 +229,7 @@ public class ShippingRepository {
             connection = connectionClass.CONN();
             if (connection == null) return null;
 
-            String query = "SELECT * FROM shipping WHERE shipping_id = ?";
+            String query = "SELECT * FROM Shipping WHERE shipping_id = ?";
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, shippingId);
 
@@ -265,7 +265,7 @@ public class ShippingRepository {
             connection = connectionClass.CONN();
             if (connection == null) return null;
 
-            String query = "SELECT * FROM shipping WHERE order_id = ?";
+            String query = "SELECT * FROM Shipping WHERE order_id = ?";
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, orderId);
 
@@ -301,7 +301,7 @@ public class ShippingRepository {
             connection = connectionClass.CONN();
             if (connection == null) return null;
 
-            String query = "SELECT * FROM shipping WHERE tracking_number = ?";
+            String query = "SELECT * FROM Shipping WHERE tracking_number = ?";
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, trackingNumber);
 
@@ -338,7 +338,7 @@ public class ShippingRepository {
             connection = connectionClass.CONN();
             if (connection == null) return shippings;
 
-            String query = "SELECT * FROM shipping ORDER BY shipping_id DESC";
+            String query = "SELECT * FROM Shipping ORDER BY shipping_id DESC";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
 
@@ -373,7 +373,7 @@ public class ShippingRepository {
             connection = connectionClass.CONN();
             if (connection == null) return shippings;
 
-            String query = "SELECT * FROM shipping WHERE status = ? ORDER BY shipping_id DESC";
+            String query = "SELECT * FROM Shipping WHERE status = ? ORDER BY shipping_id DESC";
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, status);
 
@@ -410,7 +410,7 @@ public class ShippingRepository {
             connection = connectionClass.CONN();
             if (connection == null) return shippings;
 
-            String query = "SELECT * FROM shipping WHERE expected_delivery < NOW() AND status != 'delivered' " +
+            String query = "SELECT * FROM Shipping WHERE expected_delivery < NOW() AND status != 'delivered' " +
                     "ORDER BY expected_delivery ASC";
             preparedStatement = connection.prepareStatement(query);
 

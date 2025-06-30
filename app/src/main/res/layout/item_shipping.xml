@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="12dp"
-    android:background="@color/background_white"
+    android:background="@color/background"
     android:layout_marginVertical="4dp"
     android:layout_marginHorizontal="8dp"
     android:elevation="2dp">
@@ -25,8 +25,8 @@
             android:text="ID: 001"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="@color/primary_color"
-            android:background="@color/primary_light_color"
+            android:textColor="@color/black"
+            android:background="@color/background_light"
             android:padding="4dp" />
 
         <View
@@ -44,7 +44,11 @@
             android:textColor="@color/text_white"
             android:textSize="12sp"
             android:textStyle="bold"
+
             tools:ignore="TextContrastCheck" />
+
+            android:padding="6dp" />
+
 
     </LinearLayout>
 
@@ -62,7 +66,6 @@
             android:layout_weight="1"
             android:text="📦 Đơn hàng: #12345"
             android:textSize="13sp"
-            android:textColor="@color/text_primary"
             android:gravity="center_vertical" />
 
         <TextView
@@ -72,7 +75,6 @@
             android:layout_weight="1"
             android:text="🏷️ Tracking: TN1234567890"
             android:textSize="11sp"
-            android:textColor="@color/text_secondary"
             android:gravity="center_vertical" />
 
     </LinearLayout>
@@ -90,7 +92,6 @@
             android:layout_height="wrap_content"
             android:text="👤 Người nhận: Nguyễn Văn A"
             android:textSize="13sp"
-            android:textColor="@color/text_primary"
             android:textStyle="bold"
             android:gravity="center_vertical"
             android:layout_marginBottom="4dp" />
@@ -101,7 +102,6 @@
             android:layout_height="wrap_content"
             android:text="📍 Địa chỉ: 123 Đường ABC, Quận 1, TP.HCM"
             android:textSize="12sp"
-            android:textColor="@color/text_secondary"
             android:gravity="top"
             android:maxLines="2"
             android:ellipsize="end" />
@@ -122,7 +122,6 @@
             android:layout_weight="1"
             android:text="🚚 Phương thức: Giao hàng nhanh"
             android:textSize="11sp"
-            android:textColor="@color/text_secondary"
             android:gravity="center_vertical" />
 
         <TextView
@@ -132,7 +131,6 @@
             android:layout_weight="1"
             android:text="📅 Dự kiến: 25/12/2024"
             android:textSize="11sp"
-            android:textColor="@color/text_secondary"
             android:gravity="center_vertical" />
 
     </LinearLayout>
@@ -145,8 +143,6 @@
         android:text="⚠️ TRỄ HẠN GIAO HÀNG"
         android:textSize="12sp"
         android:textStyle="bold"
-        android:textColor="@color/text_white"
-        android:background="@color/danger_color"
         android:padding="8dp"
         android:gravity="center"
         android:visibility="gone"
@@ -168,8 +164,6 @@
             android:layout_weight="1"
             android:text="✏️ Sửa"
             android:textSize="10sp"
-            android:textColor="@color/text_white"
-            android:background="@color/primary_color"
             android:layout_marginEnd="4dp" />
 
         <Button
@@ -179,8 +173,6 @@
             android:layout_weight="1"
             android:text="🗺️ Theo dõi"
             android:textSize="10sp"
-            android:textColor="@color/text_white"
-            android:background="@color/status_shipping_bg"
             android:layout_marginStart="4dp" />
 
     </LinearLayout>

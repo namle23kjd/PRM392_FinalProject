@@ -12,9 +12,13 @@
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:src="@android:drawable/ic_delete"
+
         android:tint="#F44336"
         android:contentDescription="Failed"
         tools:ignore="UseAppTint" />
+
+        android:contentDescription="Failed" />
+
 
     <TextView
         android:id="@+id/tvFailedTitle"

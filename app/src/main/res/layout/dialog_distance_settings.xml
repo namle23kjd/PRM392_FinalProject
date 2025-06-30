@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tạo file: res/layout/dialog_distance_settings.xml -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📏 Cài đặt khoảng cách giao hàng"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#1976D2"
+            android:gravity="center"
+            android:layout_marginBottom="16dp"
+            android:padding="8dp"
+            android:background="#E3F2FD" />
+
+        <!-- Warehouse Location Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🏭 Vị trí kho hàng"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvWarehouseLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Kho hàng chính - TP. Hồ Chí Minh"
+            android:textSize="12sp"
+            android:textColor="#666666"
+            android:background="#F5F5F5"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Delivery Range Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📏 Phạm vi giao hàng"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+
+            <EditText
+                android:id="@+id/etMaxDistance"
+                android:layout_width="100dp"
+                android:layout_height="48dp"
+                android:hint="50"
+                android:inputType="number"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:background="#F5F5F5"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="km"
+                android:textSize="14sp"
+                android:textColor="#666666" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mặc định: 50km"
+                android:textSize="12sp"
+                android:textColor="#999999" />
+        </LinearLayout>
+
+        <!-- Shipping Fee Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="💰 Phí giao hàng"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Standard Shipping -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#E8F5E8"
+            android:padding="12dp"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="📦 Standard"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="#2E7D32"
+                android:layout_marginBottom="4dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Phí cơ bản:"
+                    android:textSize="11sp"
+                    android:textColor="#666666"
+                    android:layout_marginEnd="8dp" />
+
+                <EditText
+                    android:id="@+id/etStandardBaseFee"
+                    android:layout_width="80dp"
+                    android:layout_height="40dp"
+                    android:hint="20000"
+                    android:inputType="number"
+                    android:textSize="11sp"
+                    android:gravity="center"
+                    android:background="#FFFFFF"
+                    android:layout_marginEnd="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="VNĐ +"
+                    android:textSize="11sp"
+                    android:textColor="#666666"
+                    android:layout_marginEnd="8dp" />
+
+                <EditText
+                    android:id="@+id/etStandardPerKmFee"
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:hint="2000"
+                    android:inputType="number"
+                    android:textSize="11sp"
+                    android:gravity="center"
+                    android:background="#FFFFFF"
+                    android:layout_marginEnd="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="VNĐ/km"
+                    android:textSize="11sp"
+                    android:textColor="#666666" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Express Shipping -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#FFF3E0"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="⚡ Express"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="#E65100"
+                android:layout_marginBottom="4dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Phí cơ bản:"
+                    android:textSize="11sp"
+                    android:textColor="#666666"
+                    android:layout_marginEnd="8dp" />
+
+                <EditText
+                    android:id="@+id/etExpressBaseFee"
+                    android:layout_width="80dp"
+                    android:layout_height="40dp"
+                    android:hint="30000"
+                    android:inputType="number"
+                    android:textSize="11sp"
+                    android:gravity="center"
+                    android:background="#FFFFFF"
+                    android:layout_marginEnd="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="VNĐ +"
+                    android:textSize="11sp"
+                    android:textColor="#666666"
+                    android:layout_marginEnd="8dp" />
+
+                <EditText
+                    android:id="@+id/etExpressPerKmFee"
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:hint="3000"
+                    android:inputType="number"
+                    android:textSize="11sp"
+                    android:gravity="center"
+                    android:background="#FFFFFF"
+                    android:layout_marginEnd="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="VNĐ/km"
+                    android:textSize="11sp"
+                    android:textColor="#666666" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Test Calculator -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🧮 Tính thử phí giao hàng"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <EditText
+                android:id="@+id/etTestDistance"
+                android:layout_width="100dp"
+                android:layout_height="48dp"
+                android:hint="15.5"
+                android:inputType="numberDecimal"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:background="#F5F5F5"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="km"
+                android:textSize="14sp"
+                android:textColor="#666666"
+                android:layout_marginEnd="16dp" />
+
+            <Button
+                android:id="@+id/btnCalculateTestFee"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Tính"
+                android:textSize="12sp"
+                android:textColor="#FFFFFF"
+                android:background="#1976D2"
+                android:paddingHorizontal="16dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvTestResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nhập khoảng cách để tính phí"
+            android:textSize="12sp"
+            android:textColor="#666666"
+            android:background="#F5F5F5"
+            android:padding="8dp"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <!-- API Info -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📡 Thông tin API"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="• Google Maps API: Tính khoảng cách theo đường thực tế\n• Geocoding: Chuyển đổi địa chỉ thành tọa độ\n• Directions: Tìm đường đi tối ưu"
+            android:textSize="11sp"
+            android:textColor="#666666"
+            android:lineSpacingExtra="4dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Reset Button -->
+        <Button
+            android:id="@+id/btnResetToDefault"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="🔄 Khôi phục mặc định"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:background="#F5F5F5"
+            android:layout_marginBottom="8dp" />
+
+    </LinearLayout>
+
+</ScrollView>
