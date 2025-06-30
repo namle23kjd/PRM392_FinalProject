@@ -2,8 +2,28 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!-- ===== INTERNET & NETWORK PERMISSIONS ===== -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <!-- ===== GOOGLE MAPS LOCATION PERMISSIONS ===== -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- ===== GOOGLE MAPS FEATURES ===== -->
+    <!-- OpenGL ES 2.0 required for Google Maps -->
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <!-- Location feature (optional but recommended) -->
+    <uses-feature
+        android:name="android.hardware.location"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -16,6 +36,7 @@
         android:theme="@style/Theme.PRM392_FinalProject"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
         <activity
             android:name=".views.CategoryActivity"
             android:exported="false" />
@@ -28,15 +49,28 @@
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
 <!--            </intent-filter>-->
 <!--        </activity>-->
+
+
+        <!-- ===== GOOGLE MAPS API KEY ===== -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_api_key" />
+
+        <!-- ===== GOOGLE PLAY SERVICES VERSION ===== -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+
         <activity
             android:name=".views.ProductListActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
 <!--        <activity-->
 <!--            android:name=".views.RegisterActivity"-->
 <!--            android:exported="false" />-->
@@ -56,6 +90,58 @@
         <activity
             android:name=".views.ProductDetailActivity"
             android:exported="true" />
+
+
+
+        <activity
+            android:name=".views.PaymentActivity"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="app"
+                    android:scheme="@string/zalopay_app_scheme" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".views.ShippingActivity"
+            android:exported="false">
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
+        </activity>
+
+        <activity
+            android:name=".views.RegisterActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".views.AdminActivity"
+            android:exported="false" />
+        <activity android:name=".views.CategoryActivity">
+        </activity>
+        <activity android:name=".views.SupplierActivity">
+        </activity>
+        <activity
+            android:name=".views.MapActivity"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:label="Theo dõi giao hàng"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.PRM392_FinalProject.NoActionBar" />
+        <activity android:name=".views.PaymentSuccessActivity" />
+        <activity android:name=".views.PaymentFailedActivity" />
+        <activity android:name=".views.OrderManagementActivity" />
+        <activity android:name=".views.PaymentHistoryActivity" />
 
     </application>
 

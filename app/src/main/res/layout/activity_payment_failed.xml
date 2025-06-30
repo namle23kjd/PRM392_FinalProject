@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#FFF6F6"
+    android:padding="32dp">
+
+    <ImageView
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:src="@android:drawable/ic_delete"
+        android:tint="#F44336"
+        android:contentDescription="Failed" />
+
+    <TextView
+        android:id="@+id/tvFailedTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thanh toán thất bại!"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="#C62828"
+        android:layout_marginTop="24dp" />
+
+    <TextView
+        android:id="@+id/tvFailedMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đã có lỗi xảy ra trong quá trình thanh toán."
+        android:textSize="16sp"
+        android:textColor="#333"
+        android:gravity="center"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="32dp" />
+
+    <Button
+        android:id="@+id/btnBackToHomeFailed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Quay về trang chủ"
+        android:backgroundTint="#F44336"
+        android:textColor="#FFF"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout> 

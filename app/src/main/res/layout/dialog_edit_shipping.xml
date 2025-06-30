@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="✏️ Chỉnh sửa thông tin giao hàng"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#1976D2"
+            android:gravity="center"
+            android:layout_marginBottom="16dp"
+            android:padding="8dp"
+            android:minHeight="48dp" />
+
+        <!-- Current Status Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📊 Trạng thái hiện tại"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:background="#FFF3E0"
+            android:padding="12dp"
+            android:layout_marginBottom="8dp"
+            android:minHeight="48dp"
+            android:gravity="center_vertical" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Trạng thái *"
+            android:textSize="12sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="4dp"
+            android:minHeight="32dp"
+            android:gravity="center_vertical" />
+
+        <Spinner
+            android:id="@+id/spinnerStatus"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="#F5F5F5"
+            android:layout_marginBottom="16dp"
+            android:minHeight="48dp" />
+
+        <!-- Shipping Information Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🚚 Thông tin giao hàng"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:background="#E8F5E8"
+            android:padding="12dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:minHeight="48dp"
+            android:gravity="center_vertical" />
+
+        <EditText
+            android:id="@+id/etPersonName"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="👤 Tên người nhận *"
+            android:inputType="textPersonName"
+            android:maxLines="1"
+            android:background="#F5F5F5"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/etShippingAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="📍 Địa chỉ giao hàng *"
+            android:inputType="textPostalAddress"
+            android:maxLines="3"
+            android:minLines="2"
+            android:background="#F5F5F5"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"
+            android:minHeight="80dp" />
+
+        <!-- Shipping Method -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🚛 Phương thức giao hàng *"
+            android:textSize="12sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="4dp"
+            android:minHeight="32dp"
+            android:gravity="center_vertical" />
+
+        <Spinner
+            android:id="@+id/spinnerShippingMethod"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="#F5F5F5"
+            android:layout_marginBottom="16dp"
+            android:minHeight="48dp" />
+
+        <!-- Expected Delivery -->
+        <EditText
+            android:id="@+id/etExpectedDelivery"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="📅 Ngày dự kiến giao hàng *"
+            android:inputType="none"
+            android:focusable="false"
+            android:clickable="true"
+            android:maxLines="1"
+            android:background="#F5F5F5"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"
+            android:minHeight="48dp" />
+
+        <!-- Description -->
+        <EditText
+            android:id="@+id/etDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="📝 Ghi chú (tùy chọn)"
+            android:inputType="textMultiLine"
+            android:maxLines="3"
+            android:minLines="2"
+            android:background="#F5F5F5"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"
+            android:minHeight="80dp" />
+
+        <!-- Status Change Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#F5F5F5"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp"
+            android:minHeight="100dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="📋 Hướng dẫn trạng thái"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="#666666"
+                android:layout_marginBottom="8dp"
+                android:minHeight="32dp"
+                android:gravity="center_vertical" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• Pending: Chờ xử lý\n• Preparing: Đang chuẩn bị hàng\n• Shipping: Đang giao hàng\n• Delivered: Đã giao thành công\n• Cancelled: Đã hủy"
+                android:textSize="11sp"
+                android:textColor="#777777"
+                android:lineSpacingExtra="4dp"
+                android:minHeight="80dp"
+                android:gravity="top" />
+
+        </LinearLayout>
+
+        <!-- Quick Actions -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/btnMarkAsShipping"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="🚛 Đang giao"
+                android:textSize="12sp"
+                android:textColor="#FFFFFF"
+                android:background="#1976D2"
+                android:layout_marginEnd="8dp"
+                android:minHeight="48dp"
+                android:minWidth="88dp" />
+
+            <Button
+                android:id="@+id/btnMarkAsDelivered"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="✅ Đã giao"
+                android:textSize="12sp"
+                android:textColor="#FFFFFF"
+                android:background="#4CAF50"
+                android:layout_marginStart="8dp"
+                android:minHeight="48dp"
+                android:minWidth="88dp" />
+
+        </LinearLayout>
+
+        <!-- Advanced Options (Collapsible) -->
+        <TextView
+            android:id="@+id/tvAdvancedOptions"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="🔽 Tùy chọn nâng cao"
+            android:textSize="14sp"
+            android:textColor="#1976D2"
+            android:padding="12dp"
+            android:background="#F0F0F0"
+            android:layout_marginBottom="8dp"
+            android:minHeight="48dp"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <LinearLayout
+            android:id="@+id/layoutAdvancedOptions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="🏷️ Cập nhật mã tracking"
+                android:textSize="12sp"
+                android:textColor="#666666"
+                android:layout_marginBottom="8dp"
+                android:minHeight="32dp"
+                android:gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/etTrackingNumber"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Mã tracking (tùy chọn)"
+                android:inputType="text"
+                android:maxLines="1"
+                android:enabled="false"
+                android:background="#F5F5F5"
+                android:padding="12dp"
+                android:layout_marginBottom="12dp"
+                android:minHeight="48dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="⚠️ Mã tracking được tạo tự động và không nên thay đổi"
+                android:textSize="10sp"
+                android:textColor="#F44336"
+                android:layout_marginBottom="8dp"
+                android:minHeight="32dp"
+                android:gravity="center_vertical" />
+
+        </LinearLayout>
+
+        <!-- Required Fields Note -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="* Trường bắt buộc"
+            android:textSize="12sp"
+            android:textColor="#F44336"
+            android:gravity="center"
+            android:layout_marginTop="16dp"
+            android:minHeight="32dp" />
+
+    </LinearLayout>
+
+</ScrollView>
