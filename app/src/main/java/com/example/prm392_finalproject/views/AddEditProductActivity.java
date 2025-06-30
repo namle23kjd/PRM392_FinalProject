@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.prm392_finalproject.R;
+import com.example.prm392_finalproject.dao.ProductDAO;
 import com.example.prm392_finalproject.models.Product;
 
 import java.util.concurrent.ExecutorService;
@@ -27,6 +28,7 @@ public class AddEditProductActivity extends AppCompatActivity {
     private Switch switchIsActive;
 
     private ExecutorService executorService;
+    private ProductDAO productDAO;
     private boolean isEditMode = false;
     private int productId = -1;
 
@@ -48,6 +50,7 @@ public class AddEditProductActivity extends AppCompatActivity {
             }
 
             executorService = Executors.newSingleThreadExecutor();
+            productDAO = new ProductDAO();
 
             // Initialize views safely
             initializeViewsSafely();
@@ -64,7 +67,6 @@ public class AddEditProductActivity extends AppCompatActivity {
             System.out.println("AddEditProductActivity: Critical error in onCreate: " + e.getMessage());
             e.printStackTrace();
             Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            // Don't finish() - let user see the error
         }
     }
 
@@ -73,6 +75,9 @@ public class AddEditProductActivity extends AppCompatActivity {
         super.onDestroy();
         if (executorService != null && !executorService.isShutdown()) {
             executorService.shutdown();
+        }
+        if (productDAO != null) {
+            productDAO.shutdown();
         }
     }
 
@@ -91,10 +96,24 @@ public class AddEditProductActivity extends AppCompatActivity {
         editTextProductCode.setHint("Product Code");
         layout.addView(editTextProductCode);
 
+        editTextDescription = new EditText(this);
+        editTextDescription.setHint("Description");
+        layout.addView(editTextDescription);
+
         editTextPrice = new EditText(this);
         editTextPrice.setHint("Price");
         editTextPrice.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
         layout.addView(editTextPrice);
+
+        editTextStock = new EditText(this);
+        editTextStock.setHint("Stock Quantity");
+        editTextStock.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
+        layout.addView(editTextStock);
+
+        switchIsActive = new Switch(this);
+        switchIsActive.setText("Active");
+        switchIsActive.setChecked(true);
+        layout.addView(switchIsActive);
 
         android.widget.Button saveButton = new android.widget.Button(this);
         saveButton.setText("Save");
@@ -118,9 +137,9 @@ public class AddEditProductActivity extends AppCompatActivity {
             try { autoCompleteCategory = findViewById(R.id.autoCompleteCategory); } catch (Exception e) { System.out.println("autoCompleteCategory not found"); }
             try { switchIsActive = findViewById(R.id.switchIsActive); } catch (Exception e) { System.out.println("switchIsActive not found"); }
 
-            // Setup simple category dropdown if available
+            // Setup category dropdown with your actual categories
             if (autoCompleteCategory != null) {
-                String[] categories = {"Electronics", "Clothing", "Books", "Home & Garden", "Sports"};
+                String[] categories = {"Smartphone", "Laptop", "Tablet", "Accessories"};
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, categories);
                 autoCompleteCategory.setAdapter(adapter);
             }
@@ -152,15 +171,15 @@ public class AddEditProductActivity extends AppCompatActivity {
         try {
             if (getIntent().hasExtra("IS_EDIT") && getIntent().getBooleanExtra("IS_EDIT", false)) {
                 isEditMode = true;
-                productId = getIntent().getIntExtra("PRODUCT_ID", -1);
+                productId = getIntent().getIntExtra("product_id", -1);
                 System.out.println("AddEditProductActivity: Edit mode, product ID: " + productId);
 
                 if (getSupportActionBar() != null) {
                     getSupportActionBar().setTitle("Edit Product");
                 }
 
-                // Load product data (simplified)
-                loadProductDataSafely();
+                // Load product data from database
+                loadProductDataFromDatabase();
             } else {
                 System.out.println("AddEditProductActivity: Add mode");
                 if (getSupportActionBar() != null) {
@@ -172,19 +191,52 @@ public class AddEditProductActivity extends AppCompatActivity {
         }
     }
 
-    private void loadProductDataSafely() {
-        // For now, just show test data in edit mode
-        try {
-            if (editTextProductName != null) editTextProductName.setText("Sample Product " + productId);
-            if (editTextProductCode != null) editTextProductCode.setText("PRD" + String.format("%03d", productId));
-            if (editTextDescription != null) editTextDescription.setText("Sample description for product " + productId);
-            if (editTextPrice != null) editTextPrice.setText("99.99");
-            if (editTextStock != null) editTextStock.setText("10");
-            if (switchIsActive != null) switchIsActive.setChecked(true);
+    private void loadProductDataFromDatabase() {
+        if (productId == -1) {
+            Toast.makeText(this, "Invalid product ID", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-            Toast.makeText(this, "Loaded test data for product " + productId, Toast.LENGTH_SHORT).show();
+        // Use ProductDAO to load product data
+        productDAO.getProductByIdAsync(productId, new ProductDAO.ProductCallback() {
+            @Override
+            public void onSuccess(Product product) {
+                // Update UI on main thread
+                runOnUiThread(() -> {
+                    populateFields(product);
+                    Toast.makeText(AddEditProductActivity.this, "Product loaded successfully", Toast.LENGTH_SHORT).show();
+                });
+            }
+
+            @Override
+            public void onError(String error) {
+                runOnUiThread(() -> {
+                    Toast.makeText(AddEditProductActivity.this, "Error loading product: " + error, Toast.LENGTH_LONG).show();
+                    System.out.println("AddEditProductActivity: Error loading product: " + error);
+                });
+            }
+        });
+    }
+
+    private void populateFields(Product product) {
+        try {
+            if (editTextProductName != null) editTextProductName.setText(product.getName() != null ? product.getName() : "");
+            if (editTextProductCode != null) editTextProductCode.setText(product.getProductCode() != null ? product.getProductCode() : "");
+            if (editTextDescription != null) editTextDescription.setText(product.getDescription() != null ? product.getDescription() : "");
+            if (editTextPrice != null) editTextPrice.setText(String.valueOf(product.getPrice()));
+            if (editTextStock != null) editTextStock.setText(String.valueOf(product.getQuantityInStock()));
+            if (switchIsActive != null) switchIsActive.setChecked(product.isActive());
+
+            // Set category if available
+            if (autoCompleteCategory != null && product.getCategoryId() != null) {
+                String[] categories = {"Smartphone", "Laptop", "Tablet", "Accessories"};
+                int categoryIndex = product.getCategoryId() - 1; // Assuming category IDs start from 1
+                if (categoryIndex >= 0 && categoryIndex < categories.length) {
+                    autoCompleteCategory.setText(categories[categoryIndex]);
+                }
+            }
         } catch (Exception e) {
-            System.out.println("AddEditProductActivity: Error loading test data: " + e.getMessage());
+            System.out.println("AddEditProductActivity: Error populating fields: " + e.getMessage());
         }
     }
 
@@ -231,13 +283,19 @@ public class AddEditProductActivity extends AppCompatActivity {
 
             // Create product object
             Product product = new Product();
+
+            // Set product ID for edit mode
+            if (isEditMode) {
+                product.setProductId(productId);
+            }
+
             product.setName(editTextProductName.getText().toString().trim());
 
-            if (editTextProductCode != null) {
+            if (editTextProductCode != null && !TextUtils.isEmpty(editTextProductCode.getText().toString().trim())) {
                 product.setProductCode(editTextProductCode.getText().toString().trim());
             }
 
-            if (editTextDescription != null) {
+            if (editTextDescription != null && !TextUtils.isEmpty(editTextDescription.getText().toString().trim())) {
                 product.setDescription(editTextDescription.getText().toString().trim());
             }
 
@@ -246,7 +304,7 @@ public class AddEditProductActivity extends AppCompatActivity {
                 product.setPrice(price);
             } catch (NumberFormatException e) {
                 Toast.makeText(this, "Invalid price format", Toast.LENGTH_SHORT).show();
-                editTextPrice.requestFocus();
+                if (editTextPrice != null) editTextPrice.requestFocus();
                 return;
             }
 
@@ -257,6 +315,8 @@ public class AddEditProductActivity extends AppCompatActivity {
                 } catch (NumberFormatException e) {
                     product.setQuantityInStock(0);
                 }
+            } else {
+                product.setQuantityInStock(0);
             }
 
             if (switchIsActive != null) {
@@ -265,14 +325,64 @@ public class AddEditProductActivity extends AppCompatActivity {
                 product.setActive(true);
             }
 
-            // For now, just show success message (no database save)
-            String message = isEditMode ? "Product updated successfully (test mode)" : "Product added successfully (test mode)";
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            // Set category ID based on selection
+            if (autoCompleteCategory != null && !TextUtils.isEmpty(autoCompleteCategory.getText().toString().trim())) {
+                String selectedCategory = autoCompleteCategory.getText().toString().trim();
+                String[] categories = {"Smartphone", "Laptop", "Tablet", "Accessories"};
+                for (int i = 0; i < categories.length; i++) {
+                    if (categories[i].equals(selectedCategory)) {
+                        product.setCategoryId(i + 1); // Category IDs start from 1
+                        break;
+                    }
+                }
+            } else {
+                product.setCategoryId(1); // Default to first category
+            }
 
-            System.out.println("AddEditProductActivity: Product saved: " + product.getName());
+            // Save product using DAO
+            if (isEditMode) {
+                // Update existing product
+                productDAO.updateProductAsync(product, new ProductDAO.OperationCallback() {
+                    @Override
+                    public void onSuccess() {
+                        runOnUiThread(() -> {
+                            Toast.makeText(AddEditProductActivity.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
+                            System.out.println("AddEditProductActivity: Product updated: " + product.getName());
+                            setResult(RESULT_OK);
+                            finish();
+                        });
+                    }
 
-            // Close activity
-            finish();
+                    @Override
+                    public void onError(String error) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(AddEditProductActivity.this, "Error updating product: " + error, Toast.LENGTH_LONG).show();
+                            System.out.println("AddEditProductActivity: Error updating product: " + error);
+                        });
+                    }
+                });
+            } else {
+                // Add new product
+                productDAO.addProductAsync(product, new ProductDAO.OperationCallback() {
+                    @Override
+                    public void onSuccess() {
+                        runOnUiThread(() -> {
+                            Toast.makeText(AddEditProductActivity.this, "Product added successfully", Toast.LENGTH_SHORT).show();
+                            System.out.println("AddEditProductActivity: Product added: " + product.getName());
+                            setResult(RESULT_OK);
+                            finish();
+                        });
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(AddEditProductActivity.this, "Error adding product: " + error, Toast.LENGTH_LONG).show();
+                            System.out.println("AddEditProductActivity: Error adding product: " + error);
+                        });
+                    }
+                });
+            }
 
         } catch (Exception e) {
             System.out.println("AddEditProductActivity: Error saving product: " + e.getMessage());

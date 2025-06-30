@@ -11,16 +11,16 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.prm392_finalproject.R;
-import com.example.prm392_finalproject.controllers.ProductController;
+import com.example.prm392_finalproject.dao.ProductDAO;
 import com.example.prm392_finalproject.models.Product;
 import com.squareup.picasso.Picasso;
 
 import java.text.NumberFormat;
 import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ProductDetailActivity extends AppCompatActivity {
     private ImageView imageViewProduct;
@@ -30,8 +30,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private TextView textViewWarranty, textViewOrigin, textViewReleaseDate;
     private TextView textViewStatus, textViewCreatedAt, textViewUpdatedAt;
 
-    private ProductController productController;
-    private ExecutorService executorService;
+    private ProductDAO productDAO;
     private Product currentProduct;
     private int productId;
     private NumberFormat currencyFormat;
@@ -43,7 +42,6 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         initializeViews();
         setupToolbar();
-        setupExecutorService();
         getProductId();
         loadProductDetails();
     }
@@ -67,7 +65,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         textViewCreatedAt = findViewById(R.id.textViewCreatedAt);
         textViewUpdatedAt = findViewById(R.id.textViewUpdatedAt);
 
-        productController = new ProductController();
+        productDAO = new ProductDAO();
         currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
     }
 
@@ -80,10 +78,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         }
     }
 
-    private void setupExecutorService() {
-        executorService = Executors.newSingleThreadExecutor();
-    }
-
     private void getProductId() {
         productId = getIntent().getIntExtra("PRODUCT_ID", -1);
         if (productId == -1) {
@@ -93,22 +87,27 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void loadProductDetails() {
-        executorService.execute(() -> {
-            try {
-                currentProduct = productController.getProductById(productId);
-                if (currentProduct != null) {
-                    runOnUiThread(() -> displayProductDetails(currentProduct));
-                } else {
-                    runOnUiThread(() -> {
-                        Toast.makeText(this, "Product not found", Toast.LENGTH_SHORT).show();
-                        finish();
-                    });
-                }
-            } catch (Exception e) {
-                runOnUiThread(() -> {
-                    Toast.makeText(this, "Error loading product: " + e.getMessage(),
-                            Toast.LENGTH_SHORT).show();
-                });
+        // Show loading state (optional - you can add a progress bar)
+        // progressBar.setVisibility(View.VISIBLE);
+
+        productDAO.getProductByIdAsync(productId, new ProductDAO.ProductCallback() {
+            @Override
+            public void onSuccess(Product product) {
+                // Hide loading state
+                // progressBar.setVisibility(View.GONE);
+
+                currentProduct = product;
+                displayProductDetails(product);
+            }
+
+            @Override
+            public void onError(String error) {
+                // Hide loading state
+                // progressBar.setVisibility(View.GONE);
+
+                Toast.makeText(ProductDetailActivity.this,
+                        "Error loading product: " + error, Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }
@@ -128,13 +127,13 @@ public class ProductDetailActivity extends AppCompatActivity {
         int stock = product.getQuantityInStock();
         textViewStock.setText("Stock: " + stock);
 
-        // Color code stock levels
+        // Color code stock levels using ContextCompat
         if (stock <= 5) {
-            textViewStock.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+            textViewStock.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_dark));
         } else if (stock <= 20) {
-            textViewStock.setTextColor(getResources().getColor(android.R.color.holo_orange_dark));
+            textViewStock.setTextColor(ContextCompat.getColor(this, android.R.color.holo_orange_dark));
         } else {
-            textViewStock.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
+            textViewStock.setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark));
         }
 
         // Product specifications
@@ -219,18 +218,27 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void deleteProduct() {
-        executorService.execute(() -> {
-            try {
-                productController.deleteProduct(productId);
-                runOnUiThread(() -> {
-                    Toast.makeText(this, "Product deleted successfully", Toast.LENGTH_SHORT).show();
-                    finish();
-                });
-            } catch (Exception e) {
-                runOnUiThread(() -> {
-                    Toast.makeText(this, "Error deleting product: " + e.getMessage(),
-                            Toast.LENGTH_SHORT).show();
-                });
+        // Show loading state (optional)
+        // progressBar.setVisibility(View.VISIBLE);
+
+        productDAO.deleteProductAsync(productId, new ProductDAO.OperationCallback() {
+            @Override
+            public void onSuccess() {
+                // Hide loading state
+                // progressBar.setVisibility(View.GONE);
+
+                Toast.makeText(ProductDetailActivity.this,
+                        "Product deleted successfully", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+            @Override
+            public void onError(String error) {
+                // Hide loading state
+                // progressBar.setVisibility(View.GONE);
+
+                Toast.makeText(ProductDetailActivity.this,
+                        "Error deleting product: " + error, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -238,14 +246,18 @@ public class ProductDetailActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadProductDetails(); // Refresh product details when returning to this activity
+        // Refresh product details when returning to this activity
+        if (productId != -1) {
+            loadProductDetails();
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (executorService != null && !executorService.isShutdown()) {
-            executorService.shutdown();
+        // Clean up the DAO resources
+        if (productDAO != null) {
+            productDAO.shutdown();
         }
     }
 }

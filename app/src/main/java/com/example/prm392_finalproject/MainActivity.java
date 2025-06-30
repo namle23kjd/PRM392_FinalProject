@@ -18,6 +18,7 @@ import com.example.prm392_finalproject.db.ConnectionClass;
 import com.example.prm392_finalproject.views.LoginActivity;
 import com.example.prm392_finalproject.views.OrderManagementActivity;
 import com.example.prm392_finalproject.views.PaymentHistoryActivity;
+import com.example.prm392_finalproject.views.ProductListActivity;
 import com.example.prm392_finalproject.views.adapters.ProductAdapter;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnPaymentHistory;
 
     private Button btnProduct;
+
 
 
     @Override
@@ -94,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         btnProduct = findViewById(R.id.btnProduct);
 
         btnProduct.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, ProductAdapter.class);
+            Intent intent = new Intent(MainActivity.this, ProductListActivity.class);
             startActivity(intent);
         });
 
@@ -116,42 +118,42 @@ public class MainActivity extends AppCompatActivity {
         new Thread(() -> {
             try {
                 Log.d(TAG, "Attempting to connect to database...");
-                
+
                 // Create instance of ConnectionClass and call CONN() method
                 ConnectionClass connectionClass = new ConnectionClass();
                 Connection connection = connectionClass.CONN();
-                
+
                 if (connection != null && !connection.isClosed()) {
                     Log.d(TAG, "✅ DATABASE CONNECTION SUCCESSFUL!");
-                    
+
                     // Show success message on UI thread
                     runOnUiThread(() -> {
-                        Toast.makeText(MainActivity.this, 
-                            "Database connected successfully!", 
+                        Toast.makeText(MainActivity.this,
+                            "Database connected successfully!",
                             Toast.LENGTH_LONG).show();
                     });
-                    
+
                     // Close the connection
                     connection.close();
                 } else {
                     Log.e(TAG, "❌ DATABASE CONNECTION FAILED: Connection is null or closed");
-                    
+
                     // Show error message on UI thread
                     runOnUiThread(() -> {
-                        Toast.makeText(MainActivity.this, 
-                            "Database connection failed!", 
+                        Toast.makeText(MainActivity.this,
+                            "Database connection failed!",
                             Toast.LENGTH_LONG).show();
                     });
                 }
-                
+
             } catch (Exception e) {
                 Log.e(TAG, "❌ DATABASE CONNECTION ERROR: " + e.getMessage());
                 e.printStackTrace();
-                
+
                 // Show error message on UI thread
                 runOnUiThread(() -> {
-                    Toast.makeText(MainActivity.this, 
-                        "Database error: " + e.getMessage(), 
+                    Toast.makeText(MainActivity.this,
+                        "Database error: " + e.getMessage(),
                         Toast.LENGTH_LONG).show();
                 });
             }

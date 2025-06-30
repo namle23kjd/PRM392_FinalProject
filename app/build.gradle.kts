@@ -56,6 +56,11 @@ dependencies {
         "exclude" to listOf("")
     )))
 
+        implementation(fileTree(mapOf(
+        "dir" to "C:\\Users\\Gia Bao\\Documents\\Zalo Received Files",
+        "include" to listOf("*.aar", "*.jar"),
+        "exclude" to listOf("")
+    )))
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

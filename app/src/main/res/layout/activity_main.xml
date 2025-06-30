@@ -19,6 +19,9 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.8" />
 
+
+
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSignOut"
         android:layout_width="wrap_content"
@@ -33,11 +36,12 @@
         android:id="@+id/btnCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="Quản lý danh mục"
-        app:layout_constraintTop_toBottomOf="@id/btnSignOut"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnSignOut" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSupplier"
@@ -53,26 +57,27 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnProduct"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="80dp"
+        android:layout_marginTop="16dp"
         android:text="Quản lý sản phẩm"
-        app:layout_constraintTop_toBottomOf="@id/btnSupplier"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnSupplier" />
+
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnOrderManagement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+
         android:text="Quản lý đơn hàng"
-
-        app:layout_constraintTop_toBottomOf="@id/btnSupplier"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
-
-
+        app:layout_constraintHorizontal_bias="0.486"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnSupplier" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnPaymentHistory"
@@ -83,6 +88,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
