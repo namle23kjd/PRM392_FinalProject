@@ -10,6 +10,7 @@
     <!-- ===== GOOGLE MAPS LOCATION PERMISSIONS ===== -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <!-- ===== GOOGLE MAPS FEATURES ===== -->
     <!-- OpenGL ES 2.0 required for Google Maps -->
     <uses-feature
@@ -40,15 +41,15 @@
         <activity
             android:name=".views.CategoryActivity"
             android:exported="false" />
-<!--        <activity-->
-<!--            android:name=".views.LoginActivity"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
+        <activity-->
+            android:name=".views.LoginActivity"-->
+            android:exported="true">-->
+            <intent-filter>-->
+               <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
+             <category android:name="android.intent.category.LAUNCHER" />-->
+           </intent-filter>-->
+        </activity>-->
 
 
         <!-- ===== GOOGLE MAPS API KEY ===== -->
@@ -62,6 +63,26 @@
             android:value="@integer/google_play_services_version" />
 
 
+
+<!--        <activity-->
+<!--            android:name=".views.LoginActivity"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
+<!--        <activity-->
+<!--            android:name=".views.CustomerOrderActivity"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
+
+        <activity
+            android:name=".views.ShippingActivity"
         <activity
             android:name=".views.ProductListActivity"
             android:exported="true">
@@ -107,41 +128,36 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".views.ShippingActivity"
-            android:exported="false">
-            <!--            <intent-filter>-->
-            <!--                <action android:name="android.intent.action.MAIN" />-->
-            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-            <!--            </intent-filter>-->
-        </activity>
 
-        <activity
-            android:name=".views.RegisterActivity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".MainActivity"-->
+<!--            android:exported="false" />-->
 
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".views.AdminActivity"-->
+<!--            android:exported="false" />-->
 
-        <activity
-            android:name=".views.AdminActivity"
-            android:exported="false" />
-        <activity android:name=".views.CategoryActivity">
-        </activity>
-        <activity android:name=".views.SupplierActivity">
-        </activity>
+        <!-- ===== NEW SHIPPING ACTIVITIES ===== -->
+<!--        <activity-->
+<!--            android:name=".views.ShippingActivity"-->
+<!--            android:label="Quản lý giao hàng"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            android:exported="false" />-->
+
         <activity
             android:name=".views.MapActivity"
-            android:exported="false"
-            android:hardwareAccelerated="true"
             android:label="Theo dõi giao hàng"
             android:screenOrientation="portrait"
+            android:exported="false"
+            android:hardwareAccelerated="true"
             android:theme="@style/Theme.PRM392_FinalProject.NoActionBar" />
+
+
         <activity android:name=".views.PaymentSuccessActivity" />
         <activity android:name=".views.PaymentFailedActivity" />
         <activity android:name=".views.OrderManagementActivity" />
         <activity android:name=".views.PaymentHistoryActivity" />
+
 
     </application>
 

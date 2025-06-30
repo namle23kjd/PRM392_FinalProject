@@ -12,7 +12,6 @@ public class ConnectionClass {
     protected static String port = "3306";
     protected static String username = "binh";
     protected  static String password = "1234";
-
     public Connection CONN(){
         Connection conn = null;
         try{

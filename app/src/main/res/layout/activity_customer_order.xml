@@ -1,49 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5F5"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Header với Distance Info -->
+    <!-- Customer Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/header_gradient_background"
+        android:background="#2196F3"
         android:elevation="4dp"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:layout_marginTop="8dp">
 
-        <!-- Main Header -->
+        <!-- Welcome Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="12dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/tvWelcomeCustomer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:text="📦 Quản lý giao hàng"
+                android:text="Xin chào, Khách hàng 👋"
                 android:textColor="#FFFFFF"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="🚚"
-                android:textSize="32sp" />
+                android:text="🛒"
+                android:textSize="24sp" />
         </LinearLayout>
 
-        <!-- Distance Service Info -->
+        <!-- Customer Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvCustomerInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#1565C0"
+                android:padding="8dp"
+                android:text="📱 ID: 123 • John Doe"
+                android:textColor="#E3F2FD"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tvDeliveryAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#0D47A1"
+                android:padding="8dp"
+                android:text="📍 123 Main Street, City"
+                android:textColor="#BBDEFB"
+                android:textSize="11sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- Distance Status -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,139 +85,30 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="📍"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="Hỗ trợ tính khoảng cách và phí giao hàng"
+                android:text="Tự động tính khoảng cách giao hàng"
                 android:textColor="#E3F2FD"
-                android:textSize="12sp" />
+                android:textSize="11sp" />
 
             <TextView
+                android:id="@+id/tvDistanceStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#2196F3"
                 android:padding="4dp"
-                android:text="📏 50km"
+                android:text="🔄 Đang tải..."
                 android:textColor="#FFEB3B"
-                android:textSize="11sp"
+                android:textSize="10sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Search and Filter Section -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:background="#FFFFFF"
-        android:elevation="4dp"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <!-- Quick Distance Check -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:background="#E8F5E8"
-            android:orientation="horizontal"
-            android:padding="12dp">
-
-            <EditText
-                android:id="@+id/etQuickDistanceCheck"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:background="#FFFFFF"
-                android:hint="📍 Nhập địa chỉ để kiểm tra khoảng cách..."
-                android:inputType="textPostalAddress"
-                android:maxLines="2"
-                android:minHeight="48dp"
-                android:padding="12dp"
-                android:textColor="#212121"
-                android:textColorHint="#757575"
-                android:textSize="12sp" />
-
-            <Button
-                android:id="@+id/btnQuickDistanceCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_marginStart="8dp"
-                android:background="#4CAF50"
-                android:minWidth="48dp"
-                android:minHeight="48dp"
-                android:text="📏"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp" />
-        </LinearLayout>
-
-        <!-- Tracking Search -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/etSearchTracking"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:background="#F5F5F5"
-                android:hint="🔍 Nhập mã tracking..."
-                android:inputType="text"
-                android:maxLines="1"
-                android:minHeight="48dp"
-                android:padding="12dp"
-                android:textColor="#212121"
-                android:textColorHint="#757575" />
-
-            <Button
-                android:id="@+id/btnTrackShipping"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_marginStart="8dp"
-                android:background="#0D47A1"
-                android:minWidth="88dp"
-                android:minHeight="48dp"
-                android:paddingHorizontal="16dp"
-                android:text="Tìm kiếm"
-                android:textColor="#FFFFFF" />
-        </LinearLayout>
-
-        <!-- Status Filter -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:minHeight="48dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:gravity="center_vertical"
-                android:minHeight="48dp"
-                android:text="📊 Lọc theo trạng thái:"
-                android:textColor="#212121"
-                android:textSize="14sp" />
-
-            <Spinner
-                android:id="@+id/spinnerStatusFilter"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:background="#F5F5F5"
-                android:minHeight="48dp" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- Action Buttons với Distance Features -->
+    <!-- Action Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -197,46 +116,32 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btnAddShipping"
+            android:id="@+id/btnRefreshOrders"
             android:layout_width="0dp"
             android:layout_height="56dp"
-            android:layout_marginEnd="4dp"
-            android:layout_weight="2"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
             android:background="#2E7D32"
             android:gravity="center"
-            android:minHeight="56dp"
-            android:text="➕ Thêm giao hàng"
+            android:text="🔄 Làm mới"
             android:textColor="#FFFFFF"
             android:textSize="13sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:minHeight="56dp" />
 
         <Button
-            android:id="@+id/btnDistanceSettings"
+            android:id="@+id/btnOrderHistory"
             android:layout_width="0dp"
             android:layout_height="56dp"
-            android:layout_marginHorizontal="4dp"
-            android:layout_weight="1"
-            android:background="#FF9800"
-            android:gravity="center"
-            android:lineSpacingExtra="2dp"
-            android:minHeight="56dp"
-            android:text="📏\nCài đặt"
-            android:textColor="#FFFFFF"
-            android:textSize="11sp" />
-
-        <Button
-            android:id="@+id/btnRefresh"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:background="#5D4037"
             android:gravity="center"
-            android:lineSpacingExtra="2dp"
-            android:minHeight="56dp"
-            android:text="🔄\nLàm mới"
+            android:text="📋 Lọc đơn hàng"
             android:textColor="#FFFFFF"
-            android:textSize="11sp" />
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:minHeight="56dp" />
     </LinearLayout>
 
     <!-- Distance Summary Card -->
@@ -246,7 +151,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:background="#FFF3E0"
-        android:elevation="2dp"
+        android:elevation="3dp"
         android:orientation="horizontal"
         android:padding="12dp"
         android:visibility="gone">
@@ -256,7 +161,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="4dp">
 
             <TextView
                 android:id="@+id/tvDistanceValue"
@@ -286,7 +192,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="4dp">
 
             <TextView
                 android:id="@+id/tvDurationValue"
@@ -316,7 +223,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="4dp">
 
             <TextView
                 android:id="@+id/tvShippingFeeValue"
@@ -344,10 +252,11 @@
             android:minWidth="32dp"
             android:minHeight="32dp"
             android:text="✕"
-            android:textColor="#757575" />
+            android:textColor="#757575"
+            android:textSize="14sp" />
     </LinearLayout>
 
-    <!-- Shipping List -->
+    <!-- Orders List Container -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -356,65 +265,50 @@
         android:elevation="4dp"
         android:orientation="vertical">
 
-        <!-- List Header với Enhanced Info -->
+        <!-- List Header -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#E3F2FD"
-            android:minHeight="48dp"
+            android:background="#E8F5E8"
             android:orientation="horizontal"
-            android:padding="16dp">
+            android:padding="16dp"
+            android:minHeight="48dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="📋 Danh sách giao hàng"
-                android:textColor="#0D47A1"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <View
                 android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="📦 Đơn hàng của bạn"
+                android:textColor="#2E7D32"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:gravity="center_vertical" />
 
             <TextView
-                android:id="@+id/tvTotalShippingCount"
+                android:id="@+id/tvTotalOrderCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:gravity="center_vertical"
-                android:minHeight="48dp"
-                android:text="0 chuyến"
+                android:text="0 đơn"
                 android:textColor="#424242"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/tvDistanceStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#E8F5E8"
-                android:gravity="center"
-                android:padding="4dp"
-                android:text="📏 Ready"
-                android:textColor="#4CAF50"
-                android:textSize="10sp" />
+                android:textSize="12sp"
+                android:gravity="center_vertical" />
         </LinearLayout>
 
         <!-- ListView -->
         <ListView
-            android:id="@+id/listViewShippings"
+            android:id="@+id/listViewCustomerOrders"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:clipToPadding="false"
             android:divider="#E0E0E0"
             android:dividerHeight="1dp"
-            android:minHeight="48dp"
             android:padding="8dp"
             android:scrollbars="vertical"
-            android:smoothScrollbar="true" />
+            android:smoothScrollbar="true"
+            android:fastScrollEnabled="true"
+            android:scrollingCache="true" />
 
         <!-- Empty State -->
         <LinearLayout
@@ -423,7 +317,6 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:minHeight="200dp"
             android:orientation="vertical"
             android:padding="32dp"
             android:visibility="gone">
@@ -433,7 +326,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:alpha="0.5"
-                android:text="📭"
+                android:text="🛒"
                 android:textSize="64sp" />
 
             <TextView
@@ -441,43 +334,54 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:gravity="center"
-                android:text="Chưa có chuyến giao hàng nào"
+                android:text="Bạn chưa có đơn hàng nào"
                 android:textColor="#424242"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:lineSpacingExtra="4dp"
-                android:text="Nhấn 'Thêm giao hàng' để tạo chuyến giao hàng mới\n📏 Hỗ trợ tính khoảng cách tự động"
+                android:text="Hãy bắt đầu mua sắm để tạo đơn hàng đầu tiên\n📏 Hệ thống sẽ tự động tính khoảng cách giao hàng"
                 android:textColor="#757575"
                 android:textSize="12sp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="#2196F3"
+                android:text="🛍️ Bắt đầu mua sắm"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:padding="12dp"
+                android:minWidth="120dp" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Enhanced Quick Stats với Distance Info -->
+    <!-- Order Statistics -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="#FFFFFF"
         android:elevation="2dp"
-        android:minHeight="80dp"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:minHeight="80dp">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:minHeight="64dp"
             android:orientation="vertical"
             android:padding="8dp">
 
             <TextView
-                android:id="@+id/tvPendingCount"
+                android:id="@+id/tvPendingOrderCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
@@ -489,7 +393,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="⏳ Chờ xử lý"
+                android:text="⏳ Đang xử lý"
                 android:textColor="#424242"
                 android:textSize="10sp" />
         </LinearLayout>
@@ -505,12 +409,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:minHeight="64dp"
             android:orientation="vertical"
             android:padding="8dp">
 
             <TextView
-                android:id="@+id/tvShippingCount"
+                android:id="@+id/tvShippingOrderCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
@@ -538,12 +441,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:minHeight="64dp"
             android:orientation="vertical"
             android:padding="8dp">
 
             <TextView
-                android:id="@+id/tvDeliveredCount"
+                android:id="@+id/tvCompletedOrderCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
@@ -555,54 +457,38 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="✅ Đã giao"
-                android:textColor="#424242"
-                android:textSize="10sp" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="8dp"
-            android:background="#E0E0E0" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:minHeight="64dp"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <TextView
-                android:id="@+id/tvOverdueCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textColor="#C62828"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="⚠️ Trễ hạn"
+                android:text="✅ Hoàn thành"
                 android:textColor="#424242"
                 android:textSize="10sp" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Distance Service Attribution -->
-    <TextView
+    <!-- Distance Service Info Footer -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:alpha="0.7"
-        android:gravity="center"
-        android:text="📍 Powered by Google Maps API • Khoảng cách tính theo đường đi thực tế"
-        android:textColor="#757575"
-        android:textSize="9sp" />
+        android:background="#F8F9FA"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            android:gravity="center"
+            android:text="📍 Tự động tính khoảng cách từ kho đến địa chỉ giao hàng"
+            android:textColor="#757575"
+            android:textSize="9sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            android:gravity="center"
+            android:text="💡 Nhấn giữ đơn hàng để kiểm tra khoảng cách • Nhấn để xem chi tiết"
+            android:textColor="#757575"
+            android:textSize="9sp" />
+    </LinearLayout>
 
 </LinearLayout>
