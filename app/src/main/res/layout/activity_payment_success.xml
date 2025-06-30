@@ -16,6 +16,8 @@
         android:contentDescription="Success"
         tools:ignore="UseAppTint" />
 
+        android:contentDescription="Success" />
+
     <TextView
         android:id="@+id/tvSuccessTitle"
         android:layout_width="wrap_content"
