@@ -19,6 +19,7 @@ import com.example.prm392_finalproject.models.User;
 import com.example.prm392_finalproject.views.LoginActivity;
 import com.example.prm392_finalproject.views.OrderManagementActivity;
 import com.example.prm392_finalproject.views.PaymentHistoryActivity;
+import com.example.prm392_finalproject.views.ShippingActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnSupplier;
     private Button btnOrderManagement;
     private Button btnPaymentHistory;
-
+    private Button btnShippingManagement;
     private Button btnProduct;
 
 
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         btnSupplier = findViewById(R.id.btnSupplier);
         btnOrderManagement = findViewById(R.id.btnOrderManagement);
         btnPaymentHistory = findViewById(R.id.btnPaymentHistory);
-
+        btnShippingManagement=findViewById(R.id.btnShippingManagement);
         if (currentUser != null) {
             welcomeText.setText("Welcome, " + currentUser.getDisplayName() + "!");
         }
@@ -100,6 +101,10 @@ public class MainActivity extends AppCompatActivity {
         });
         btnPaymentHistory.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, PaymentHistoryActivity.class);
+            startActivity(intent);
+        });
+        btnShippingManagement.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ShippingActivity.class);
             startActivity(intent);
         });
 
