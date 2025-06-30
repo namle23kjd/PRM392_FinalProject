@@ -50,6 +50,11 @@ dependencies {
 
     // Firebase Analytics (optional but recommended)
     implementation("com.google.firebase:firebase-analytics")
+    implementation(fileTree(mapOf(
+        "dir" to "C:\\Users\\BINH\\OneDrive\\Desktop\\projectprm\\PRM392_FinalProject\\app\\zalopaylibs",
+        "include" to listOf("*.aar", "*.jar"),
+        "exclude" to listOf("")
+    )))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
@@ -67,5 +72,6 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("com.squareup.okhttp3:okhttp:4.11.0")
     implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
+    implementation("commons-codec:commons-codec:1.14")
 
 }

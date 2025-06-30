@@ -4,6 +4,14 @@
     <!-- QUAN TRỌNG: Thay YOUR_API_KEY_HERE bằng API key thực của bạn -->
     <string name="google_maps_api_key">AIzaSyBkiuiWJBnSbjMVJ9H86IoCca_i6oyxTQ4</string>
 
+    <!-- ===== ZALOPAY CONFIGURATION ===== -->
+    <!-- QUAN TRỌNG: Thay thế bằng thông tin ZaloPay sandbox thực của bạn -->
+    <string name="zalopay_app_id">2554</string>
+    <string name="zalopay_app_user">user123</string>
+    <string name="zalopay_payment_code">sandbox</string>
+    <string name="zalopay_secret_key">sdngKKJmqEMzvh5QQcdD2A9XBSKUNaYn</string>
+    <string name="zalopay_app_scheme">yourappscheme</string>
+
     <!-- Google Maps Error Messages -->
     <string name="google_play_services_error">Google Play Services không khả dụng</string>
     <string name="location_permission_denied">Cần quyền truy cập vị trí</string>
@@ -73,5 +81,19 @@
         <item>Đang giao hàng</item>
         <item>Đã giao hàng</item>
         <item>Đã hủy</item>
+    </string-array>
+
+    <string-array name="payment_status_filter">
+        <item>Tất cả</item>
+        <item>Completed</item>
+        <item>Pending</item>
+        <item>Failed</item>
+        <item>Canceled</item>
+    </string-array>
+    <string-array name="payment_method_filter">
+        <item>Tất cả</item>
+        <item>ZaloPay</item>
+        <item>Credit Card</item>
+        <item>Cash on Delivery</item>
     </string-array>
 </resources>
