@@ -15,11 +15,14 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.prm392_finalproject.controllers.UserRepository;
 import com.example.prm392_finalproject.db.ConnectionClass;
-import com.example.prm392_finalproject.models.User;
 import com.example.prm392_finalproject.views.LoginActivity;
 import com.example.prm392_finalproject.views.OrderManagementActivity;
 import com.example.prm392_finalproject.views.PaymentHistoryActivity;
+
+import com.example.prm392_finalproject.views.adapters.ProductAdapter;
+
 import com.example.prm392_finalproject.views.ShippingActivity;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -27,8 +30,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.sql.Connection;
-import java.util.Calendar;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -91,6 +92,14 @@ public class MainActivity extends AppCompatActivity {
         });
         btnSupplier.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, com.example.prm392_finalproject.views.SupplierActivity.class);
+            startActivity(intent);
+        });
+
+
+        btnProduct = findViewById(R.id.btnProduct);
+
+        btnProduct.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ProductAdapter.class);
             startActivity(intent);
         });
 

@@ -1,11 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Basic Colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="purple_500">#6200EE</color>
+
+    <!-- Primary Colors -->
     <color name="primary">#1976D2</color>
     <color name="primary_light">#63A4FF</color>
+    <color name="primary_dark">#0D47A1</color>
     <color name="accent">#FF9800</color>
+
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#1976D2</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <!-- Alternative Primary Colors -->
+    <color name="primary_color">#1976D2</color>
+    <color name="primary_light_color">#BBDEFB</color>
+    <color name="primary_dark_color">#0D47A1</color>
+
+    <!-- Text Colors -->
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="white_text">#FFFFFF</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="text_white">#FFFFFF</color>
+
+    <!-- Status Colors -->
+    <color name="status_active">#4CAF50</color>
+    <color name="status_inactive">#F44336</color>
+    <color name="status_pending">#FF6F00</color>
+    <color name="status_preparing">#1976D2</color>
+    <color name="status_shipping">#7B1FA2</color>
+    <color name="status_delivered">#388E3C</color>
+    <color name="status_cancelled">#D32F2F</color>
+
+    <!-- Status Background Colors -->
+    <color name="status_pending_bg">#E65100</color>
+    <color name="status_preparing_bg">#1565C0</color>
+    <color name="status_shipping_bg">#6A1B9A</color>
+    <color name="status_delivered_bg">#2E7D32</color>
+    <color name="status_cancelled_bg">#C62828</color>
+
+    <!-- Button & Alert Colors -->
+    <color name="success_color">#4CAF50</color>
+    <color name="warning_color">#FF9800</color>
+    <color name="info_color">#2196F3</color>
+    <color name="danger_color">#F44336</color>
+
+    <!-- Background Colors -->
+    <color name="background">#FAFAFA</color>
+    <color name="background_light">#FAFAFA</color>
+    <color name="background_white">#FFFFFF</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="status_background">#E8F5E8</color>
+    <color name="stock_background">#FFF3E0</color>
+    <color name="image_background">#F5F5F5</color>
+
+    <!-- Stock Level Colors -->
+    <color name="stock_low">#F44336</color>
+    <color name="stock_medium">#FF9800</color>
+    <color name="stock_high">#4CAF50</color>
+
+    <!-- Other Colors -->
+    <color name="divider_color">#E0E0E0</color>
+    <color name="ripple_color">#E3F2FD</color>
+    <color name="price_text">#FF5722</color>
+    <color name="route_color">#9C27B0</color>
+
+    <!-- Transparent Overlays -->
+    <color name="black_overlay">#66000000</color>
+    <color name="white_overlay">#66FFFFFF</color>
+
     <color name="gray">#F5F5F5</color>
     <color name="gray_dark">#757575</color>
     <color name="background">#FAFAFA</color>

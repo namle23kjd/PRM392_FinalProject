@@ -253,7 +253,7 @@ public class SupplierActivity extends AppCompatActivity {
                 holder.chipStatus.setChipBackgroundColorResource(R.color.accent);
             } else {
                 holder.chipStatus.setText("Ngừng hoạt động");
-                holder.chipStatus.setChipBackgroundColorResource(R.color.gray_dark);
+                holder.chipStatus.setChipBackgroundColorResource(R.color.accent);
             }
             holder.btnEdit.setOnClickListener(v -> listener.onEdit(supplier));
         }

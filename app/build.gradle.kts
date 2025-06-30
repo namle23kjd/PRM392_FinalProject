@@ -56,7 +56,11 @@ dependencies {
 //        "exclude" to listOf("")
 //    )))
     implementation(fileTree(mapOf(
-        "dir" to "D:\\ZaloPay",
+
+  //      "dir" to "C:\\Users\\Gia Bao\\Documents\\Zalo Received Files",
+
+   //     "dir" to "D:\\ZaloPay",
+
         "include" to listOf("*.aar", "*.jar"),
         "exclude" to listOf("")
     )))

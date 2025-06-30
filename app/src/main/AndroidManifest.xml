@@ -118,6 +118,14 @@
 <!--            android:exported="false" />-->
 
         <activity
+
+            android:name=".views.AdminActivity"
+            android:exported="false" />
+
+        <activity android:name=".views.SupplierActivity">
+        </activity>
+        <activity
+
             android:name=".views.MapActivity"
             android:label="Theo dõi giao hàng"
             android:screenOrientation="portrait"

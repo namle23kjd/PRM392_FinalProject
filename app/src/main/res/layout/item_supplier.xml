@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="6dp"
-    app:cardBackgroundColor="@color/surface">
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:text="SĐT: 0123456789"
                 android:textSize="14sp"
-                android:textColor="@color/gray_dark" />
+             />
 
             <TextView
                 android:id="@+id/tvSupplierEmail"
@@ -54,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:text="Email: example@email.com"
                 android:textSize="14sp"
-                android:textColor="@color/gray_dark" />
+                />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipSupplierStatus"
@@ -76,9 +77,10 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_edit"
             android:contentDescription="Sửa"
-            app:tint="@color/accent" />
+            android:src="@android:drawable/ic_menu_edit"
+            app:tint="@color/accent"
+            tools:ignore="TouchTargetSizeCheck" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView> 
