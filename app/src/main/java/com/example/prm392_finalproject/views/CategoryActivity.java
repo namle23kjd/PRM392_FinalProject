@@ -103,16 +103,21 @@ public class CategoryActivity extends AppCompatActivity {
     private void loadCategories() {
         new Thread(() -> {
             List<CategoryResponse> categories = categoryController.getAllCategories();
+            if (categories == null) {
+                categories = new ArrayList<>();
+            }
             categories.sort(Comparator.comparingInt(CategoryResponse::getCategory_id).reversed());
+            List<CategoryResponse> finalCategories = categories;
             runOnUiThread(() -> {
                 fullCategoryList.clear();
-                fullCategoryList.addAll(categories);
+                fullCategoryList.addAll(finalCategories);
                 categoryList.clear();
-                categoryList.addAll(categories);
+                categoryList.addAll(finalCategories);
                 categoryAdapter.notifyDataSetChanged();
             });
         }).start();
     }
+
 
     private void filterCategories(String keyword) {
         searchKeyword = keyword;
