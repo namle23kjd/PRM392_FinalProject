@@ -11,7 +11,7 @@ import com.example.prm392_finalproject.R;
 import java.util.ArrayList;
 import java.util.List;
 import com.example.prm392_finalproject.models.Product;
-import com.example.prm392_finalproject.adapters.ProductAdapter;
+import com.example.prm392_finalproject.views.adapters.ProductAdapter;
 
 public class ProductListActivity extends AppCompatActivity {
 

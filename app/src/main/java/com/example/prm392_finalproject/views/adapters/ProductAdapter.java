@@ -1,4 +1,4 @@
-package com.example.prm392_finalproject.adapters;
+package com.example.prm392_finalproject.views.adapters;
 
 import android.content.Context;
 import android.view.View;
