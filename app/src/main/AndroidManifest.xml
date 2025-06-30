@@ -19,8 +19,17 @@
         <activity
             android:name=".views.CategoryActivity"
             android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".views.LoginActivity"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
         <activity
-            android:name=".views.LoginActivity"
+            android:name=".views.ProductListActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,16 +37,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<!--        <activity-->
+<!--            android:name=".views.RegisterActivity"-->
+<!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".MainActivity"-->
+<!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".views.AdminActivity"-->
+<!--            android:exported="false" />-->
+<!--        <activity android:name=".views.SupplierActivity" />-->
+
+
         <activity
-            android:name=".views.RegisterActivity"
-            android:exported="false" />
+            android:name=".views.AddEditProductActivity"
+            android:exported="true" />
+
         <activity
-            android:name=".MainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".views.AdminActivity"
-            android:exported="false" />
-        <activity android:name=".views.SupplierActivity" />
+            android:name=".views.ProductDetailActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>
