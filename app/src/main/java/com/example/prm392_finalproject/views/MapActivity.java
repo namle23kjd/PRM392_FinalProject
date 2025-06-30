@@ -289,7 +289,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .add(currentLocation)
                 .add(destinationLocation)
                 .width(8)
-                .color(ContextCompat.getColor(this, R.color.route_color))
+                .color(ContextCompat.getColor(this, R.color.accent))
                 .geodesic(true);
 
         routePolyline = mMap.addPolyline(polylineOptions);
@@ -345,10 +345,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         if (tvConnectionStatus != null) {
             if (connected) {
                 tvConnectionStatus.setText("🟢 Kết nối");
-                tvConnectionStatus.setTextColor(ContextCompat.getColor(this, R.color.success_color));
+                tvConnectionStatus.setTextColor(ContextCompat.getColor(this, R.color.status_active));
             } else {
                 tvConnectionStatus.setText("🔴 Mất kết nối");
-                tvConnectionStatus.setTextColor(ContextCompat.getColor(this, R.color.danger_color));
+                tvConnectionStatus.setTextColor(ContextCompat.getColor(this, R.color.status_inactive));
             }
         }
     }

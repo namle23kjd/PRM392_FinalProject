@@ -19,7 +19,6 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@android:drawable/ic_menu_manage"
-            android:tint="@color/primary"
             android:background="@drawable/circle_bg"
             android:padding="8dp"
             android:contentDescription="icon" />

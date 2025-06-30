@@ -93,12 +93,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        btnProduct = findViewById(R.id.btnProduct);
-
-        btnProduct.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, com.example.prm392_finalproject.adapters.ProductAdapter.class);
-            startActivity(intent);
-        });
 
         btnOrderManagement.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, OrderManagementActivity.class);
