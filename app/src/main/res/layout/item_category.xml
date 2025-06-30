@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="6dp"
-    app:cardBackgroundColor="@color/surface">
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +23,8 @@
             android:tint="@color/primary"
             android:background="@drawable/circle_bg"
             android:padding="8dp"
-            android:contentDescription="icon" />
+            android:contentDescription="icon"
+            tools:ignore="UseAppTint" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -46,7 +48,7 @@
         android:layout_height="wrap_content"
         android:text="Mô tả danh mục"
         android:textSize="14sp"
-                android:textColor="@color/gray_dark" />
+                />
         </LinearLayout>
 
         <ImageButton
@@ -54,19 +56,21 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Sửa"
             android:src="@android:drawable/ic_menu_edit"
             android:tint="@color/accent"
-            android:contentDescription="Sửa" />
+            tools:ignore="TouchTargetSizeCheck" />
 
         <ImageButton
             android:id="@+id/btnDeleteCategory"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_marginStart="4dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Xóa"
             android:src="@android:drawable/ic_menu_delete"
             android:tint="#F44336"
-            android:contentDescription="Xóa"
-            android:layout_marginStart="4dp" />
+            tools:ignore="TouchTargetSizeCheck,UseAppTint" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView> 

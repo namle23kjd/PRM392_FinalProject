@@ -8,11 +8,14 @@ import java.util.Objects;
 
 public class ConnectionClass {
     protected static String db = "technology_device_store";
-    protected static String ip = "160.191.50.42";
+//    protected static String ip = "160.191.50.42";
+//    protected static String port = "3306";
+//    protected static String username = "binh";
+//    protected  static String password = "1234";
+    protected static String ip = "10.0.2.2";
     protected static String port = "3306";
-    protected static String username = "binh";
-    protected  static String password = "1234";
-
+    protected static String username = "root";
+    protected  static String password = "123456789";
     public Connection CONN(){
         Connection conn = null;
         try{

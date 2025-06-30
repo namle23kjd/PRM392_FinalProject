@@ -127,8 +127,7 @@
         <activity
             android:name=".views.AdminActivity"
             android:exported="false" />
-        <activity android:name=".views.CategoryActivity">
-        </activity>
+
         <activity android:name=".views.SupplierActivity">
         </activity>
         <activity

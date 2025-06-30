@@ -10,6 +10,8 @@ import com.example.prm392_finalproject.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.example.prm392_finalproject.dao.ProductDAO;
 import com.example.prm392_finalproject.models.Product;
 import com.example.prm392_finalproject.views.adapters.ProductAdapter;
 
@@ -34,8 +36,8 @@ public class ProductListActivity extends AppCompatActivity {
             initializeViews();
             System.out.println("ProductListActivity: initializeViews completed");
 
-            // Test với fake data
-            testWithFakeData();
+
+            loadProductsFromDatabase();
 
             // Test message
             Toast.makeText(this, "Activity loaded successfully", Toast.LENGTH_SHORT).show();
@@ -89,40 +91,28 @@ public class ProductListActivity extends AppCompatActivity {
         }
     }
 
-    private void testWithFakeData() {
+    private void loadProductsFromDatabase() {
         try {
-            System.out.println("ProductListActivity: Testing with Product objects");
+            System.out.println("ProductListActivity: Loading products from database...");
 
-            // Tạo fake Product objects
-            List<Product> testProducts = new ArrayList<>();
+            ProductDAO productDAO = new ProductDAO();
+            List<Product> products = productDAO.getAllProducts();
 
-            Product p1 = new Product();
-            p1.setProductId(1);
-            p1.setName("Test Product 1");
-            p1.setProductCode("TEST001");
-            p1.setPrice(99.99);
-            p1.setQuantityInStock(10);
-            testProducts.add(p1);
+            if (products.isEmpty()) {
+                Toast.makeText(this, "No products found in database", Toast.LENGTH_SHORT).show();
+            } else {
+                ProductAdapter adapter = new ProductAdapter(this, products);
+                listViewProducts.setAdapter(adapter);
+                Toast.makeText(this, "Loaded " + products.size() + " products from DB", Toast.LENGTH_SHORT).show();
+            }
 
-            Product p2 = new Product();
-            p2.setProductId(2);
-            p2.setName("Test Product 2");
-            p2.setProductCode("TEST002");
-            p2.setPrice(149.99);
-            p2.setQuantityInStock(5);
-            testProducts.add(p2);
-
-            // Sử dụng ProductAdapter
-            ProductAdapter adapter = new ProductAdapter(this, testProducts);
-            listViewProducts.setAdapter(adapter);
-
-            System.out.println("ProductListActivity: Product data loaded successfully");
-            Toast.makeText(this, "Loaded " + testProducts.size() + " products", Toast.LENGTH_SHORT).show();
+            System.out.println("ProductListActivity: Products loaded from database successfully");
 
         } catch (Exception e) {
-            System.out.println("ProductListActivity: Error in testWithFakeData: " + e.getMessage());
+            System.out.println("ProductListActivity: Error loading products from database: " + e.getMessage());
             e.printStackTrace();
-            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Database Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
+
 }
