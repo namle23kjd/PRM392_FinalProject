@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -389,7 +390,7 @@ public class ShippingActivity extends AppCompatActivity {
 
     private void showAddShippingDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_shipping, null);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_shipping, null);
 
         EditText etOrderId = dialogView.findViewById(R.id.etOrderId);
         EditText etShippingAddress = dialogView.findViewById(R.id.etShippingAddress);
@@ -407,7 +408,8 @@ public class ShippingActivity extends AppCompatActivity {
         btnCheckDistance.setTextSize(12);
 
         // Thêm button vào layout
-        LinearLayout layout = (LinearLayout) dialogView;
+        LinearLayout layout = dialogView.findViewById(R.id.layoutContainer); // ✅ Đúng
+
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT

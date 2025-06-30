@@ -57,17 +57,8 @@
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
 <!--            </intent-filter>-->
 <!--        </activity>-->
-        <activity
-            android:name=".views.CustomerOrderActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
 <!--        <activity-->
-<!--            android:name=".views.ShippingActivity"-->
+<!--            android:name=".views.CustomerOrderActivity"-->
 <!--            android:exported="true">-->
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->
@@ -76,16 +67,25 @@
 <!--        </activity>-->
 
         <activity
-            android:name=".views.RegisterActivity"
-            android:exported="false" />
+            android:name=".views.ShippingActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".views.RegisterActivity"-->
+<!--            android:exported="false" />-->
 
-        <activity
-            android:name=".views.AdminActivity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".MainActivity"-->
+<!--            android:exported="false" />-->
+
+<!--        <activity-->
+<!--            android:name=".views.AdminActivity"-->
+<!--            android:exported="false" />-->
 
         <!-- ===== NEW SHIPPING ACTIVITIES ===== -->
 <!--        <activity-->
