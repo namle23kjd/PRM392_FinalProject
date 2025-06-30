@@ -42,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     private Button btnOrderManagement;
     private Button btnPaymentHistory;
 
+    private Button btnProduct;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +92,14 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, com.example.prm392_finalproject.views.SupplierActivity.class);
             startActivity(intent);
         });
+
+        btnProduct = findViewById(R.id.btnProduct);
+
+        btnProduct.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, com.example.prm392_finalproject.adapters.ProductAdapter.class);
+            startActivity(intent);
+        });
+
         btnOrderManagement.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, OrderManagementActivity.class);
             startActivity(intent);

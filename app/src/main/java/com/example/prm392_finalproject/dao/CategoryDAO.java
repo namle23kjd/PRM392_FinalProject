@@ -70,7 +70,7 @@ public class CategoryDAO {
             PreparedStatement preparedStatement = connectionClass.CONN().prepareStatement(query);
             preparedStatement.setString(1, category.getName());
             preparedStatement.setString(2, category.getDescription());
-            preparedStatement.setBoolean(3, false); 
+            preparedStatement.setBoolean(3, false);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

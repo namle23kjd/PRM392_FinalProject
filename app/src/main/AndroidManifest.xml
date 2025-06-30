@@ -38,6 +38,20 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
+        <activity
+            android:name=".views.CategoryActivity"
+            android:exported="false" />
+        <activity-->
+            android:name=".views.LoginActivity"-->
+            android:exported="true">-->
+            <intent-filter>-->
+               <action android:name="android.intent.action.MAIN" />-->
+
+             <category android:name="android.intent.category.LAUNCHER" />-->
+           </intent-filter>-->
+        </activity>-->
+
+
         <!-- ===== GOOGLE MAPS API KEY ===== -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -48,7 +62,8 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <!-- ===== EXISTING ACTIVITIES ===== -->
+
+
 <!--        <activity-->
 <!--            android:name=".views.LoginActivity"-->
 <!--            android:exported="true">-->
@@ -68,6 +83,8 @@
 
         <activity
             android:name=".views.ShippingActivity"
+        <activity
+            android:name=".views.ProductListActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -78,6 +95,39 @@
 <!--        <activity-->
 <!--            android:name=".views.RegisterActivity"-->
 <!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".MainActivity"-->
+<!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".views.AdminActivity"-->
+<!--            android:exported="false" />-->
+<!--        <activity android:name=".views.SupplierActivity" />-->
+
+
+        <activity
+            android:name=".views.AddEditProductActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".views.ProductDetailActivity"
+            android:exported="true" />
+
+
+
+        <activity
+            android:name=".views.PaymentActivity"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="app"
+                    android:scheme="@string/zalopay_app_scheme" />
+            </intent-filter>
+        </activity>
+
 
 <!--        <activity-->
 <!--            android:name=".MainActivity"-->
@@ -101,6 +151,13 @@
             android:exported="false"
             android:hardwareAccelerated="true"
             android:theme="@style/Theme.PRM392_FinalProject.NoActionBar" />
+
+
+        <activity android:name=".views.PaymentSuccessActivity" />
+        <activity android:name=".views.PaymentFailedActivity" />
+        <activity android:name=".views.OrderManagementActivity" />
+        <activity android:name=".views.PaymentHistoryActivity" />
+
 
     </application>
 
