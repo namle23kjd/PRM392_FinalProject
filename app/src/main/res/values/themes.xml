@@ -1,9 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.PRM392_FinalProject" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <!-- Base application theme -->
+    <style name="Theme.PRM392_FinalProject" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here -->
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimaryContainer">#E3F2FD</item>
+        <item name="colorOnPrimaryContainer">#0D47A1</item>
+
+        <item name="colorError">#F44336</item>
+        <item name="colorOnError">#FFFFFF</item>
+        <item name="colorErrorContainer">#FFEBEE</item>
+        <item name="colorOnErrorContainer">#B71C1C</item>
+
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#000000</item>
+        <item name="colorSurfaceVariant">#F5F5F5</item>
+        <item name="colorOnSurfaceVariant">#424242</item>
+
+        <item name="android:colorBackground">@color/background_light</item>
+        <item name="colorOnBackground">#000000</item>
+
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@color/primary_dark_color</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+
+        <!-- ActionBar -->
+        <item name="actionBarStyle">@style/CustomActionBar</item>
+        <item name="android:actionBarStyle">@style/CustomActionBar</item>
     </style>
 
-    <style name="Theme.PRM392_FinalProject" parent="Base.Theme.PRM392_FinalProject" />
+    <!-- Theme for MapActivity without ActionBar -->
+    <style name="Theme.PRM392_FinalProject.NoActionBar" parent="Theme.PRM392_FinalProject">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+    </style>
+
+    <!-- Theme for Splash Screen -->
+    <style name="Theme.PRM392_FinalProject.Splash" parent="Theme.PRM392_FinalProject.NoActionBar">
+        <item name="android:windowBackground">@color/primary_color</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+    </style>
+
+    <!-- Custom ActionBar Style -->
+    <style name="CustomActionBar" parent="Widget.Material3.ActionBar.Solid">
+        <item name="background">@color/primary_color</item>
+        <item name="titleTextStyle">@style/CustomActionBarTitle</item>
+        <item name="elevation">4dp</item>
+    </style>
+
+    <!-- Custom ActionBar Title -->
+    <style name="CustomActionBarTitle" parent="TextAppearance.Material3.ActionBar.Title">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Button Styles -->
+    <style name="CustomButton" parent="Widget.Material3.Button">
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:minHeight">48dp</item>
+    </style>
+
+    <style name="CustomButton.Primary">
+        <item name="backgroundTint">@color/primary_color</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="CustomButton.Success">
+        <item name="backgroundTint">@color/primary_color</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="CustomButton.Secondary">
+        <item name="backgroundTint">@color/primary_color</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <!-- TextInputLayout Style -->
+    <style name="CustomTextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/primary_color</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="hintTextColor">@color/primary_color</item>
+        <item name="android:textColorHint">@color/text_primary</item>
+    </style>
+
+    <!-- Card Style -->
+    <style name="CustomCard" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">8dp</item>
+        <item name="cardElevation">4dp</item>
+        <item name="cardBackgroundColor">@color/design_default_color_surface</item>
+    </style>
 </resources>
