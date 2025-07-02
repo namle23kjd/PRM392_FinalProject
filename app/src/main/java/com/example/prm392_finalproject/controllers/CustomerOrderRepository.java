@@ -302,4 +302,66 @@ public class CustomerOrderRepository {
             }
         }
     }
+
+    // Tạo đơn hàng mới cho customer
+    public boolean createOrderForCustomer(int customerId, List<CustomerOrder.OrderItem> items, String note) {
+        Connection connection = null;
+        PreparedStatement orderStmt = null;
+        PreparedStatement itemStmt = null;
+        ResultSet generatedKeys = null;
+        try {
+            connection = connectionClass.CONN();
+            if (connection == null) return false;
+            connection.setAutoCommit(false); // Transaction
+
+            // 1. Tính tổng tiền
+            double totalAmount = 0;
+            for (CustomerOrder.OrderItem item : items) {
+                totalAmount += item.getUnitPrice() * item.getQuantity();
+            }
+
+            // 2. Insert vào Orders
+            String orderSql = "INSERT INTO Orders (customer_id, order_date, status, total_amount, note) VALUES (?, NOW(), 'pending', ?, ?)";
+            orderStmt = connection.prepareStatement(orderSql, PreparedStatement.RETURN_GENERATED_KEYS);
+            orderStmt.setInt(1, customerId);
+            orderStmt.setDouble(2, totalAmount);
+            orderStmt.setString(3, note);
+            int affectedRows = orderStmt.executeUpdate();
+            if (affectedRows == 0) throw new SQLException("Creating order failed, no rows affected.");
+
+            generatedKeys = orderStmt.getGeneratedKeys();
+            int orderId = -1;
+            if (generatedKeys.next()) {
+                orderId = generatedKeys.getInt(1);
+            } else {
+                throw new SQLException("Creating order failed, no ID obtained.");
+            }
+
+            // 3. Insert từng item vào Order_Items
+            String itemSql = "INSERT INTO Order_Items (order_id, product_id, quantity, unit_price, total_price) VALUES (?, ?, ?, ?, ?)";
+            itemStmt = connection.prepareStatement(itemSql);
+            for (CustomerOrder.OrderItem item : items) {
+                itemStmt.setInt(1, orderId);
+                itemStmt.setInt(2, item.getProductId());
+                itemStmt.setInt(3, item.getQuantity());
+                itemStmt.setDouble(4, item.getUnitPrice());
+                itemStmt.setDouble(5, item.getUnitPrice() * item.getQuantity());
+                itemStmt.addBatch();
+            }
+            itemStmt.executeBatch();
+
+            connection.commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            try { if (connection != null) connection.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
+            return false;
+        } finally {
+            try { if (generatedKeys != null) generatedKeys.close(); } catch (Exception e) {}
+            try { if (orderStmt != null) orderStmt.close(); } catch (Exception e) {}
+            try { if (itemStmt != null) itemStmt.close(); } catch (Exception e) {}
+            try { if (connection != null) connection.setAutoCommit(true); } catch (Exception e) {}
+            try { if (connection != null) connection.close(); } catch (Exception e) {}
+        }
+    }
 }

@@ -62,7 +62,7 @@ public class ProductListActivity extends AppCompatActivity {
         try {
             System.out.println("ProductListActivity: Finding views...");
 
-            listViewProducts = findViewById(R.id.listViewProducts);
+            listViewProducts = findViewById(R.id.linearLayoutProducts);
             if (listViewProducts == null) {
                 System.out.println("ProductListActivity: ERROR - listViewProducts is NULL");
                 throw new RuntimeException("listViewProducts not found in layout");
@@ -91,27 +91,141 @@ public class ProductListActivity extends AppCompatActivity {
         }
     }
 
-    private void loadProductsFromDatabase() {
+    private void setClickListeners() {
         try {
-            System.out.println("ProductListActivity: Loading products from database...");
+            btnAddProduct.setOnClickListener(new android.view.View.OnClickListener() {
+                @Override
+                public void onClick(android.view.View v) {
+                    System.out.println("ProductListActivity: Add Product button clicked");
+                    Toast.makeText(ProductListActivity.this, "Add Product feature coming soon", Toast.LENGTH_SHORT).show();
+                }
+            });
 
-            ProductDAO productDAO = new ProductDAO();
-            List<Product> products = productDAO.getAllProducts();
-
-            if (products.isEmpty()) {
-                Toast.makeText(this, "No products found in database", Toast.LENGTH_SHORT).show();
-            } else {
-                ProductAdapter adapter = new ProductAdapter(this, products);
-                listViewProducts.setAdapter(adapter);
-                Toast.makeText(this, "Loaded " + products.size() + " products from DB", Toast.LENGTH_SHORT).show();
-            }
-
-            System.out.println("ProductListActivity: Products loaded from database successfully");
+            System.out.println("ProductListActivity: Click listeners set successfully");
 
         } catch (Exception e) {
-            System.out.println("ProductListActivity: Error loading products from database: " + e.getMessage());
+            System.out.println("ProductListActivity: ERROR in setClickListeners: " + e.getMessage());
             e.printStackTrace();
-            Toast.makeText(this, "Database Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void loadProductsFromDatabase() {
+        System.out.println("ProductListActivity: Starting to load products from database...");
+        
+        // Chạy trong background thread
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    System.out.println("ProductListActivity: Loading products from database in background...");
+
+                    ProductDAO productDAO = new ProductDAO();
+                    List<Product> products = productDAO.getAllProducts();
+
+                    System.out.println("ProductListActivity: Products loaded from database successfully. Count: " + (products != null ? products.size() : "null"));
+
+                    // Update UI trên main thread
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (products != null && !products.isEmpty()) {
+                                System.out.println("ProductListActivity: Displaying " + products.size() + " products");
+                                displayProducts(products);
+                                Toast.makeText(ProductListActivity.this, "Loaded " + products.size() + " products", Toast.LENGTH_SHORT).show();
+                            } else {
+                                System.out.println("ProductListActivity: No products found or null list");
+                                Toast.makeText(ProductListActivity.this, "No products found", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+                } catch (Exception e) {
+                    System.out.println("ProductListActivity: Error loading products from database: " + e.getMessage());
+                    e.printStackTrace();
+                    
+                    // Show error trên main thread
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(ProductListActivity.this, "Database Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        }).start();
+    }
+
+    private void displayProducts(List<Product> products) {
+        try {
+            System.out.println("ProductListActivity: Displaying products...");
+            
+            // Clear existing views
+            listViewProducts.removeAllViews();
+            
+            // Add each product as a card view
+            for (Product product : products) {
+                // Create a card layout for each product
+                CardView cardView = new CardView(this);
+                CardView.LayoutParams cardParams = new CardView.LayoutParams(
+                    CardView.LayoutParams.MATCH_PARENT,
+                    CardView.LayoutParams.WRAP_CONTENT
+                );
+                cardParams.setMargins(16, 8, 16, 8);
+                cardView.setLayoutParams(cardParams);
+                cardView.setCardElevation(4);
+                cardView.setRadius(8);
+                
+                // Create linear layout inside card
+                android.widget.LinearLayout linearLayout = new android.widget.LinearLayout(this);
+                linearLayout.setOrientation(android.widget.LinearLayout.VERTICAL);
+                linearLayout.setPadding(16, 16, 16, 16);
+                
+                // Product name
+                android.widget.TextView nameTextView = new android.widget.TextView(this);
+                nameTextView.setText(product.getName());
+                nameTextView.setTextSize(18);
+                nameTextView.setTextColor(android.graphics.Color.BLACK);
+                nameTextView.setTypeface(null, android.graphics.Typeface.BOLD);
+                
+                // Product description
+                android.widget.TextView descTextView = new android.widget.TextView(this);
+                descTextView.setText(product.getDescription() != null ? product.getDescription() : "No description");
+                descTextView.setTextSize(14);
+                descTextView.setTextColor(android.graphics.Color.GRAY);
+                descTextView.setMaxLines(2);
+                descTextView.setEllipsize(android.text.TextUtils.TruncateAt.END);
+                
+                // Product price
+                android.widget.TextView priceTextView = new android.widget.TextView(this);
+                priceTextView.setText("$" + String.format("%.2f", product.getPrice()));
+                priceTextView.setTextSize(16);
+                priceTextView.setTextColor(android.graphics.Color.parseColor("#FF5722"));
+                priceTextView.setTypeface(null, android.graphics.Typeface.BOLD);
+                
+                // Stock info
+                android.widget.TextView stockTextView = new android.widget.TextView(this);
+                stockTextView.setText("Stock: " + product.getQuantityInStock() + " units");
+                stockTextView.setTextSize(12);
+                stockTextView.setTextColor(android.graphics.Color.DKGRAY);
+                
+                // Add views to linear layout
+                linearLayout.addView(nameTextView);
+                linearLayout.addView(descTextView);
+                linearLayout.addView(priceTextView);
+                linearLayout.addView(stockTextView);
+                
+                // Add linear layout to card
+                cardView.addView(linearLayout);
+                
+                // Add card to main layout
+                listViewProducts.addView(cardView);
+            }
+            
+            System.out.println("ProductListActivity: Products displayed successfully");
+            
+        } catch (Exception e) {
+            System.out.println("ProductListActivity: Error displaying products: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

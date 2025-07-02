@@ -19,7 +19,7 @@ import com.example.prm392_finalproject.views.LoginActivity;
 import com.example.prm392_finalproject.views.OrderManagementActivity;
 import com.example.prm392_finalproject.views.PaymentHistoryActivity;
 
-import com.example.prm392_finalproject.views.adapters.ProductAdapter;
+import com.example.prm392_finalproject.views.ProductListActivity;
 
 import com.example.prm392_finalproject.views.ShippingActivity;
 
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         btnProduct = findViewById(R.id.btnProduct);
 
         btnProduct.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, ProductAdapter.class);
+            Intent intent = new Intent(MainActivity.this, ProductListActivity.class);
             startActivity(intent);
         });
 

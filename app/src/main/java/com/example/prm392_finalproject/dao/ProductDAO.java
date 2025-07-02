@@ -21,52 +21,25 @@ public class ProductDAO {
 
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
-
-        System.out.println("ProductDAO: getAllProducts() started");
-
-        Connection conn = connectionClass.CONN();
-        if (conn == null) {
-            System.out.println("ProductDAO: ERROR - Connection is NULL");
-            Log.e("ProductDAO", "Connection is null in getAllProducts");
-            return products;
-        }
-
-        System.out.println("ProductDAO: Database connection successful");
-
         try {
+            Connection conn = connectionClass.CONN();
+            if (conn == null) {
+                System.out.println("ProductDAO: Connection is null in getAllProducts");
+                return products;
+            }
             String query = "SELECT * FROM Product";
-            System.out.println("ProductDAO: Executing query: " + query);
-
-            PreparedStatement stmt = conn.prepareStatement(query);
-            ResultSet rs = stmt.executeQuery();
-
-            System.out.println("ProductDAO: Query executed, processing results...");
-
-            int count = 0;
-            while (rs.next()) {
-                System.out.println("ProductDAO: Processing row " + (count + 1));
-
-                Product p = extractProduct(rs);
+            PreparedStatement preparedStatement = conn.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Product p = extractProduct(resultSet);
                 if (p != null) {
                     products.add(p);
-                    count++;
-                    System.out.println("ProductDAO: Added product: ID=" + p.getProductId() +
-                            ", Name=" + p.getName() + ", Code=" + p.getProductCode());
-                } else {
-                    System.out.println("ProductDAO: Failed to extract product from row " + (count + 1));
                 }
             }
-
-            System.out.println("ProductDAO: Finished processing. Total products: " + count);
-            Log.i("ProductDAO", "Fetched " + count + " products from DB.");
-
         } catch (Exception e) {
-            System.out.println("ProductDAO: EXCEPTION in getAllProducts: " + e.getMessage());
-            Log.e("ProductDAO", "Error fetching all products: " + e.getMessage());
+            System.out.println("ProductDAO: Exception: " + e.getMessage());
             e.printStackTrace();
         }
-
-        System.out.println("ProductDAO: Returning " + products.size() + " products");
         return products;
     }
 

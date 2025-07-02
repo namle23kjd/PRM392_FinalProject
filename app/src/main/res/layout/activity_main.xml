@@ -15,9 +15,10 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/btnSignOut"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8" />
+        app:layout_constraintVertical_bias="0.511" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSignOut"
@@ -26,8 +27,10 @@
         android:text="Sign Out"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.342" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCategory"
@@ -50,17 +53,15 @@
         android:layout_marginTop="16dp" />
 
 
-
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnProduct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="Quản lý sản phẩm"
-        app:layout_constraintTop_toBottomOf="@id/btnSupplier"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnSupplier" />
 
 <!--    <com.google.android.material.button.MaterialButton-->
 <!--        android:id="@+id/btnProduct"-->
@@ -73,36 +74,35 @@
         android:id="@+id/btnOrderManagement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+
         android:text="Quản lý đơn hàng"
-
-        app:layout_constraintTop_toBottomOf="@id/btnSupplier"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
-
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnProduct" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnShippingManagement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="8dp"
 
         android:text="Quản lý vận chuyển"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnSupplier" />
+        app:layout_constraintTop_toBottomOf="@+id/btnOrderManagement" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnPaymentHistory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="16dp"
         android:text="Lịch sử thanh toán"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnOrderManagement" />
+        app:layout_constraintTop_toBottomOf="@+id/btnShippingManagement" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

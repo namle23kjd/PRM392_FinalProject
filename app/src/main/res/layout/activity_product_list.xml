@@ -23,19 +23,34 @@
         android:queryHint="Search products..."
         android:layout_marginBottom="16dp" />
 
-    <ListView
-        android:id="@+id/listViewProducts"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp">
 
-    <Button
-        android:id="@+id/btnAddProduct"
-        android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/linearLayoutProducts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Add Product"
-        android:layout_marginTop="16dp" />
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp">
+
+        <Button
+            android:id="@+id/btnAddProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Product"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/button_secondary" />
+
+    </LinearLayout>
 
 </LinearLayout>
