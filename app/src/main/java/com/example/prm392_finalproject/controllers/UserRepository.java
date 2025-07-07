@@ -11,7 +11,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserRepository {
     private static final String TAG = "UserRepository";
@@ -311,5 +313,32 @@ public class UserRepository {
                 Log.e(TAG, "Error closing resources: " + e.getMessage());
             }
         }
+    }
+
+    public Map<String, Integer> getUserCountByRole() {
+        Map<String, Integer> roleCount = new HashMap<>();
+        String sql = "SELECT role, COUNT(*) as count FROM User GROUP BY role";
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            connection = connectionClass.CONN();
+            ps = connection.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                roleCount.put(rs.getString("role"), rs.getInt("count"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (connection != null) connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return roleCount;
     }
 } 

@@ -7,7 +7,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OrderDAO {
     private ConnectionClass connectionClass;
@@ -51,5 +53,48 @@ public class OrderDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Order> getAllOrders() {
+        List<Order> orders = new ArrayList<>();
+        String query = "SELECT order_id, customer_id, order_date, status, total_amount, note FROM Orders ORDER BY order_id DESC";
+        try {
+            Connection conn = connectionClass.CONN();
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Order order = new Order();
+                order.setOrderId(String.valueOf(rs.getInt("order_id")));
+                order.setCustomerId(rs.getInt("customer_id"));
+                order.setOrderDate(String.valueOf(rs.getTimestamp("order_date")));
+                order.setStatus(rs.getString("status"));
+                order.setTotalAmount(rs.getDouble("total_amount"));
+                order.setNote(rs.getString("note"));
+                orders.add(order);
+            }
+            rs.close();
+            ps.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
+
+    public Map<Integer, Integer> getOrderCountByMonth(int year) {
+        Map<Integer, Integer> monthCount = new HashMap<>();
+        String sql = "SELECT MONTH(order_date) as month, COUNT(*) as count FROM Orders WHERE YEAR(order_date) = ? GROUP BY MONTH(order_date)";
+        try (Connection conn = connectionClass.CONN();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, year);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                monthCount.put(rs.getInt("month"), rs.getInt("count"));
+            }
+            rs.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return monthCount;
     }
 } 

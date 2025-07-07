@@ -57,9 +57,9 @@ dependencies {
 //    )))
     implementation(fileTree(mapOf(
 
-  //      "dir" to "C:\\Users\\Gia Bao\\Documents\\Zalo Received Files",
+        "dir" to "C:\\Users\\Gia Bao\\Documents\\Zalo Received Files",
 
-   //     "dir" to "D:\\ZaloPay",
+        "dir" to "D:\\ZaloPay",
 
         "include" to listOf("*.aar", "*.jar"),
         "exclude" to listOf("")
@@ -87,5 +87,7 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
     implementation("commons-codec:commons-codec:1.14")
 
+    // ===== MPANDROIDCHART FOR CHARTS =====
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
 }

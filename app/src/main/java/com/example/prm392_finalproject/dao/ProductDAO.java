@@ -9,7 +9,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ProductDAO {
 
@@ -178,6 +180,22 @@ public class ProductDAO {
             Log.e("ProductDAO", "Error searching products: " + e.getMessage());
         }
         return products;
+    }
+
+    public Map<String, Integer> getProductCountByCategory() {
+        Map<String, Integer> categoryCount = new HashMap<>();
+        String sql = "SELECT c.name as category, COUNT(*) as count FROM Product p LEFT JOIN Category c ON p.category_id = c.category_id WHERE p.is_active = 1 GROUP BY c.name";
+        try (Connection conn = connectionClass.CONN();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                categoryCount.put(rs.getString("category"), rs.getInt("count"));
+            }
+            rs.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return categoryCount;
     }
 
     private Product extractProduct(ResultSet rs) {
