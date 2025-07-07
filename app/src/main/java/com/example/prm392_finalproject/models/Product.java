@@ -24,6 +24,7 @@ public class Product {
     private String qrCode;
     private boolean isActive;
     private Integer categoryId;
+    private String category;
 
     // Default constructor
     public Product() {
@@ -37,7 +38,7 @@ public class Product {
                    String specifications, String color, Double weight, String dimensions,
                    double price, Double cost, int quantityInStock, Integer warrantyPeriod,
                    String originCountry, String releaseDate, String qrCode, boolean isActive,
-                   Integer categoryId) {
+                   Integer categoryId, String category) {
         this.productId = productId;
         this.name = name;
         this.description = description;
@@ -59,6 +60,7 @@ public class Product {
         this.qrCode = qrCode;
         this.isActive = isActive;
         this.categoryId = categoryId;
+        this.category = category;
     }
 
     // Getters and Setters
@@ -234,6 +236,14 @@ public class Product {
 
     public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     // Utility method for debugging

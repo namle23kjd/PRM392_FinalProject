@@ -2,6 +2,7 @@ package com.example.prm392_finalproject.views;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -13,11 +14,11 @@ import java.util.List;
 
 import com.example.prm392_finalproject.dao.ProductDAO;
 import com.example.prm392_finalproject.models.Product;
-import com.example.prm392_finalproject.views.adapters.ProductAdapter;
+import androidx.cardview.widget.CardView;
 
 public class ProductListActivity extends AppCompatActivity {
 
-    private ListView listViewProducts;
+    private LinearLayout listViewProducts;
     private SearchView searchViewProducts;
     private Button btnAddProduct;
 
@@ -36,7 +37,11 @@ public class ProductListActivity extends AppCompatActivity {
             initializeViews();
             System.out.println("ProductListActivity: initializeViews completed");
 
+            // Set click listeners
+            setClickListeners();
+            System.out.println("ProductListActivity: setClickListeners completed");
 
+            // Tự động load sản phẩm khi vào activity
             loadProductsFromDatabase();
 
             // Test message

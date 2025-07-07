@@ -27,7 +27,7 @@ public class ProductDAO {
                 System.out.println("ProductDAO: Connection is null in getAllProducts");
                 return products;
             }
-            String query = "SELECT * FROM Product";
+            String query = "SELECT p.*, c.name as category_name FROM Product p LEFT JOIN Category c ON p.category_id = c.category_id WHERE p.is_active = 1";
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -208,6 +208,7 @@ public class ProductDAO {
             String qrCode = rs.getString("qr_code");
             boolean isActive = rs.getBoolean("is_active");
             Integer categoryId = rs.getObject("category_id") != null ? rs.getInt("category_id") : null;
+            String category = rs.getString("category_name");
 
             p.setProductId(productId);
             p.setName(name);
@@ -230,6 +231,7 @@ public class ProductDAO {
             p.setQrCode(qrCode);
             p.setActive(isActive);
             p.setCategoryId(categoryId);
+            p.setCategory(category);
 
             System.out.println("ProductDAO: Product object created successfully");
             return p;

@@ -1,85 +1,85 @@
 package com.example.prm392_finalproject.views.adapters;
 
-import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.prm392_finalproject.R;
 import com.example.prm392_finalproject.models.Product;
+
 import java.util.List;
+import java.util.Locale;
 
-public class ProductAdapter extends BaseAdapter {
-    private Context context;
-    private List<Product> products;
+public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
+    
+    private List<Product> productList;
+    private OnProductClickListener listener;
 
-    public ProductAdapter(Context context, List<Product> products) {
-        this.context = context;
-        this.products = products;
-        System.out.println("ProductAdapter: Created with " +
-                (products != null ? products.size() : "null") + " products");
+    public interface OnProductClickListener {
+        void onProductClick(Product product);
+    }
+
+    public ProductAdapter(List<Product> productList, OnProductClickListener listener) {
+        this.productList = productList;
+        this.listener = listener;
+    }
+
+    @NonNull
+    @Override
+    public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product, parent, false);
+        return new ProductViewHolder(view);
     }
 
     @Override
-    public int getCount() {
-        int count = products != null ? products.size() : 0;
-        System.out.println("ProductAdapter: getCount() = " + count);
-        return count;
+    public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
+        Product product = productList.get(position);
+        holder.bind(product);
     }
 
     @Override
-    public Object getItem(int position) {
-        System.out.println("ProductAdapter: getItem(" + position + ")");
-        return products != null && position < products.size() ? products.get(position) : null;
+    public int getItemCount() {
+        return productList.size();
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
+    public class ProductViewHolder extends RecyclerView.ViewHolder {
+        private CardView cardView;
+        private ImageView ivProductImage;
+        private TextView tvProductName;
+        private TextView tvProductPrice;
+        private TextView tvProductDescription;
+        private TextView tvProductCategory;
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        System.out.println("ProductAdapter: getView(" + position + ") called");
+        public ProductViewHolder(@NonNull View itemView) {
+            super(itemView);
+            cardView = itemView.findViewById(R.id.cardProduct);
+            ivProductImage = itemView.findViewById(R.id.ivProductImage);
+            tvProductName = itemView.findViewById(R.id.tvProductName);
+            tvProductPrice = itemView.findViewById(R.id.tvProductPrice);
+            tvProductDescription = itemView.findViewById(R.id.tvProductDescription);
+            tvProductCategory = itemView.findViewById(R.id.tvProductCategory);
+        }
 
-        try {
-            TextView textView;
-
-            if (convertView == null) {
-                System.out.println("ProductAdapter: Creating new TextView");
-                textView = new TextView(context);
-                textView.setPadding(20, 20, 20, 20);
-                textView.setTextSize(16);
-            } else {
-                System.out.println("ProductAdapter: Reusing existing view");
-                textView = (TextView) convertView;
-            }
-
-            if (products != null && position < products.size()) {
-                Product product = products.get(position);
-                if (product != null) {
-                    String text = product.getName() + "\nPrice: $" + product.getPrice();
-                    textView.setText(text);
-                    System.out.println("ProductAdapter: Set text for position " + position + ": " + product.getName());
-                } else {
-                    textView.setText("Product is null");
-                    System.out.println("ProductAdapter: Product at position " + position + " is null");
+        public void bind(Product product) {
+            tvProductName.setText(product.getName());
+            tvProductPrice.setText(String.format(Locale.getDefault(), "$%.2f", product.getPrice()));
+            tvProductDescription.setText(product.getDescription());
+            tvProductCategory.setText(product.getCategory());
+            
+            // Set default image for now (you can load actual images later)
+            ivProductImage.setImageResource(R.drawable.ic_menu_business);
+            
+            cardView.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onProductClick(product);
                 }
-            } else {
-                textView.setText("Invalid position");
-                System.out.println("ProductAdapter: Invalid position " + position);
-            }
-
-            return textView;
-
-        } catch (Exception e) {
-            System.out.println("ProductAdapter: ERROR in getView: " + e.getMessage());
-            e.printStackTrace();
-
-            // Return a simple error view
-            TextView errorView = new TextView(context);
-            errorView.setText("Error displaying product");
-            errorView.setPadding(20, 20, 20, 20);
-            return errorView;
+            });
         }
     }
 }

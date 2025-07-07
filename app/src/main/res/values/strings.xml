@@ -96,4 +96,8 @@
         <item>Credit Card</item>
         <item>Cash on Delivery</item>
     </string-array>
+
+    <!-- Navigation Drawer -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

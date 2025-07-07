@@ -342,14 +342,15 @@ public class LoginActivity extends AppCompatActivity {
                         intent.putExtra("currentUser", user);
                         startActivity(intent);
                     } else {
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        // Navigate to UserDashboardActivity for customers
+                        Intent intent = new Intent(LoginActivity.this, UserDashboardActivity.class);
                         startActivity(intent);
                     }
                     finish();
                 });
             }).start();
         } else {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            Intent intent = new Intent(LoginActivity.this, UserDashboardActivity.class);
             startActivity(intent);
             finish();
         }

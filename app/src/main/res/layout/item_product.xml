@@ -1,121 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardProduct"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="2dp">
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp">
+        android:orientation="vertical">
 
         <!-- Product Image -->
         <ImageView
-            android:id="@+id/imageViewProductThumb"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginEnd="16dp"
+            android:id="@+id/ivProductImage"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
             android:scaleType="centerCrop"
-            android:background="@drawable/image_background"
-            android:src="@drawable/ic_product_placeholder"
+            android:src="@drawable/ic_menu_business"
             android:contentDescription="Product Image" />
 
-        <!-- Product Information -->
+        <!-- Product Info -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="12dp">
 
+            <!-- Product Name -->
             <TextView
-                android:id="@+id/textViewProductName"
+                android:id="@+id/tvProductName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Product Name"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/primary_text"
-                android:maxLines="1"
+                android:textColor="@color/black"
+                android:maxLines="2"
                 android:ellipsize="end" />
 
+            <!-- Product Category -->
             <TextView
-                android:id="@+id/textViewProductCode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="CODE123"
-                android:textSize="12sp"
-                android:textColor="@color/secondary_text"
-                android:layout_marginTop="2dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="4dp">
-
-                <TextView
-                    android:id="@+id/textViewPrice"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="$0.00"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/price_text" />
-
-                <TextView
-                    android:id="@+id/textViewStock"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Stock: 0"
-                    android:textSize="12sp"
-                    android:textColor="@color/secondary_text"
-                    android:background="@drawable/stock_background"
-                    android:padding="4dp" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <!-- Status Indicator -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_marginStart="8dp">
-
-            <View
-                android:id="@+id/viewStatusIndicator"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:background="@drawable/status_indicator_active" />
-
-            <TextView
-                android:id="@+id/textViewStatus"
+                android:id="@+id/tvProductCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Active"
-                android:textSize="10sp"
-                android:textColor="@color/secondary_text"
+                android:text="Category"
+                android:textSize="12sp"
+                android:textColor="@color/design_default_color_primary"
+                android:background="@drawable/tag_background"
+                android:padding="4dp"
                 android:layout_marginTop="4dp" />
 
+            <!-- Product Description -->
             <TextView
-                android:id="@+id/textViewProductDescription"
+                android:id="@+id/tvProductDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Product description here"
-                android:textSize="12sp"
-                android:textColor="@color/secondary_text"
+                android:text="Product description goes here..."
+                android:textSize="14sp"
+                android:textColor="@color/black"
                 android:maxLines="2"
                 android:ellipsize="end"
-                android:layout_marginTop="4dp"/>
+                android:layout_marginTop="8dp" />
+
+            <!-- Product Price -->
+            <TextView
+                android:id="@+id/tvProductPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$0.00"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/design_default_color_primary"
+                android:layout_marginTop="8dp" />
 
         </LinearLayout>
 
     </LinearLayout>
 
-</com.google.android.material.card.MaterialCardView>
+</androidx.cardview.widget.CardView>

@@ -131,6 +131,8 @@
         <activity android:name=".views.PaymentFailedActivity" />
         <activity android:name=".views.OrderManagementActivity" />
         <activity android:name=".views.PaymentHistoryActivity" />
+        <activity android:name=".views.UserDashboardActivity" />
+        <activity android:name=".views.UserProfileActivity" />
 
 
     </application>
