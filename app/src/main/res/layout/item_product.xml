@@ -11,76 +11,96 @@
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="220dp">
 
-        <!-- Product Image -->
-        <ImageView
-            android:id="@+id/ivProductImage"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_menu_business"
-            android:contentDescription="Product Image" />
-
-        <!-- Product Info -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="12dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <!-- Product Name -->
-            <TextView
-                android:id="@+id/tvProductName"
+            <!-- Product Image -->
+            <ImageView
+                android:id="@+id/ivProductImage"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Product Name"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:maxLines="2"
-                android:ellipsize="end" />
+                android:layout_height="120dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_menu_business"
+                android:contentDescription="Product Image" />
 
-            <!-- Product Category -->
-            <TextView
-                android:id="@+id/tvProductCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Category"
-                android:textSize="12sp"
-                android:textColor="@color/design_default_color_primary"
-                android:background="@drawable/tag_background"
-                android:padding="4dp"
-                android:layout_marginTop="4dp" />
-
-            <!-- Product Description -->
-            <TextView
-                android:id="@+id/tvProductDescription"
+            <!-- Product Info -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Product description goes here..."
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:maxLines="2"
-                android:ellipsize="end"
-                android:layout_marginTop="8dp" />
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="12dp">
 
-            <!-- Product Price -->
-            <TextView
-                android:id="@+id/tvProductPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="$0.00"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/design_default_color_primary"
-                android:layout_marginTop="8dp" />
+                <!-- Product Name -->
+                <TextView
+                    android:id="@+id/tvProductName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Product Name"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:maxLines="2"
+                    android:ellipsize="end" />
 
+                <!-- Product Category -->
+                <TextView
+                    android:id="@+id/tvProductCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Category"
+                    android:textSize="12sp"
+                    android:textColor="@color/design_default_color_primary"
+                    android:background="@drawable/tag_background"
+                    android:padding="4dp"
+                    android:layout_marginTop="4dp" />
+
+                <!-- Product Description -->
+                <TextView
+                    android:id="@+id/tvProductDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Product description goes here..."
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:layout_marginTop="8dp" />
+
+                <!-- Product Price -->
+                <TextView
+                    android:id="@+id/tvProductPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$0.00"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/design_default_color_primary"
+                    android:layout_marginTop="8dp" />
+
+            </LinearLayout>
         </LinearLayout>
 
-    </LinearLayout>
+        <!-- Nút thêm vào giỏ hàng nổi góc phải dưới -->
+        <ImageView
+            android:id="@+id/btnAddToCart"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="12dp"
+            android:src="@android:drawable/ic_input_add"
+            android:background="@android:color/holo_blue_dark"
+            android:contentDescription="Thêm vào giỏ hàng"
+            android:padding="6dp"
+            android:clickable="true"
+            android:focusable="true" />
+
+    </FrameLayout>
 
 </androidx.cardview.widget.CardView>

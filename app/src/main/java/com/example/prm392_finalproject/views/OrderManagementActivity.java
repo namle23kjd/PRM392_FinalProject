@@ -44,6 +44,13 @@ public class OrderManagementActivity extends AppCompatActivity implements OrderA
             startActivity(intent);
         });
 
+        // Add create order button
+        Button btnCreateOrder = findViewById(R.id.btnCreateOrder);
+        btnCreateOrder.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CreateOrderActivity.class);
+            startActivity(intent);
+        });
+
         int userId = 1;
         executorService.execute(() -> {
             OrderDAO orderDAO = new OrderDAO();

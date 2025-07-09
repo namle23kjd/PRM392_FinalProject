@@ -20,14 +20,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     
     private List<Product> productList;
     private OnProductClickListener listener;
+    private OnAddToCartClickListener addToCartListener;
 
     public interface OnProductClickListener {
         void onProductClick(Product product);
     }
+    public interface OnAddToCartClickListener {
+        void onAddToCartClick(Product product);
+    }
 
-    public ProductAdapter(List<Product> productList, OnProductClickListener listener) {
+    public ProductAdapter(List<Product> productList, OnProductClickListener listener, OnAddToCartClickListener addToCartListener) {
         this.productList = productList;
         this.listener = listener;
+        this.addToCartListener = addToCartListener;
     }
 
     @NonNull
@@ -64,6 +69,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             tvProductPrice = itemView.findViewById(R.id.tvProductPrice);
             tvProductDescription = itemView.findViewById(R.id.tvProductDescription);
             tvProductCategory = itemView.findViewById(R.id.tvProductCategory);
+            ImageView btnAddToCart = itemView.findViewById(R.id.btnAddToCart);
+            btnAddToCart.setOnClickListener(v -> {
+                int pos = getAdapterPosition();
+                if (addToCartListener != null && pos != RecyclerView.NO_POSITION) {
+                    addToCartListener.onAddToCartClick(productList.get(pos));
+                }
+            });
         }
 
         public void bind(Product product) {

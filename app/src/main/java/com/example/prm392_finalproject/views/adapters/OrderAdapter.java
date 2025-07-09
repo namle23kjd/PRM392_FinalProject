@@ -1,5 +1,6 @@
 package com.example.prm392_finalproject.views.adapters;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.prm392_finalproject.R;
 import com.example.prm392_finalproject.models.zalopay.Order;
+import com.example.prm392_finalproject.views.OrderDetailActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -62,6 +64,13 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         } else {
             holder.btnPay.setVisibility(View.GONE);
         }
+
+        // Add click listener for order detail
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), OrderDetailActivity.class);
+            intent.putExtra("order_id", Integer.parseInt(order.getOrderId()));
+            v.getContext().startActivity(intent);
+        });
     }
 
     @Override

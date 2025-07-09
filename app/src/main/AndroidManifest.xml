@@ -82,6 +82,7 @@
             android:name=".views.AdminActivity"
             android:exported="false" />
         <activity android:name=".views.SupplierActivity" />
+        <activity android:name=".views.CartActivity" />
 
 
 <!--        <activity-->
@@ -130,6 +131,9 @@
         <activity android:name=".views.PaymentSuccessActivity" />
         <activity android:name=".views.PaymentFailedActivity" />
         <activity android:name=".views.OrderManagementActivity" />
+        <activity android:name=".views.CustomerOrderActivity" />
+        <activity android:name=".views.CreateOrderActivity" />
+        <activity android:name=".views.OrderDetailActivity" />
         <activity android:name=".views.PaymentHistoryActivity" />
         <activity android:name=".views.UserDashboardActivity" />
         <activity android:name=".views.UserProfileActivity" />

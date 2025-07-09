@@ -26,6 +26,7 @@ import com.example.prm392_finalproject.controllers.UserRepository;
 import com.example.prm392_finalproject.dao.ProductDAO;
 import com.example.prm392_finalproject.models.Product;
 import com.example.prm392_finalproject.models.User;
+import com.example.prm392_finalproject.utils.CartManager;
 import com.example.prm392_finalproject.views.adapters.ProductAdapter;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -33,6 +34,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,6 +108,14 @@ public class UserDashboardActivity extends AppCompatActivity implements Navigati
                 }
             }
         );
+
+        // Thêm sự kiện cho nút tạo đơn hàng mới
+        FloatingActionButton fabCreateOrder = findViewById(R.id.fabCreateOrder);
+        fabCreateOrder.setOnClickListener(v -> {
+            // Mở giỏ hàng (CartActivity)
+            Intent intent = new Intent(this, CartActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void initViews() {
@@ -134,9 +145,11 @@ public class UserDashboardActivity extends AppCompatActivity implements Navigati
 
     private void setupRecyclerView() {
         productAdapter = new ProductAdapter(productList, product -> {
-            // Handle product click - navigate to product detail
-            Toast.makeText(this, "Selected: " + product.getName(), Toast.LENGTH_SHORT).show();
-            // TODO: Navigate to product detail activity
+            // Xem chi tiết sản phẩm (nếu muốn)
+        }, product -> {
+            // Thêm vào giỏ hàng
+            CartManager.getInstance().addToCart(product);
+            Snackbar.make(rvProducts, "Đã thêm vào giỏ hàng: " + product.getName(), Snackbar.LENGTH_SHORT).show();
         });
         
         rvProducts.setLayoutManager(new GridLayoutManager(this, 2));

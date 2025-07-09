@@ -15,6 +15,32 @@
         android:layout_gravity="center_horizontal"
         android:paddingBottom="16dp" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCreateOrder"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Tạo đơn hàng mới"
+            android:layout_marginEnd="8dp"
+            android:padding="12dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPaymentHistory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Lịch sử thanh toán"
+            android:layout_marginStart="8dp"
+            android:padding="12dp" />
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvOrders"
         android:layout_width="match_parent"
@@ -22,13 +48,5 @@
         android:layout_weight="1"
         android:clipToPadding="false"
         android:paddingBottom="8dp"/>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnPaymentHistory"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Xem lịch sử thanh toán"
-        android:layout_marginTop="16dp"
-        android:padding="12dp" />
 
 </LinearLayout> 

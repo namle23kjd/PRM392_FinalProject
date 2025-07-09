@@ -4,8 +4,8 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_my_orders"
-            android:icon="@drawable/ic_calendar"
-            android:title="My Orders" />
+            android:icon="@drawable/ic_add"
+            android:title="Đơn hàng của tôi" />
         
         <item
             android:id="@+id/nav_payment_history"
