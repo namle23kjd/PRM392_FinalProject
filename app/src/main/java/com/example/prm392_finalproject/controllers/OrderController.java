@@ -38,16 +38,19 @@ public class OrderController {
     }
 
     // Cập nhật method này để thực sự tạo order
-    public boolean createOrder(Order order) {
+    public boolean createOrder(Order order, String shippingAddress, String shippingMethod, String shippingPersonName) {
         return safe(() -> {
             // Chuyển đổi Order thành CustomerOrder.OrderItem list
             List<CustomerOrder.OrderItem> items = new ArrayList<>();
             // TODO: Cần thêm logic để lấy order items từ cart hoặc parameter
-            
+
             return customerOrderRepository.createOrderForCustomer(
-                order.getCustomerId(), 
-                items, 
-                order.getNote()
+                    order.getCustomerId(),
+                    items,
+                    order.getNote(),
+                    shippingAddress,
+                    shippingMethod,
+                    shippingPersonName
             );
         }, false);
     }
@@ -70,7 +73,10 @@ public class OrderController {
             return customerOrderRepository.createOrderForCustomer(
                 orderRequest.getCustomerId(),
                 items,
-                orderRequest.getNote()
+                orderRequest.getNote(),
+                orderRequest.getShippingAddress(),
+                orderRequest.getShippingMethod(),
+                orderRequest.getShippingPersonName()
             );
         }, false);
     }

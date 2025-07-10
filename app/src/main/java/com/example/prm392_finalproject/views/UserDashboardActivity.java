@@ -1,6 +1,7 @@
 package com.example.prm392_finalproject.views;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -67,93 +68,169 @@ public class UserDashboardActivity extends AppCompatActivity implements Navigati
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_dashboard);
 
-        // Initialize dependencies
-        userRepository = new UserRepository();
-        productDAO = new ProductDAO();
-        mAuth = FirebaseAuth.getInstance();
+        try {
+            Log.d(TAG, "UserDashboardActivity onCreate started");
 
-        // Configure Google Sign-In
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+            // Initialize dependencies
+            userRepository = new UserRepository();
+            productDAO = new ProductDAO();
+            mAuth = FirebaseAuth.getInstance();
 
-        // Initialize views
-        initViews();
-        
-        // Setup toolbar and navigation drawer
-        setupToolbar();
-        setupNavigationDrawer();
-        
-        // Setup RecyclerView
-        setupRecyclerView();
-        
-        // Load current user data
-        loadCurrentUser();
-        
-        // Load products
-        loadProducts();
+            // Configure Google Sign-In
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.default_web_client_id))
+                    .requestEmail()
+                    .build();
+            mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        profileLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                    User updatedUser = (User) result.getData().getSerializableExtra("updatedUser");
-                    if (updatedUser != null) {
-                        currentUser = updatedUser;
-                        updateUI(currentUser);
-                        Toast.makeText(this, "Profile updated!", Toast.LENGTH_SHORT).show();
+            // Initialize views
+            initViews();
+            
+            // Setup toolbar and navigation drawer
+            setupToolbar();
+            setupNavigationDrawer();
+            
+            // Setup RecyclerView
+            setupRecyclerView();
+            
+            // Load current user data
+            loadCurrentUser();
+            
+            // Load products
+            loadProducts();
+
+            profileLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        User updatedUser = (User) result.getData().getSerializableExtra("updatedUser");
+                        if (updatedUser != null) {
+                            currentUser = updatedUser;
+                            updateUI(currentUser);
+                            Toast.makeText(this, "Profile updated!", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
-            }
-        );
+            );
 
-        // Thêm sự kiện cho nút tạo đơn hàng mới
-        FloatingActionButton fabCreateOrder = findViewById(R.id.fabCreateOrder);
-        fabCreateOrder.setOnClickListener(v -> {
-            // Mở giỏ hàng (CartActivity)
-            Intent intent = new Intent(this, CartActivity.class);
-            startActivity(intent);
-        });
+            // Thêm sự kiện cho nút tạo đơn hàng mới
+            FloatingActionButton fabCreateOrder = findViewById(R.id.fabCreateOrder);
+            if (fabCreateOrder != null) {
+                fabCreateOrder.setOnClickListener(v -> {
+                    // Mở giỏ hàng (CartActivity)
+                    Intent intent = new Intent(this, CartActivity.class);
+                    startActivity(intent);
+                });
+            } else {
+                Log.w(TAG, "fabCreateOrder is null, skipping click listener");
+            }
+
+            Log.d(TAG, "UserDashboardActivity onCreate completed successfully");
+        } catch (Exception e) {
+            Log.e(TAG, "Error in onCreate: " + e.getMessage());
+            e.printStackTrace();
+            Toast.makeText(this, "Lỗi khởi tạo: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            finish();
+        }
     }
 
     private void initViews() {
-        drawerLayout = findViewById(R.id.drawerLayout);
-        navigationView = findViewById(R.id.navigationView);
-        toolbar = findViewById(R.id.toolbar);
-        rvProducts = findViewById(R.id.rvProducts);
-        welcomeText = findViewById(R.id.tvWelcome);
-        btnSignOut = findViewById(R.id.btnSignOut);
-        btnSignOut.setOnClickListener(v -> signOut());
+        try {
+            Log.d(TAG, "Initializing views...");
+            
+            drawerLayout = findViewById(R.id.drawerLayout);
+            if (drawerLayout == null) {
+                Log.e(TAG, "drawerLayout is null!");
+                throw new RuntimeException("drawerLayout not found");
+            }
+            
+            navigationView = findViewById(R.id.navigationView);
+            if (navigationView == null) {
+                Log.e(TAG, "navigationView is null!");
+                throw new RuntimeException("navigationView not found");
+            }
+            
+            toolbar = findViewById(R.id.toolbar);
+            if (toolbar == null) {
+                Log.e(TAG, "toolbar is null!");
+                throw new RuntimeException("toolbar not found");
+            }
+            
+            rvProducts = findViewById(R.id.rvProducts);
+            if (rvProducts == null) {
+                Log.e(TAG, "rvProducts is null!");
+                throw new RuntimeException("rvProducts not found");
+            }
+            
+            welcomeText = findViewById(R.id.tvWelcome);
+            if (welcomeText == null) {
+                Log.e(TAG, "tvWelcome is null!");
+                throw new RuntimeException("tvWelcome not found");
+            }
+            
+            btnSignOut = findViewById(R.id.btnSignOut);
+            if (btnSignOut == null) {
+                Log.e(TAG, "btnSignOut is null!");
+                throw new RuntimeException("btnSignOut not found");
+            }
+            
+            btnSignOut.setOnClickListener(v -> signOut());
+            
+            Log.d(TAG, "All views initialized successfully");
+        } catch (Exception e) {
+            Log.e(TAG, "Error initializing views: " + e.getMessage());
+            e.printStackTrace();
+            Toast.makeText(this, "Lỗi khởi tạo giao diện: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            finish();
+        }
     }
 
     private void setupToolbar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Tech Store");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        try {
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle("Tech Store");
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+            Log.d(TAG, "Toolbar setup completed");
+        } catch (Exception e) {
+            Log.e(TAG, "Error setting up toolbar: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void setupNavigationDrawer() {
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
+        try {
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawerLayout.addDrawerListener(toggle);
+            toggle.syncState();
 
-        navigationView.setNavigationItemSelectedListener(this);
+            navigationView.setNavigationItemSelectedListener(this);
+            Log.d(TAG, "Navigation drawer setup completed");
+        } catch (Exception e) {
+            Log.e(TAG, "Error setting up navigation drawer: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void setupRecyclerView() {
-        productAdapter = new ProductAdapter(productList, product -> {
-            // Xem chi tiết sản phẩm (nếu muốn)
-        }, product -> {
-            // Thêm vào giỏ hàng
-            CartManager.getInstance().addToCart(product);
-            Snackbar.make(rvProducts, "Đã thêm vào giỏ hàng: " + product.getName(), Snackbar.LENGTH_SHORT).show();
-        });
-        
-        rvProducts.setLayoutManager(new GridLayoutManager(this, 2));
-        rvProducts.setAdapter(productAdapter);
+        try {
+            productAdapter = new ProductAdapter(productList, product -> {
+                // Xem chi tiết sản phẩm (nếu muốn)
+            }, product -> {
+                // Thêm vào giỏ hàng
+                CartManager.getInstance().addToCart(product);
+                Snackbar.make(rvProducts, "Đã thêm vào giỏ hàng: " + product.getName(), Snackbar.LENGTH_SHORT).show();
+            });
+            
+            rvProducts.setLayoutManager(new GridLayoutManager(this, 2));
+            rvProducts.setAdapter(productAdapter);
+            Log.d(TAG, "RecyclerView setup completed");
+        } catch (Exception e) {
+            Log.e(TAG, "Error setting up RecyclerView: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void loadCurrentUser() {
@@ -205,24 +282,37 @@ public class UserDashboardActivity extends AppCompatActivity implements Navigati
     }
 
     private void updateUI(User user) {
-        if (user != null) {
-            welcomeText.setText("Welcome, " + user.getFullName() + "!");
-            
-            // Update navigation header
-            View headerView = navigationView.getHeaderView(0);
-            TextView navUserName = headerView.findViewById(R.id.navUserName);
-            TextView navUserEmail = headerView.findViewById(R.id.navUserEmail);
-            TextView navUserGender = headerView.findViewById(R.id.navUserGender);
-            
-            if (navUserName != null) {
-                navUserName.setText(user.getFullName());
+        try {
+            if (user != null) {
+                welcomeText.setText("Welcome, " + user.getFullName() + "!");
+                
+                // Update navigation header
+                View headerView = navigationView.getHeaderView(0);
+                if (headerView != null) {
+                    TextView navUserName = headerView.findViewById(R.id.navUserName);
+                    TextView navUserEmail = headerView.findViewById(R.id.navUserEmail);
+                    TextView navUserGender = headerView.findViewById(R.id.navUserGender);
+                    
+                    if (navUserName != null) {
+                        navUserName.setText(user.getFullName());
+                    }
+                    if (navUserEmail != null) {
+                        navUserEmail.setText(user.getEmail());
+                    }
+                    if (navUserGender != null) {
+                        navUserGender.setText(user.getGender());
+                    }
+                } else {
+                    Log.w(TAG, "Navigation header view is null");
+                }
+                
+                Log.d(TAG, "UI updated successfully for user: " + user.getFullName());
+            } else {
+                Log.w(TAG, "User is null, cannot update UI");
             }
-            if (navUserEmail != null) {
-                navUserEmail.setText(user.getEmail());
-            }
-            if (navUserGender != null) {
-                navUserGender.setText(user.getGender());
-            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error updating UI: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -233,7 +323,28 @@ public class UserDashboardActivity extends AppCompatActivity implements Navigati
         if (id == R.id.nav_my_orders) {
             Intent intent = new Intent(UserDashboardActivity.this, CustomerOrderActivity.class);
             if (currentUser != null) {
-                intent.putExtra("currentUser", currentUser);
+                // Truyền thông tin customer theo đúng format mà CustomerOrderActivity mong đợi
+                intent.putExtra("customer_id", currentUser.getCustomerId());
+                intent.putExtra("customer_name", currentUser.getFullName());
+                intent.putExtra("customer_address", currentUser.getAddress());
+                
+                // Lưu vào SharedPreferences để CustomerOrderActivity có thể đọc
+                SharedPreferences prefs = getSharedPreferences("customer_session", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putInt("customer_id", currentUser.getCustomerId());
+                editor.putString("customer_name", currentUser.getFullName());
+                editor.putString("customer_address", currentUser.getAddress());
+                editor.apply();
+                
+                // Log để debug
+                Log.d(TAG, "Starting CustomerOrderActivity with customer_id: " + currentUser.getCustomerId());
+                Log.d(TAG, "Customer name: " + currentUser.getFullName());
+                Log.d(TAG, "Customer address: " + currentUser.getAddress());
+            } else {
+                Log.e(TAG, "currentUser is null when trying to open orders");
+                Toast.makeText(this, "Lỗi: Không tìm thấy thông tin người dùng", Toast.LENGTH_SHORT).show();
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return false;
             }
             startActivity(intent);
         } else if (id == R.id.nav_payment_history) {

@@ -72,15 +72,26 @@ public class CustomerOrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_order);
 
-        loadCustomerSession();
-        initViews();
-        initData();
-        setupListeners();
-        loadCustomerOrders();
+        try {
+            Log.d(TAG, "CustomerOrderActivity onCreate started");
+            
+            loadCustomerSession();
+            initViews();
+            initData();
+            setupListeners();
+            loadCustomerOrders();
 
-        // Auto-calculate distance for customer address if available
-        if (customerAddress != null && !customerAddress.trim().isEmpty()) {
-            autoCalculateDeliveryDistance();
+            // Auto-calculate distance for customer address if available
+            if (customerAddress != null && !customerAddress.trim().isEmpty()) {
+                autoCalculateDeliveryDistance();
+            }
+            
+            Log.d(TAG, "CustomerOrderActivity onCreate completed successfully");
+        } catch (Exception e) {
+            Log.e(TAG, "Error in onCreate: " + e.getMessage());
+            e.printStackTrace();
+            Toast.makeText(this, "Lỗi khởi tạo: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            finish();
         }
     }
 
@@ -90,6 +101,8 @@ public class CustomerOrderActivity extends AppCompatActivity {
         customerName = prefs.getString("customer_name", "Khách hàng");
         customerAddress = prefs.getString("customer_address", "");
 
+        Log.d(TAG, "Loaded from SharedPreferences - customer_id: " + currentCustomerId + ", name: " + customerName);
+
         // Also check intent data
         Intent intent = getIntent();
         if (intent != null) {
@@ -98,18 +111,31 @@ public class CustomerOrderActivity extends AppCompatActivity {
                 currentCustomerId = intentCustomerId;
                 customerName = intent.getStringExtra("customer_name");
                 customerAddress = intent.getStringExtra("customer_address");
+                
+                Log.d(TAG, "Loaded from Intent - customer_id: " + currentCustomerId + ", name: " + customerName);
             }
         }
 
         if (currentCustomerId == -1) {
+            Log.e(TAG, "No valid customer_id found, finishing activity");
             Toast.makeText(this, "Vui lòng đăng nhập lại", Toast.LENGTH_LONG).show();
             finish();
+        } else {
+            Log.d(TAG, "Customer session loaded successfully - ID: " + currentCustomerId + ", Name: " + customerName);
         }
     }
 
     private void initViews() {
+        Log.d(TAG, "Initializing views");
+        
         // Main UI components
         listViewOrders = findViewById(R.id.listViewCustomerOrders);
+        if (listViewOrders == null) {
+            Log.e(TAG, "listViewCustomerOrders is null!");
+        } else {
+            Log.d(TAG, "listViewCustomerOrders found successfully");
+        }
+        
         btnRefresh = findViewById(R.id.btnRefreshOrders);
         btnOrderHistory = findViewById(R.id.btnOrderHistory);
         emptyStateLayout = findViewById(R.id.emptyStateLayout);
@@ -144,16 +170,31 @@ public class CustomerOrderActivity extends AppCompatActivity {
         } else {
             tvDeliveryAddress.setVisibility(View.GONE);
         }
+        
+        Log.d(TAG, "Views initialized successfully");
     }
 
     private void initData() {
-        orderRepository = new CustomerOrderRepository();
-        orderList = new ArrayList<>();
-        orderAdapter = new CustomerOrderAdapter(this, orderList);
-        listViewOrders.setAdapter(orderAdapter);
+        Log.d(TAG, "Initializing data components");
+        try {
+            orderRepository = new CustomerOrderRepository();
+            orderList = new ArrayList<>();
+            orderAdapter = new CustomerOrderAdapter(this, orderList);
+            
+            if (listViewOrders != null) {
+                listViewOrders.setAdapter(orderAdapter);
+                Log.d(TAG, "Adapter set successfully");
+            } else {
+                Log.e(TAG, "listViewOrders is null, cannot set adapter");
+            }
 
-        // Initialize distance calculator
-        distanceCalculator = new DistanceCalculator(this);
+            // Initialize distance calculator
+            distanceCalculator = new DistanceCalculator(this);
+            Log.d(TAG, "Data components initialized successfully");
+        } catch (Exception e) {
+            Log.e(TAG, "Error initializing data components: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void setupListeners() {
@@ -506,20 +547,26 @@ public class CustomerOrderActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             updateDistanceStatus("🔄 Đang tải đơn hàng...", "#2196F3");
+            Log.d(TAG, "Starting to load orders for customer_id: " + currentCustomerId);
         }
 
         @Override
         protected List<CustomerOrder> doInBackground(Integer... customerIds) {
             try {
-                return orderRepository.getOrdersByCustomerId(customerIds[0]);
+                Log.d(TAG, "Loading orders for customer_id: " + customerIds[0]);
+                List<CustomerOrder> orders = orderRepository.getOrdersByCustomerId(customerIds[0]);
+                Log.d(TAG, "Loaded " + orders.size() + " orders from database");
+                return orders;
             } catch (Exception e) {
                 Log.e(TAG, "Error loading customer orders: " + e.getMessage());
+                e.printStackTrace();
                 return new ArrayList<>();
             }
         }
 
         @Override
         protected void onPostExecute(List<CustomerOrder> orders) {
+            Log.d(TAG, "onPostExecute: Received " + orders.size() + " orders");
             orderList.clear();
             orderList.addAll(orders);
             orderAdapter.notifyDataSetChanged();

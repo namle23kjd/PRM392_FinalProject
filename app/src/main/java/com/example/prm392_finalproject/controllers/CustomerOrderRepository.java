@@ -36,11 +36,12 @@ public class CustomerOrderRepository {
 
             String query = "SELECT o.*, s.shipping_address, s.shipping_method, s.tracking_number, " +
                     "s.expected_delivery, s.delivered_date, s.status as shipping_status " +
-                    "FROM orders o " +
-                    "LEFT JOIN shipping s ON o.order_id = s.order_id " +
+                    "FROM Orders o " +
+                    "LEFT JOIN Shipping s ON o.order_id = s.order_id " +
                     "WHERE o.customer_id = ? " +
                     "ORDER BY o.order_date DESC";
 
+            Log.d(TAG, "Executing query: " + query + " with customer_id = " + customerId);
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, customerId);
 
@@ -48,7 +49,10 @@ public class CustomerOrderRepository {
 
             while (resultSet.next()) {
                 CustomerOrder order = mapResultSetToCustomerOrder(resultSet);
-                orders.add(order);
+                if (order != null) {
+                    orders.add(order);
+                    Log.d(TAG, "Added order: " + order.getOrderId() + " with status: " + order.getStatus());
+                }
             }
 
             Log.d(TAG, "Found " + orders.size() + " orders for customer " + customerId);
@@ -56,6 +60,10 @@ public class CustomerOrderRepository {
 
         } catch (SQLException e) {
             Log.e(TAG, "SQL Error getting orders by customer ID: " + e.getMessage());
+            e.printStackTrace();
+            return orders;
+        } catch (Exception e) {
+            Log.e(TAG, "General Error getting orders by customer ID: " + e.getMessage());
             e.printStackTrace();
             return orders;
         } finally {
@@ -90,8 +98,8 @@ public class CustomerOrderRepository {
 
             String query = "SELECT o.*, s.shipping_address, s.shipping_method, s.tracking_number, " +
                     "s.expected_delivery, s.delivered_date, s.status as shipping_status " +
-                    "FROM orders o " +
-                    "LEFT JOIN shipping s ON o.order_id = s.order_id " +
+                    "FROM Orders o " +
+                    "LEFT JOIN Shipping s ON o.order_id = s.order_id " +
                     "WHERE o.customer_id = ? AND (o.status IN (" + placeholders + ") " +
                     "OR s.status IN (" + placeholders + ")) " +
                     "ORDER BY o.order_date DESC";
@@ -143,8 +151,8 @@ public class CustomerOrderRepository {
 
             String query = "SELECT o.*, s.shipping_address, s.shipping_method, s.tracking_number, " +
                     "s.expected_delivery, s.delivered_date, s.status as shipping_status " +
-                    "FROM orders o " +
-                    "LEFT JOIN shipping s ON o.order_id = s.order_id " +
+                    "FROM Orders o " +
+                    "LEFT JOIN Shipping s ON o.order_id = s.order_id " +
                     "WHERE o.order_id = ? AND o.customer_id = ?";
 
             preparedStatement = connection.prepareStatement(query);
@@ -185,8 +193,8 @@ public class CustomerOrderRepository {
             if (connection == null) return items;
 
             String query = "SELECT oi.*, p.name as product_name, p.image_url " +
-                    "FROM order_items oi " +
-                    "JOIN product p ON oi.product_id = p.product_id " +
+                    "FROM Order_Items oi " +
+                    "JOIN Product p ON oi.product_id = p.product_id " +
                     "WHERE oi.order_id = ?";
 
             preparedStatement = connection.prepareStatement(query);
@@ -223,33 +231,51 @@ public class CustomerOrderRepository {
 
     // Helper method to map ResultSet to CustomerOrder object
     private CustomerOrder mapResultSetToCustomerOrder(ResultSet resultSet) throws SQLException {
-        CustomerOrder order = new CustomerOrder();
+        try {
+            CustomerOrder order = new CustomerOrder();
 
-        // Order basic info
-        order.setOrderId(resultSet.getInt("order_id"));
-        order.setCustomerId(resultSet.getInt("customer_id"));
-        order.setOrderDate(resultSet.getTimestamp("order_date"));
-        order.setStatus(resultSet.getString("status"));
-        order.setTotalAmount(resultSet.getDouble("total_amount"));
-        order.setNote(resultSet.getString("note"));
+            // Order basic info
+            int orderId = resultSet.getInt("order_id");
+            int customerId = resultSet.getInt("customer_id");
+            String status = resultSet.getString("status");
+            double totalAmount = resultSet.getDouble("total_amount");
+            
+            order.setOrderId(orderId);
+            order.setCustomerId(customerId);
+            order.setOrderDate(resultSet.getTimestamp("order_date"));
+            order.setStatus(status);
+            order.setTotalAmount(totalAmount);
+            order.setNote(resultSet.getString("note"));
 
-        // Shipping info (if exists)
-        String shippingAddress = resultSet.getString("shipping_address");
-        if (shippingAddress != null) {
-            order.setShippingAddress(shippingAddress);
-            order.setShippingMethod(resultSet.getString("shipping_method"));
-            order.setTrackingNumber(resultSet.getString("tracking_number"));
-            order.setExpectedDelivery(resultSet.getTimestamp("expected_delivery"));
-            order.setDeliveredDate(resultSet.getTimestamp("delivered_date"));
+            Log.d(TAG, "Mapped order: ID=" + orderId + ", Customer=" + customerId + ", Status=" + status + ", Amount=" + totalAmount);
 
-            // Use shipping status if available, otherwise use order status
-            String shippingStatus = resultSet.getString("shipping_status");
-            if (shippingStatus != null && !shippingStatus.trim().isEmpty()) {
-                order.setShippingStatus(shippingStatus);
+            // Shipping info (if exists)
+            String shippingAddress = resultSet.getString("shipping_address");
+            if (shippingAddress != null) {
+                order.setShippingAddress(shippingAddress);
+                order.setShippingMethod(resultSet.getString("shipping_method"));
+                order.setTrackingNumber(resultSet.getString("tracking_number"));
+                order.setExpectedDelivery(resultSet.getTimestamp("expected_delivery"));
+                order.setDeliveredDate(resultSet.getTimestamp("delivered_date"));
+
+                // Use shipping status if available, otherwise use order status
+                String shippingStatus = resultSet.getString("shipping_status");
+                if (shippingStatus != null && !shippingStatus.trim().isEmpty()) {
+                    order.setShippingStatus(shippingStatus);
+                    Log.d(TAG, "Order " + orderId + " has shipping status: " + shippingStatus);
+                }
+                
+                Log.d(TAG, "Order " + orderId + " has shipping address: " + shippingAddress);
+            } else {
+                Log.d(TAG, "Order " + orderId + " has no shipping info");
             }
-        }
 
-        return order;
+            return order;
+        } catch (Exception e) {
+            Log.e(TAG, "Error mapping ResultSet to CustomerOrder: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
     }
 
     // Get customer order statistics
@@ -268,8 +294,8 @@ public class CustomerOrderRepository {
                     "SUM(CASE WHEN o.status IN ('Completed', 'Delivered') OR s.status IN ('Delivered') THEN 1 ELSE 0 END) as completed_orders, " +
                     "SUM(CASE WHEN s.status = 'Shipped' THEN 1 ELSE 0 END) as shipping_orders, " +
                     "SUM(o.total_amount) as total_spent " +
-                    "FROM orders o " +
-                    "LEFT JOIN shipping s ON o.order_id = s.order_id " +
+                    "FROM Orders o " +
+                    "LEFT JOIN Shipping s ON o.order_id = s.order_id " +
                     "WHERE o.customer_id = ?";
 
             preparedStatement = connection.prepareStatement(query);
@@ -304,10 +330,11 @@ public class CustomerOrderRepository {
     }
 
     // Tạo đơn hàng mới cho customer
-    public boolean createOrderForCustomer(int customerId, List<CustomerOrder.OrderItem> items, String note) {
+    public boolean createOrderForCustomer(int customerId, List<CustomerOrder.OrderItem> items, String note, String shippingAddress, String shippingMethod, String shippingPersonName) {
         Connection connection = null;
         PreparedStatement orderStmt = null;
         PreparedStatement itemStmt = null;
+        PreparedStatement shippingStmt = null;
         ResultSet generatedKeys = null;
         try {
             connection = connectionClass.CONN();
@@ -350,6 +377,15 @@ public class CustomerOrderRepository {
             }
             itemStmt.executeBatch();
 
+            // 4. Insert vào Shipping
+            String shippingSql = "INSERT INTO Shipping (order_id, shipping_address, shipping_method, shipping_person_name, status) VALUES (?, ?, ?, ?, 'Pending')";
+            shippingStmt = connection.prepareStatement(shippingSql);
+            shippingStmt.setInt(1, orderId);
+            shippingStmt.setString(2, shippingAddress);
+            shippingStmt.setString(3, shippingMethod);
+            shippingStmt.setString(4, shippingPersonName);
+            shippingStmt.executeUpdate();
+
             connection.commit();
             return true;
         } catch (Exception e) {
@@ -360,6 +396,7 @@ public class CustomerOrderRepository {
             try { if (generatedKeys != null) generatedKeys.close(); } catch (Exception e) {}
             try { if (orderStmt != null) orderStmt.close(); } catch (Exception e) {}
             try { if (itemStmt != null) itemStmt.close(); } catch (Exception e) {}
+            try { if (shippingStmt != null) shippingStmt.close(); } catch (Exception e) {}
             try { if (connection != null) connection.setAutoCommit(true); } catch (Exception e) {}
             try { if (connection != null) connection.close(); } catch (Exception e) {}
         }

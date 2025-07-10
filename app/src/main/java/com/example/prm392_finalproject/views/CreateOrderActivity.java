@@ -156,6 +156,14 @@ public class CreateOrderActivity extends AppCompatActivity implements CartAdapte
         // Calculate total amount
         double totalAmount = cartManager.getTotalAmount();
 
+        // Lấy customer_id từ SharedPreferences
+        android.content.SharedPreferences prefs = getSharedPreferences("customer_session", MODE_PRIVATE);
+        int customerId = prefs.getInt("customer_id", -1);
+        if (customerId == -1) {
+            Toast.makeText(this, "Không tìm thấy thông tin người dùng!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // Create order request
         List<OrderRequest.OrderItemRequest> items = new ArrayList<>();
         for (CartManager.CartItem cartItem : cartManager.getCartItems()) {
@@ -167,7 +175,7 @@ public class CreateOrderActivity extends AppCompatActivity implements CartAdapte
         }
 
         OrderRequest orderRequest = new OrderRequest(
-            1, // TODO: Get actual customer ID from session
+            customerId,
             totalAmount,
             note,
             shippingAddress,
