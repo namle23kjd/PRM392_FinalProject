@@ -24,7 +24,7 @@ public class PaymentFailedActivity extends AppCompatActivity {
 
         Button btnBack = findViewById(R.id.btnBackToHomeFailed);
         btnBack.setOnClickListener(v -> {
-            Intent intent = new Intent(PaymentFailedActivity.this, MainActivity.class);
+            Intent intent = new Intent(PaymentFailedActivity.this, UserDashboardActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();

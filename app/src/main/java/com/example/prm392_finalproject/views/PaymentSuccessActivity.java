@@ -24,7 +24,7 @@ public class PaymentSuccessActivity extends AppCompatActivity {
 
         Button btnBack = findViewById(R.id.btnBackToHomeSuccess);
         btnBack.setOnClickListener(v -> {
-            Intent intent = new Intent(PaymentSuccessActivity.this, MainActivity.class);
+            Intent intent = new Intent(PaymentSuccessActivity.this, UserDashboardActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
