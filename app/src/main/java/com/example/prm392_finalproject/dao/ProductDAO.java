@@ -156,7 +156,7 @@ public class ProductDAO {
             Log.e("ProductDAO", "Error deleting product: " + e.getMessage());
         }
     }
-
+     // SearchProducts
     public List<Product> searchProducts(String searchTerm) {
         List<Product> products = new ArrayList<>();
         Connection conn = connectionClass.CONN();
@@ -166,18 +166,38 @@ public class ProductDAO {
         }
 
         try {
-            String query = "SELECT * FROM Product WHERE name LIKE ? OR product_code LIKE ? OR description LIKE ?";
+            // Updated query để include category và chỉ tìm active products
+            String query = "SELECT p.*, c.name as category_name FROM Product p " +
+                    "LEFT JOIN Category c ON p.category_id = c.category_id " +
+                    "WHERE p.is_active = 1 AND (" +
+                    "p.name LIKE ? OR " +
+                    "p.product_code LIKE ? OR " +
+                    "p.description LIKE ? OR " +
+                    "c.name LIKE ?" +
+                    ") ORDER BY p.name";
+
             PreparedStatement stmt = conn.prepareStatement(query);
             String likeSearch = "%" + searchTerm + "%";
             stmt.setString(1, likeSearch);
             stmt.setString(2, likeSearch);
             stmt.setString(3, likeSearch);
+            stmt.setString(4, likeSearch);
+
+            System.out.println("ProductDAO: Executing search query with term: " + searchTerm);
+
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                products.add(extractProduct(rs));
+                Product product = extractProduct(rs);
+                if (product != null) {
+                    products.add(product);
+                }
             }
+
+            System.out.println("ProductDAO: Search completed. Found " + products.size() + " products");
+
         } catch (Exception e) {
             Log.e("ProductDAO", "Error searching products: " + e.getMessage());
+            e.printStackTrace();
         }
         return products;
     }

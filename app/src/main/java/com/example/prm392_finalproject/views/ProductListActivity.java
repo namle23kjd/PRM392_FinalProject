@@ -21,7 +21,8 @@ public class ProductListActivity extends AppCompatActivity {
     private LinearLayout listViewProducts;
     private SearchView searchViewProducts;
     private Button btnAddProduct;
-
+    private List<Product> allProducts; // Lưu danh sách tất cả sản phẩm
+    private List<Product> filteredProducts; // Lưu danh sách sản phẩm đã filter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         System.out.println("ProductListActivity: MINIMAL VERSION - onCreate() started");
@@ -40,7 +41,13 @@ public class ProductListActivity extends AppCompatActivity {
             // Set click listeners
             setClickListeners();
             System.out.println("ProductListActivity: setClickListeners completed");
+            // Initialize lists
+            allProducts = new ArrayList<>();
+            filteredProducts = new ArrayList<>();
 
+// Setup search functionality
+            setupSearchView();
+            System.out.println("ProductListActivity: setupSearchView completed");
             // Tự động load sản phẩm khi vào activity
             loadProductsFromDatabase();
 
@@ -135,6 +142,9 @@ public class ProductListActivity extends AppCompatActivity {
                         public void run() {
                             if (products != null && !products.isEmpty()) {
                                 System.out.println("ProductListActivity: Displaying " + products.size() + " products");
+                                // Lưu danh sách tất cả sản phẩm
+                                allProducts = products;
+                                filteredProducts = new ArrayList<>(products);
                                 displayProducts(products);
                                 Toast.makeText(ProductListActivity.this, "Loaded " + products.size() + " products", Toast.LENGTH_SHORT).show();
                             } else {
@@ -212,13 +222,17 @@ public class ProductListActivity extends AppCompatActivity {
                 stockTextView.setText("Stock: " + product.getQuantityInStock() + " units");
                 stockTextView.setTextSize(12);
                 stockTextView.setTextColor(android.graphics.Color.DKGRAY);
-                
+                // Product code
+                android.widget.TextView codeTextView = new android.widget.TextView(this);
+                codeTextView.setText("Code: " + (product.getProductCode() != null ? product.getProductCode() : "N/A"));
+                codeTextView.setTextSize(12);
+                codeTextView.setTextColor(android.graphics.Color.BLUE);
                 // Add views to linear layout
                 linearLayout.addView(nameTextView);
                 linearLayout.addView(descTextView);
                 linearLayout.addView(priceTextView);
                 linearLayout.addView(stockTextView);
-                
+                linearLayout.addView(codeTextView);
                 // Add linear layout to card
                 cardView.addView(linearLayout);
                 
@@ -232,6 +246,102 @@ public class ProductListActivity extends AppCompatActivity {
             System.out.println("ProductListActivity: Error displaying products: " + e.getMessage());
             e.printStackTrace();
         }
-    }
 
+    }
+//SearchProduct method
+    private void setupSearchView() {
+        try {
+            searchViewProducts.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    System.out.println("ProductListActivity: Search submitted: " + query);
+                    performSearch(query);
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    System.out.println("ProductListActivity: Search text changed: " + newText);
+                    performSearch(newText);
+                    return true;
+                }
+            });
+
+            searchViewProducts.setOnCloseListener(new SearchView.OnCloseListener() {
+                @Override
+                public boolean onClose() {
+                    System.out.println("ProductListActivity: Search view closed");
+                    displayProducts(allProducts);
+                    return false;
+                }
+            });
+
+            System.out.println("ProductListActivity: SearchView setup completed");
+
+        } catch (Exception e) {
+            System.out.println("ProductListActivity: ERROR in setupSearchView: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    private void performSearch(String query) {
+        try {
+            if (query == null || query.trim().isEmpty()) {
+                System.out.println("ProductListActivity: Empty query, showing all products");
+                displayProducts(allProducts);
+                return;
+            }
+
+            System.out.println("ProductListActivity: Performing search for: " + query);
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        ProductDAO productDAO = new ProductDAO();
+                        List<Product> searchResults = productDAO.searchProducts(query.trim());
+
+                        System.out.println("ProductListActivity: Search completed. Found: " +
+                                (searchResults != null ? searchResults.size() : "null") + " products");
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (searchResults != null) {
+                                    filteredProducts = searchResults;
+                                    displayProducts(filteredProducts);
+
+                                    if (searchResults.isEmpty()) {
+                                        Toast.makeText(ProductListActivity.this,
+                                                "No products found for '" + query + "'", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(ProductListActivity.this,
+                                                "Found " + searchResults.size() + " products", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    Toast.makeText(ProductListActivity.this,
+                                            "Search error occurred", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                    } catch (Exception e) {
+                        System.out.println("ProductListActivity: Error in search: " + e.getMessage());
+                        e.printStackTrace();
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(ProductListActivity.this,
+                                        "Search error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                }
+            }).start();
+
+        } catch (Exception e) {
+            System.out.println("ProductListActivity: ERROR in performSearch: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }
