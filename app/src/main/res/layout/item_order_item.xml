@@ -1,33 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    android:layout_marginHorizontal="4dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="2dp">
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="3dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="#E0E0E0">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="12dp">
+        android:padding="16dp">
 
+        <!-- Tên sản phẩm -->
         <TextView
             android:id="@+id/textViewProductName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Tên sản phẩm"
-            android:textSize="16sp"
+            android:textSize="17sp"
             android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
+            android:textColor="#1E1E1E"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:layout_marginBottom="12dp" />
 
+        <!-- Số lượng và đơn giá -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="4dp">
+            android:layout_marginBottom="8dp">
 
             <TextView
                 android:id="@+id/textViewQuantity"
@@ -35,27 +42,28 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Số lượng: 1"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:textColor="#616161" />
 
             <TextView
                 android:id="@+id/textViewUnitPrice"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="Đơn giá: 25,000,000 VND"
-                android:textSize="14sp" />
-
+                android:textSize="14sp"
+                android:textColor="#616161"
+                android:textAlignment="viewEnd" />
         </LinearLayout>
 
+        <!-- Thành tiền -->
         <TextView
             android:id="@+id/textViewTotalPrice"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Thành tiền: 25,000,000 VND"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:textStyle="bold"
-            android:textColor="@color/primary_dark" />
-
+            android:textColor="@color/primary_dark"
+            android:textAlignment="viewEnd" />
     </LinearLayout>
-
-</androidx.cardview.widget.CardView> 
+</com.google.android.material.card.MaterialCardView>

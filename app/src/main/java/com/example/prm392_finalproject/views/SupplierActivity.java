@@ -1,7 +1,6 @@
 package com.example.prm392_finalproject.views;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -29,12 +28,10 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class SupplierActivity extends AppCompatActivity {
     private RecyclerView rvSupplierList;
     private FloatingActionButton fabAddSupplier;
-    private TextView btnBackToHomeSupplier;
     private TextInputEditText etSearchSupplier;
     private SupplierController supplierController;
     private SupplierAdapter supplierAdapter;
@@ -49,36 +46,23 @@ public class SupplierActivity extends AppCompatActivity {
 
         rvSupplierList = findViewById(R.id.rvSupplierList);
         fabAddSupplier = findViewById(R.id.fabAddSupplier);
-        btnBackToHomeSupplier = findViewById(R.id.btnBackToHomeSupplier);
         etSearchSupplier = findViewById(R.id.etSearchSupplier);
         supplierController = new SupplierController();
 
-        supplierAdapter = new SupplierAdapter(supplierList, new SupplierAdapter.OnSupplierActionListener() {
-            @Override
-            public void onEdit(SupplierResponse supplier) {
-                showSupplierDialog(supplier);
-            }
-        });
+        supplierAdapter = new SupplierAdapter(supplierList, supplier -> showSupplierDialog(supplier));
         rvSupplierList.setLayoutManager(new LinearLayoutManager(this));
         rvSupplierList.setAdapter(supplierAdapter);
 
         fabAddSupplier.setOnClickListener(v -> showSupplierDialog(null));
-        btnBackToHomeSupplier.setOnClickListener(v -> {
-            Intent intent = new Intent(SupplierActivity.this, com.example.prm392_finalproject.MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
-        });
+
         etSearchSupplier.addTextChangedListener(new android.text.TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                 filterSuppliers(s.toString());
             }
-            @Override
-            public void afterTextChanged(android.text.Editable s) {}
+            @Override public void afterTextChanged(android.text.Editable s) {}
         });
+
         loadSuppliers();
     }
 
@@ -142,9 +126,9 @@ public class SupplierActivity extends AppCompatActivity {
         String emailLower = email.toLowerCase();
         for (SupplierResponse s : fullSupplierList) {
             if (exceptId != null && s.getSupplier_id() == exceptId) continue;
-            if (removeAccent(s.getName()).toLowerCase().equals(nameNoAccent) ||
-                s.getEmail().equalsIgnoreCase(emailLower) ||
-                s.getPhone().equals(phone)) {
+            if (removeAccent(s.getName()).toLowerCase().equals(nameNoAccent)
+                    || s.getEmail().equalsIgnoreCase(emailLower)
+                    || s.getPhone().equals(phone)) {
                 return true;
             }
         }
@@ -162,6 +146,7 @@ public class SupplierActivity extends AppCompatActivity {
         TextInputEditText etPhone = view.findViewById(R.id.etSupplierPhone);
         TextInputEditText etEmail = view.findViewById(R.id.etSupplierEmail);
         SwitchMaterial switchActive = view.findViewById(R.id.switchSupplierActive);
+
         if (isEdit) {
             etName.setText(supplier.getName());
             etAddress.setText(supplier.getAddress());
@@ -170,10 +155,12 @@ public class SupplierActivity extends AppCompatActivity {
             etEmail.setText(supplier.getEmail());
             switchActive.setChecked(supplier.isIs_active());
         }
+
         builder.setView(view);
         builder.setPositiveButton(isEdit ? "Cập nhật" : "Thêm", null);
         builder.setNegativeButton("Hủy", null);
         AlertDialog dialog = builder.create();
+
         dialog.setOnShowListener(d -> {
             android.widget.Button btn = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
             btn.setOnClickListener(v -> {
@@ -183,13 +170,14 @@ public class SupplierActivity extends AppCompatActivity {
                 String phone = etPhone.getText().toString().trim();
                 String email = etEmail.getText().toString().trim();
                 boolean isActive = switchActive.isChecked();
+
                 boolean hasError = false;
                 if (!isValidName(name)) {
                     etName.setError("Tên không hợp lệ hoặc để trống");
                     hasError = true;
                 }
                 if (!isValidPhone(phone)) {
-                    etPhone.setError("Số điện thoại phải là số, 9-11 ký tự");
+                    etPhone.setError("SĐT phải là số, 9-11 ký tự");
                     hasError = true;
                 }
                 if (!isValidEmail(email)) {
@@ -203,6 +191,7 @@ public class SupplierActivity extends AppCompatActivity {
                     hasError = true;
                 }
                 if (hasError) return;
+
                 new Thread(() -> {
                     try {
                         if (isEdit) {
@@ -222,32 +211,38 @@ public class SupplierActivity extends AppCompatActivity {
                 }).start();
             });
         });
+
         dialog.show();
     }
 
-    // Adapter cho RecyclerView
+    // --- RecyclerView Adapter ---
     public static class SupplierAdapter extends RecyclerView.Adapter<SupplierAdapter.SupplierViewHolder> {
         public interface OnSupplierActionListener {
             void onEdit(SupplierResponse supplier);
         }
-        private List<SupplierResponse> suppliers;
-        private OnSupplierActionListener listener;
+
+        private final List<SupplierResponse> suppliers;
+        private final OnSupplierActionListener listener;
+
         public SupplierAdapter(List<SupplierResponse> suppliers, OnSupplierActionListener listener) {
             this.suppliers = suppliers;
             this.listener = listener;
         }
+
         @NonNull
         @Override
         public SupplierViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_supplier, parent, false);
             return new SupplierViewHolder(view);
         }
+
         @Override
         public void onBindViewHolder(@NonNull SupplierViewHolder holder, int position) {
             SupplierResponse supplier = suppliers.get(position);
             holder.tvName.setText(getHighlightedText(supplier.getName(), searchKeyword));
             holder.tvPhone.setText("SĐT: " + supplier.getPhone());
             holder.tvEmail.setText("Email: " + supplier.getEmail());
+
             if (supplier.isIs_active()) {
                 holder.chipStatus.setText("Đang hoạt động");
                 holder.chipStatus.setChipBackgroundColorResource(R.color.accent);
@@ -255,16 +250,20 @@ public class SupplierActivity extends AppCompatActivity {
                 holder.chipStatus.setText("Ngừng hoạt động");
                 holder.chipStatus.setChipBackgroundColorResource(R.color.accent);
             }
+
             holder.btnEdit.setOnClickListener(v -> listener.onEdit(supplier));
         }
+
         @Override
         public int getItemCount() {
             return suppliers.size();
         }
+
         static class SupplierViewHolder extends RecyclerView.ViewHolder {
             TextView tvName, tvPhone, tvEmail;
             Chip chipStatus;
             ImageButton btnEdit;
+
             public SupplierViewHolder(@NonNull View itemView) {
                 super(itemView);
                 tvName = itemView.findViewById(R.id.tvSupplierName);
@@ -274,7 +273,7 @@ public class SupplierActivity extends AppCompatActivity {
                 btnEdit = itemView.findViewById(R.id.btnEditSupplier);
             }
         }
-        // Highlight từ khóa search trong text
+
         private CharSequence getHighlightedText(String text, String keyword) {
             if (text == null || keyword == null || keyword.trim().isEmpty()) return text == null ? "" : text;
             String textNoAccent = removeAccent(text.toLowerCase());
@@ -282,9 +281,11 @@ public class SupplierActivity extends AppCompatActivity {
             int start = textNoAccent.indexOf(keywordNoAccent);
             android.text.SpannableString spannable = new android.text.SpannableString(text);
             if (start >= 0) {
-                spannable.setSpan(new android.text.style.ForegroundColorSpan(0xFFFF9800), start, start + keyword.length(), android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannable.setSpan(new android.text.style.ForegroundColorSpan(0xFFFF9800),
+                        start, start + keyword.length(),
+                        android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             return spannable;
         }
     }
-} 
+}
