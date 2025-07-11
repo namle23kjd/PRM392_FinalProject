@@ -39,7 +39,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="16dp">
+                    android:layout_marginBottom="16dp"
+                    android:minHeight="48dp">
 
                     <TextView
                         android:id="@+id/tvWelcome"
@@ -49,14 +50,18 @@
                         android:text="Welcome, User!"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/black"
+                        android:minHeight="48dp"
+                        android:gravity="center_vertical" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnSignOut"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
                         android:text="Sign Out"
                         android:textSize="12sp"
+                        android:minWidth="88dp"
+                        android:minHeight="48dp"
                         style="@style/Widget.Material3.Button.OutlinedButton" />
 
                 </LinearLayout>
@@ -69,7 +74,218 @@
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_marginBottom="12dp"
+                    android:minHeight="32dp"
+                    android:gravity="center_vertical" />
+
+                <!-- SearchView -->
+                <SearchView
+                    android:id="@+id/searchViewProducts"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:iconifiedByDefault="false"
+                    android:queryHint="Search products..."
+                    android:layout_marginBottom="12dp"
+                    android:background="@android:color/white"
+                    android:elevation="2dp"
+                    android:minHeight="48dp" />
+
+                <!-- Filter Section -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#F5F5F5"
+                    android:padding="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:elevation="1dp">
+
+                    <!-- Main Filter Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:minHeight="48dp">
+
+                        <Spinner
+                            android:id="@+id/spinnerCategory"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="6dp"
+                            android:background="@android:color/white"
+                            android:minHeight="48dp"
+                            android:paddingHorizontal="8dp" />
+
+                        <Spinner
+                            android:id="@+id/spinnerPriceRange"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:layout_marginHorizontal="6dp"
+                            android:background="@android:color/white"
+                            android:minHeight="48dp"
+                            android:paddingHorizontal="8dp" />
+
+                        <CheckBox
+                            android:id="@+id/cbInStock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:text="In Stock"
+                            android:textSize="12sp"
+                            android:layout_marginHorizontal="6dp"
+                            android:minWidth="80dp"
+                            android:minHeight="48dp"
+                            android:gravity="center_vertical" />
+
+                        <Button
+                            android:id="@+id/btnMoreFilters"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:text="More"
+                            android:textSize="12sp"
+                            android:layout_marginStart="6dp"
+                            android:minWidth="64dp"
+                            android:minHeight="48dp"
+                            style="@style/Widget.Material3.Button.OutlinedButton" />
+
+                    </LinearLayout>
+
+                    <!-- Advanced Filters (Initially Hidden) -->
+                    <LinearLayout
+                        android:id="@+id/layoutAdvancedFilters"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="12dp"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:minHeight="48dp"
+                            android:layout_marginBottom="8dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="48dp"
+                                android:text="Color:"
+                                android:textSize="14sp"
+                                android:minWidth="70dp"
+                                android:minHeight="48dp"
+                                android:gravity="center_vertical"
+                                android:textStyle="bold" />
+
+                            <Spinner
+                                android:id="@+id/spinnerColor"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:layout_marginStart="12dp"
+                                android:background="@android:color/white"
+                                android:minHeight="48dp"
+                                android:paddingHorizontal="8dp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:minHeight="48dp"
+                            android:layout_marginBottom="8dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="48dp"
+                                android:text="Origin:"
+                                android:textSize="14sp"
+                                android:minWidth="70dp"
+                                android:minHeight="48dp"
+                                android:gravity="center_vertical"
+                                android:textStyle="bold" />
+
+                            <Spinner
+                                android:id="@+id/spinnerOrigin"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:layout_marginStart="12dp"
+                                android:background="@android:color/white"
+                                android:minHeight="48dp"
+                                android:paddingHorizontal="8dp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:minHeight="48dp"
+                            android:layout_marginBottom="12dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="48dp"
+                                android:text="Warranty:"
+                                android:textSize="14sp"
+                                android:minWidth="70dp"
+                                android:minHeight="48dp"
+                                android:gravity="center_vertical"
+                                android:textStyle="bold" />
+
+                            <Spinner
+                                android:id="@+id/spinnerWarranty"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:layout_marginStart="12dp"
+                                android:background="@android:color/white"
+                                android:minHeight="48dp"
+                                android:paddingHorizontal="8dp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="8dp"
+                            android:minHeight="48dp">
+
+                            <Button
+                                android:id="@+id/btnClearFilters"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:text="Clear All"
+                                android:textSize="14sp"
+                                android:layout_marginEnd="8dp"
+                                android:minWidth="100dp"
+                                android:minHeight="48dp"
+                                style="@style/Widget.Material3.Button.OutlinedButton" />
+
+                            <Button
+                                android:id="@+id/btnApplyFilters"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:text="Apply Filters"
+                                android:textSize="14sp"
+                                android:layout_marginStart="8dp"
+                                android:minWidth="100dp"
+                                android:minHeight="48dp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <!-- Products RecyclerView -->
                 <androidx.recyclerview.widget.RecyclerView
@@ -78,13 +294,14 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:clipToPadding="false"
-                    android:paddingBottom="16dp" />
+                    android:paddingBottom="16dp"
+                    android:scrollbars="vertical" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <!-- Nút tạo đơn hàng mới -->
+        <!-- Floating Action Button -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabCreateOrder"
             android:layout_width="wrap_content"
@@ -92,7 +309,8 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="24dp"
             android:src="@drawable/ic_add"
-            android:contentDescription="Xem giỏ hàng" />
+            android:contentDescription="Xem giỏ hàng"
+            app:fabSize="normal" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -106,4 +324,4 @@
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_menu" />
 
-</androidx.drawerlayout.widget.DrawerLayout> 
+</androidx.drawerlayout.widget.DrawerLayout>
