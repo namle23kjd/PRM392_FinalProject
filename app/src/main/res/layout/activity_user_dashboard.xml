@@ -96,8 +96,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:background="#F5F5F5"
-                    android:padding="12dp"
-                    android:layout_marginBottom="12dp"
+                    android:padding="6dp"
+                    android:layout_marginBottom="8dp"
                     android:elevation="1dp">
 
                     <!-- Main Filter Row -->
@@ -106,48 +106,48 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:minHeight="48dp">
+                        android:minHeight="36dp">
 
                         <Spinner
                             android:id="@+id/spinnerCategory"
                             android:layout_width="0dp"
-                            android:layout_height="48dp"
+                            android:layout_height="34dp"
                             android:layout_weight="1"
-                            android:layout_marginEnd="6dp"
+                            android:layout_marginEnd="4dp"
                             android:background="@android:color/white"
-                            android:minHeight="48dp"
-                            android:paddingHorizontal="8dp" />
+                            android:minHeight="36dp"
+                            android:paddingHorizontal="6dp" />
 
                         <Spinner
                             android:id="@+id/spinnerPriceRange"
                             android:layout_width="0dp"
-                            android:layout_height="48dp"
+                            android:layout_height="34dp"
                             android:layout_weight="1"
                             android:layout_marginHorizontal="6dp"
                             android:background="@android:color/white"
-                            android:minHeight="48dp"
-                            android:paddingHorizontal="8dp" />
+                            android:minHeight="36dp"
+                            android:paddingHorizontal="6dp" />
 
                         <CheckBox
                             android:id="@+id/cbInStock"
                             android:layout_width="wrap_content"
-                            android:layout_height="48dp"
+                            android:layout_height="36dp"
                             android:text="In Stock"
-                            android:textSize="12sp"
-                            android:layout_marginHorizontal="6dp"
+                            android:textSize="10sp"
+                            android:layout_marginHorizontal="4dp"
                             android:minWidth="80dp"
-                            android:minHeight="48dp"
+                            android:minHeight="36dp"
                             android:gravity="center_vertical" />
 
                         <Button
                             android:id="@+id/btnMoreFilters"
                             android:layout_width="wrap_content"
-                            android:layout_height="48dp"
+                            android:layout_height="36dp"
                             android:text="More"
-                            android:textSize="12sp"
+                            android:textSize="10sp"
                             android:layout_marginStart="6dp"
                             android:minWidth="64dp"
-                            android:minHeight="48dp"
+                            android:minHeight="36dp"
                             style="@style/Widget.Material3.Button.OutlinedButton" />
 
                     </LinearLayout>

@@ -38,6 +38,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
+<!--        CustomerProductDetails-->
+        <activity
+            android:name=".views.CustomerProductDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".views.UserDashboardActivity" />
         <activity
             android:name=".views.CategoryActivity"
             android:exported="false" />

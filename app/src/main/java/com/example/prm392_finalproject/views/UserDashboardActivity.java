@@ -43,7 +43,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-
+import com.example.prm392_finalproject.views.CustomerProductDetailActivity;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -269,7 +269,11 @@ public class UserDashboardActivity extends AppCompatActivity implements Navigati
     private void setupRecyclerView() {
         try {
             productAdapter = new ProductAdapter(productList, product -> {
-                // Xem chi tiết sản phẩm (nếu muốn)
+                // Xem chi tiết sản phẩm
+                Intent intent = new Intent(UserDashboardActivity.this, CustomerProductDetailActivity.class);
+                intent.putExtra("product", product);
+                startActivity(intent);
+
             }, product -> {
                 // Thêm vào giỏ hàng
                 CartManager.getInstance().addToCart(product);

@@ -2,7 +2,10 @@ package com.example.prm392_finalproject.models;
 
 import java.math.BigDecimal;
 
-public class Product {
+import java.io.Serializable;
+
+public class Product implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int productId;
     private String name;
     private String description;
@@ -245,6 +248,7 @@ public class Product {
     public void setCategory(String category) {
         this.category = category;
     }
+
 
     // Utility method for debugging
     @Override

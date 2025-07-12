@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/design_default_color_primary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Product Image -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <ImageView
+                    android:id="@+id/ivProductImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="Product Image"
+                    android:src="@drawable/ic_menu_business" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Product Basic Info -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:id="@+id/tvProductName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Product Name"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/tvProductPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$0.00"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/design_default_color_primary"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/tvProductCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Category"
+                    android:textSize="14sp"
+                    android:textColor="@color/design_default_color_primary"
+                    android:background="@drawable/tag_background"
+                    android:padding="6dp"
+                    android:layout_marginBottom="8dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvStockStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="In Stock"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/design_default_color_secondary" />
+
+                    <TextView
+                        android:id="@+id/tvStockQuantity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" (10 available)"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="4dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Product Description -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Description"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/tvProductDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Product description goes here..."
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:lineSpacingExtra="4dp" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Product Specifications -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Specifications"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="12dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Color:"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/tvProductColor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="N/A"
+                            android:textSize="14sp"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Origin:"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/tvProductOrigin"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="N/A"
+                            android:textSize="14sp"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Warranty:"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/tvProductWarranty"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="N/A"
+                            android:textSize="14sp"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="@android:color/white"
+        android:elevation="8dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddToCart"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:text="Add to Cart"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="8dp"
+            style="@style/Widget.Material3.Button" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBuyNow"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:text="Buy Now"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginStart="8dp"
+            style="@style/Widget.Material3.Button.OutlinedButton" />
+
+    </LinearLayout>
+
+</LinearLayout>
