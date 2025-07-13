@@ -26,6 +26,10 @@
             android:icon="@drawable/ic_menu_business"
             android:title="Categories" />
         <item
+            android:id="@+id/nav_discounts"
+            android:icon="@drawable/ic_menu_business"
+            android:title="Discount Management" />
+        <item
             android:id="@+id/nav_shipping"
             android:icon="@drawable/ic_menu_business"
             android:title="Shipping" />

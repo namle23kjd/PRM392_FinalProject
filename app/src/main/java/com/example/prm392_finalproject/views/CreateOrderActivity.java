@@ -10,6 +10,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.prm392_finalproject.R;
 import com.example.prm392_finalproject.controllers.OrderController;
+import com.example.prm392_finalproject.dao.DiscountDAO;
+import com.example.prm392_finalproject.models.Discount;
 import com.example.prm392_finalproject.models.Order;
 import com.example.prm392_finalproject.models.OrderRequest;
 import com.example.prm392_finalproject.utils.CartManager;
@@ -35,15 +38,24 @@ import java.util.concurrent.Executors;
 public class CreateOrderActivity extends AppCompatActivity implements CartAdapter.OnCartItemListener {
 
     private EditText editTextShippingAddress, editTextShippingPersonName, editTextNote;
-    private AutoCompleteTextView autoCompleteShippingMethod;
+    private AutoCompleteTextView autoCompleteShippingMethod, spinnerDiscountCode;
     private RecyclerView recyclerViewProducts;
-    private TextView textViewTotalAmount;
-    private Button buttonCreateOrder;
+    private TextView textViewTotalAmount, textViewSubtotal, textViewDiscountAmount, textViewDiscountInfo, textViewDiscountType;
+    private Button buttonCreateOrder, buttonRemoveDiscount;
+    private LinearLayout layoutDiscountInfo;
+    private ProgressBar progressBarDiscount;
     
     private CartAdapter cartAdapter;
     private CartManager cartManager;
     private OrderController orderController;
+    private DiscountDAO discountDAO;
     private ExecutorService executorService;
+    
+    // Discount variables
+    private Discount appliedDiscount = null;
+    private double discountAmount = 0.0;
+    private List<Discount> availableDiscounts = new ArrayList<>();
+    private ArrayAdapter<String> discountAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +65,7 @@ public class CreateOrderActivity extends AppCompatActivity implements CartAdapte
         // Initialize controllers
         orderController = new OrderController();
         cartManager = CartManager.getInstance();
+        discountDAO = new DiscountDAO();
         executorService = Executors.newSingleThreadExecutor();
 
         // Initialize views
@@ -66,10 +79,18 @@ public class CreateOrderActivity extends AppCompatActivity implements CartAdapte
         editTextShippingAddress = findViewById(R.id.editTextShippingAddress);
         editTextShippingPersonName = findViewById(R.id.editTextShippingPersonName);
         editTextNote = findViewById(R.id.editTextNote);
+        spinnerDiscountCode = findViewById(R.id.spinnerDiscountCode);
         autoCompleteShippingMethod = findViewById(R.id.autoCompleteShippingMethod);
         recyclerViewProducts = findViewById(R.id.recyclerViewProducts);
         textViewTotalAmount = findViewById(R.id.textViewTotalAmount);
+        textViewSubtotal = findViewById(R.id.textViewSubtotal);
+        textViewDiscountAmount = findViewById(R.id.textViewDiscountAmount);
+        textViewDiscountInfo = findViewById(R.id.textViewDiscountInfo);
+        textViewDiscountType = findViewById(R.id.textViewDiscountType);
         buttonCreateOrder = findViewById(R.id.buttonCreateOrder);
+        buttonRemoveDiscount = findViewById(R.id.buttonRemoveDiscount);
+        layoutDiscountInfo = findViewById(R.id.layoutDiscountInfo);
+        progressBarDiscount = findViewById(R.id.progressBarDiscount);
 
         // Setup shipping method dropdown
         String[] shippingMethods = {"Standard", "Express", "Same Day"};
@@ -77,6 +98,12 @@ public class CreateOrderActivity extends AppCompatActivity implements CartAdapte
             android.R.layout.simple_dropdown_item_1line, shippingMethods);
         autoCompleteShippingMethod.setAdapter(shippingAdapter);
         autoCompleteShippingMethod.setText(shippingMethods[0], false);
+        
+        // Setup discount spinner
+        setupDiscountSpinner();
+        
+        // Load available discounts
+        loadAvailableDiscounts();
     }
 
     private void setupToolbar() {
@@ -97,6 +124,7 @@ public class CreateOrderActivity extends AppCompatActivity implements CartAdapte
 
     private void setupListeners() {
         buttonCreateOrder.setOnClickListener(v -> validateAndCreateOrder());
+        buttonRemoveDiscount.setOnClickListener(v -> removeDiscount());
     }
 
     @Override
@@ -127,9 +155,175 @@ public class CreateOrderActivity extends AppCompatActivity implements CartAdapte
             .show();
     }
 
+    private void setupDiscountSpinner() {
+        discountAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<>());
+        spinnerDiscountCode.setAdapter(discountAdapter);
+        
+        // Add loading option initially
+        discountAdapter.add("Đang tải mã giảm giá...");
+        
+        spinnerDiscountCode.setOnItemClickListener((parent, view, position, id) -> {
+            if (position > 0 && position <= availableDiscounts.size()) {
+                Discount selectedDiscount = availableDiscounts.get(position - 1);
+                applyDiscount(selectedDiscount);
+            }
+        });
+    }
+
+    private void loadAvailableDiscounts() {
+        // Show loading state
+        progressBarDiscount.setVisibility(View.VISIBLE);
+        spinnerDiscountCode.setEnabled(false);
+        
+        executorService.execute(() -> {
+            try {
+                List<Discount> allDiscounts = discountDAO.getAllDiscounts();
+                List<Discount> validDiscounts = new ArrayList<>();
+                
+                // Filter only valid discounts
+                for (Discount discount : allDiscounts) {
+                    if (discountDAO.isDiscountValid(discount.getCode())) {
+                        validDiscounts.add(discount);
+                    }
+                }
+                
+                runOnUiThread(() -> {
+                    availableDiscounts.clear();
+                    availableDiscounts.addAll(validDiscounts);
+                    updateDiscountSpinner();
+                    progressBarDiscount.setVisibility(View.GONE);
+                    spinnerDiscountCode.setEnabled(true);
+                });
+            } catch (Exception e) {
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Lỗi khi tải mã giảm giá: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    progressBarDiscount.setVisibility(View.GONE);
+                    spinnerDiscountCode.setEnabled(true);
+                    // Show error state in spinner
+                    discountAdapter.clear();
+                    discountAdapter.add("Lỗi tải mã giảm giá");
+                    discountAdapter.notifyDataSetChanged();
+                });
+            }
+        });
+    }
+
+    private void updateDiscountSpinner() {
+        discountAdapter.clear();
+        
+        if (availableDiscounts.isEmpty()) {
+            discountAdapter.add("Không có mã giảm giá khả dụng");
+        } else {
+            discountAdapter.add("-- Chọn mã giảm giá --");
+            
+            for (Discount discount : availableDiscounts) {
+                String displayText = String.format("%s - %s", 
+                    discount.getCode(), 
+                    discount.getDiscount_type().equals("Percentage") ? 
+                        discount.getDiscount_value() + "%" : 
+                        String.format(Locale.getDefault(), "%.0f VND", discount.getDiscount_value()));
+                discountAdapter.add(displayText);
+            }
+        }
+        
+        discountAdapter.notifyDataSetChanged();
+    }
+
     private void updateTotalAmount() {
-        double total = cartManager.getTotalAmount();
-        textViewTotalAmount.setText(String.format(Locale.getDefault(), "Tổng tiền: $%.2f", total));
+        double subtotal = cartManager.getTotalAmount();
+        double total = subtotal - discountAmount;
+        
+        // Update subtotal
+        textViewSubtotal.setText(String.format(Locale.getDefault(), "Tạm tính: %.0f VND", subtotal));
+        
+        // Update discount amount if applied
+        if (appliedDiscount != null) {
+            textViewDiscountAmount.setVisibility(View.VISIBLE);
+            textViewDiscountAmount.setText(String.format(Locale.getDefault(), "Giảm giá: %.0f VND", discountAmount));
+        } else {
+            textViewDiscountAmount.setVisibility(View.GONE);
+        }
+        
+        // Update total amount
+        textViewTotalAmount.setText(String.format(Locale.getDefault(), "Tổng tiền: %.0f VND", total));
+    }
+
+    private void applyDiscount(Discount discount) {
+        if (discount == null) {
+            Toast.makeText(this, "Vui lòng chọn mã giảm giá", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Check if already applied a discount
+        if (appliedDiscount != null) {
+            Toast.makeText(this, "Chỉ được áp dụng 1 mã giảm giá cho 1 đơn hàng", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Apply discount
+        appliedDiscount = discount;
+        calculateDiscountAmount();
+        showDiscountInfo();
+        updateTotalAmount();
+        
+        // Reset spinner to default
+        spinnerDiscountCode.setText("-- Chọn mã giảm giá --", false);
+        
+        Toast.makeText(this, "Đã áp dụng mã giảm giá thành công!", Toast.LENGTH_SHORT).show();
+    }
+
+    private void removeDiscount() {
+        appliedDiscount = null;
+        discountAmount = 0.0;
+        
+        // Reset spinner to appropriate default
+        if (availableDiscounts.isEmpty()) {
+            spinnerDiscountCode.setText("Không có mã giảm giá khả dụng", false);
+        } else {
+            spinnerDiscountCode.setText("-- Chọn mã giảm giá --", false);
+        }
+        
+        hideDiscountInfo();
+        updateTotalAmount();
+        Toast.makeText(this, "Đã xóa mã giảm giá", Toast.LENGTH_SHORT).show();
+    }
+
+    private void calculateDiscountAmount() {
+        if (appliedDiscount == null) {
+            discountAmount = 0.0;
+            return;
+        }
+        
+        double subtotal = cartManager.getTotalAmount();
+        double maxDiscount = subtotal * 0.5; // Maximum 50% of subtotal
+        
+        if ("Percentage".equals(appliedDiscount.getDiscount_type())) {
+            discountAmount = subtotal * (appliedDiscount.getDiscount_value() / 100.0);
+        } else if ("Amount".equals(appliedDiscount.getDiscount_type())) {
+            discountAmount = appliedDiscount.getDiscount_value();
+        }
+        
+        // Apply 50% maximum discount rule
+        if (discountAmount > maxDiscount) {
+            discountAmount = maxDiscount;
+        }
+        
+        // Ensure discount doesn't exceed subtotal
+        if (discountAmount > subtotal) {
+            discountAmount = subtotal;
+        }
+    }
+
+    private void showDiscountInfo() {
+        if (appliedDiscount != null) {
+            layoutDiscountInfo.setVisibility(View.VISIBLE);
+            textViewDiscountInfo.setText(String.format(Locale.getDefault(), "Giảm giá: %.0f VND", discountAmount));
+            textViewDiscountType.setText(String.format("Loại: %s", appliedDiscount.getDiscount_type()));
+        }
+    }
+
+    private void hideDiscountInfo() {
+        layoutDiscountInfo.setVisibility(View.GONE);
     }
 
     private void validateAndCreateOrder() {
@@ -153,8 +347,9 @@ public class CreateOrderActivity extends AppCompatActivity implements CartAdapte
             return;
         }
 
-        // Calculate total amount
-        double totalAmount = cartManager.getTotalAmount();
+        // Calculate total amount after discount
+        double subtotal = cartManager.getTotalAmount();
+        double totalAmount = subtotal - discountAmount;
 
         // Lấy customer_id từ SharedPreferences
         android.content.SharedPreferences prefs = getSharedPreferences("customer_session", MODE_PRIVATE);

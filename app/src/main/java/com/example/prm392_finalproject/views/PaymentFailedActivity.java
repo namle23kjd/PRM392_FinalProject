@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.prm392_finalproject.MainActivity;
 import com.example.prm392_finalproject.R;
 
 public class PaymentFailedActivity extends AppCompatActivity {

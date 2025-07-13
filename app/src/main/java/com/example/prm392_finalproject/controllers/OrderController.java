@@ -50,7 +50,8 @@ public class OrderController {
                     order.getNote(),
                     shippingAddress,
                     shippingMethod,
-                    shippingPersonName
+                    shippingPersonName,
+                    order.getTotalAmount() // Truyền tổng tiền từ Order
             );
         }, false);
     }
@@ -76,7 +77,8 @@ public class OrderController {
                 orderRequest.getNote(),
                 orderRequest.getShippingAddress(),
                 orderRequest.getShippingMethod(),
-                orderRequest.getShippingPersonName()
+                orderRequest.getShippingPersonName(),
+                orderRequest.getTotalAmount() // Truyền tổng tiền đã được tính sau discount
             );
         }, false);
     }

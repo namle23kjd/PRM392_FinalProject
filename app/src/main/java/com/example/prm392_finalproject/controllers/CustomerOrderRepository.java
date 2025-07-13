@@ -330,7 +330,7 @@ public class CustomerOrderRepository {
     }
 
     // Tạo đơn hàng mới cho customer
-    public boolean createOrderForCustomer(int customerId, List<CustomerOrder.OrderItem> items, String note, String shippingAddress, String shippingMethod, String shippingPersonName) {
+    public boolean createOrderForCustomer(int customerId, List<CustomerOrder.OrderItem> items, String note, String shippingAddress, String shippingMethod, String shippingPersonName, double totalAmount) {
         Connection connection = null;
         PreparedStatement orderStmt = null;
         PreparedStatement itemStmt = null;
@@ -341,11 +341,8 @@ public class CustomerOrderRepository {
             if (connection == null) return false;
             connection.setAutoCommit(false); // Transaction
 
-            // 1. Tính tổng tiền
-            double totalAmount = 0;
-            for (CustomerOrder.OrderItem item : items) {
-                totalAmount += item.getUnitPrice() * item.getQuantity();
-            }
+            // Sử dụng totalAmount đã được truyền vào (đã bao gồm discount)
+            // Không cần tính lại vì đã được tính sẵn từ CreateOrderActivity
 
             // 2. Insert vào Orders
             String orderSql = "INSERT INTO Orders (customer_id, order_date, status, total_amount, note) VALUES (?, NOW(), 'pending', ?, ?)";

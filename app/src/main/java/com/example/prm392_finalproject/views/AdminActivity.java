@@ -257,6 +257,8 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
             openSupplierManagement();
         } else if (id == R.id.nav_categories) {
             openCategoryManagement();
+        } else if (id == R.id.nav_discounts) {
+            openDiscountManagement();
         } else if (id == R.id.nav_shipping) {
             openShippingManagement();
         } else if (id == R.id.nav_payment_history) {
@@ -286,6 +288,10 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
     }
     private void openCategoryManagement() {
         Intent intent = new Intent(this, CategoryActivity.class);
+        startActivity(intent);
+    }
+    private void openDiscountManagement() {
+        Intent intent = new Intent(this, DiscountManagementActivity.class);
         startActivity(intent);
     }
     private void openShippingManagement() {
