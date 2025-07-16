@@ -337,12 +337,23 @@ public class LoginActivity extends AppCompatActivity {
             new Thread(() -> {
                 User user = userRepository.getUserByEmail(firebaseUser.getEmail());
                 runOnUiThread(() -> {
-                    if (user != null && "admin".equalsIgnoreCase(user.getRole())) {
-                        Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
-                        intent.putExtra("currentUser", user);
+                    if (user != null) {
+                        String role = user.getRole();
+                        Intent intent;
+                        
+                        if ("admin".equalsIgnoreCase(role)) {
+                            intent = new Intent(LoginActivity.this, AdminActivity.class);
+                            intent.putExtra("currentUser", user);
+                        } else if ("staff".equalsIgnoreCase(role)) {
+                            intent = new Intent(LoginActivity.this, StaffActivity.class);
+                            intent.putExtra("currentUser", user);
+                        } else {
+                            // Navigate to UserDashboardActivity for customers
+                            intent = new Intent(LoginActivity.this, UserDashboardActivity.class);
+                        }
                         startActivity(intent);
                     } else {
-                        // Navigate to UserDashboardActivity for customers
+                        // Default to customer dashboard if user not found
                         Intent intent = new Intent(LoginActivity.this, UserDashboardActivity.class);
                         startActivity(intent);
                     }

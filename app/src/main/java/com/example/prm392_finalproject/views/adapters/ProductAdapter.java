@@ -21,6 +21,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     private List<Product> productList;
     private OnProductClickListener listener;
     private OnAddToCartClickListener addToCartListener;
+    private boolean isReadOnly;
 
     public interface OnProductClickListener {
         void onProductClick(Product product);
@@ -33,6 +34,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         this.productList = productList;
         this.listener = listener;
         this.addToCartListener = addToCartListener;
+        this.isReadOnly = false;
+    }
+
+    public ProductAdapter(List<Product> productList, boolean isReadOnly) {
+        this.productList = productList;
+        this.isReadOnly = isReadOnly;
+        this.listener = null;
+        this.addToCartListener = null;
     }
 
     @NonNull
@@ -76,6 +85,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                     addToCartListener.onAddToCartClick(productList.get(pos));
                 }
             });
+            
+            // Ẩn nút Add to Cart trong chế độ read-only
+            if (isReadOnly) {
+                btnAddToCart.setVisibility(View.GONE);
+            }
         }
 
         public void bind(Product product) {

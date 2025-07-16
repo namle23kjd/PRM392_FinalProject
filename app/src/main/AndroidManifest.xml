@@ -86,6 +86,12 @@
         <activity
             android:name=".views.AdminActivity"
             android:exported="false" />
+        <activity
+            android:name=".views.StaffActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.StaffProductListActivity"
+            android:exported="false" />
         <activity android:name=".views.SupplierActivity" />
         <activity android:name=".views.CartActivity" />
 
