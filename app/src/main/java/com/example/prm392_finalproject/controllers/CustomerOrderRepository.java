@@ -3,6 +3,7 @@ package com.example.prm392_finalproject.controllers;
 import android.util.Log;
 import com.example.prm392_finalproject.db.ConnectionClass;
 import com.example.prm392_finalproject.models.CustomerOrder;
+import com.example.prm392_finalproject.dao.ProductDAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

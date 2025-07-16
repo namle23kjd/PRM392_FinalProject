@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#f5f5f5">
+
+    <!-- Header -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="QUẢN LÝ NHÂN VIÊN"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#2c3e50"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"
+        android:background="#ecf0f1"
+        android:padding="12dp" />
+
+    <!-- Control Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+        <Button
+            android:id="@+id/btnViewProducts"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="SẢN PHẨM"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:background="#3498db"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/btnViewCategories"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:background="#95a5a6"
+            android:text="THỂ LOẠI"
+            android:textColor="#3949AB"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- Add Stock Button -->
+    <Button
+        android:id="@+id/btnAddStock"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:background="#27ae60"
+        android:text="📦 NHẬP KHO"
+        android:textColor="#0D47A1"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <!-- Search Bar -->
+    <EditText
+        android:id="@+id/etSearch"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="🔍 Tìm kiếm sản phẩm..."
+        android:background="@android:color/white"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp"
+        android:elevation="2dp" />
+
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/white"
+        android:elevation="2dp"
+        android:padding="8dp" />
+
+    <!-- Logout Button -->
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="🚪 ĐĂNG XUẤT"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:background="#e74c3c"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>

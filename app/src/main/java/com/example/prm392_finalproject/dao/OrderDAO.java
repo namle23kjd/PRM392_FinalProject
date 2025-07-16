@@ -2,6 +2,9 @@ package com.example.prm392_finalproject.dao;
 
 import com.example.prm392_finalproject.db.ConnectionClass;
 import com.example.prm392_finalproject.models.zalopay.Order;
+import com.example.prm392_finalproject.controllers.CustomerOrderRepository;
+import com.example.prm392_finalproject.dao.ProductDAO;
+import com.example.prm392_finalproject.models.CustomerOrder;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -50,6 +53,17 @@ public class OrderDAO {
             ps.setString(1, newStatus);
             ps.setInt(2, Integer.parseInt(orderId));
             ps.executeUpdate();
+
+            // Nếu trạng thái là completed hoặc paid thì trừ kho
+            if ("completed".equalsIgnoreCase(newStatus) || "paid".equalsIgnoreCase(newStatus)) {
+                CustomerOrderRepository orderRepo = new CustomerOrderRepository();
+                ProductDAO productDAO = new ProductDAO();
+                int oid = Integer.parseInt(orderId);
+                java.util.List<CustomerOrder.OrderItem> items = orderRepo.getOrderItems(oid);
+                for (CustomerOrder.OrderItem item : items) {
+                    productDAO.decreaseProductStock(item.getProductId(), item.getQuantity());
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

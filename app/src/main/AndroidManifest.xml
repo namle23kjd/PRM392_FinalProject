@@ -144,6 +144,7 @@
         <activity android:name=".views.UserProfileActivity" />
         <activity android:name=".views.UserListActivity" />
         <activity android:name=".views.DiscountManagementActivity" />
+        <activity android:name=".views.StaffActivity" />
 
 
     </application>
