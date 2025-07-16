@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginHorizontal="12dp"
     android:layout_marginBottom="12dp"
     app:cardCornerRadius="16dp"
-    app:cardElevation="6dp"
-    >
+    app:cardElevation="6dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,21 +16,25 @@
         android:padding="16dp"
         android:gravity="center_vertical">
 
+        <!-- Icon avatar -->
         <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:src="@drawable/ic_menu_business"
             android:background="@drawable/circle_bg"
-            android:padding="8dp"
+            android:padding="10dp"
             android:contentDescription="icon"
-            app:tint="@color/primary" />
+            app:tint="@color/primary"
+            android:scaleType="centerInside" />
 
+        <!-- Nội dung chính -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_marginStart="16dp">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp">
 
             <TextView
                 android:id="@+id/tvSupplierName"
@@ -38,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:text="Tên nhà cung cấp"
                 android:textStyle="bold"
-                android:textSize="18sp"
+                android:textSize="17sp"
                 android:textColor="@color/primary" />
 
             <TextView
@@ -47,7 +51,8 @@
                 android:layout_height="wrap_content"
                 android:text="SĐT: 0123456789"
                 android:textSize="14sp"
-             />
+                android:textColor="#666666"
+                android:layout_marginTop="2dp" />
 
             <TextView
                 android:id="@+id/tvSupplierEmail"
@@ -55,23 +60,25 @@
                 android:layout_height="wrap_content"
                 android:text="Email: example@email.com"
                 android:textSize="14sp"
-                />
+                android:textColor="#666666"
+                android:layout_marginTop="2dp" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipSupplierStatus"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="32dp"
                 android:text="Đang hoạt động"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 app:chipBackgroundColor="@color/accent"
                 android:textSize="13sp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 app:chipCornerRadius="8dp"
                 app:closeIconEnabled="false"
                 app:checkedIconVisible="false" />
         </LinearLayout>
 
+        <!-- Nút chỉnh sửa -->
         <ImageButton
             android:id="@+id/btnEditSupplier"
             android:layout_width="40dp"
@@ -79,8 +86,8 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Sửa"
             android:src="@android:drawable/ic_menu_edit"
+            android:scaleType="centerInside"
             app:tint="@color/accent"
             tools:ignore="TouchTargetSizeCheck" />
     </LinearLayout>
-
-</androidx.cardview.widget.CardView> 
+</androidx.cardview.widget.CardView>
