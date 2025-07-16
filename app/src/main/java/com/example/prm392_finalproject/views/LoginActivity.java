@@ -342,6 +342,13 @@ public class LoginActivity extends AppCompatActivity {
                         intent.putExtra("currentUser", user);
                         startActivity(intent);
                     } else {
+                        // Lưu customer_id vào SharedPreferences cho mọi user đăng nhập thành công
+                        android.content.SharedPreferences prefs = getSharedPreferences("customer_session", MODE_PRIVATE);
+                        android.content.SharedPreferences.Editor editor = prefs.edit();
+                        editor.putInt("customer_id", user.getCustomerId());
+                        editor.putString("customer_name", user.getFullName());
+                        editor.putString("customer_address", user.getAddress());
+                        editor.apply();
                         // Navigate to UserDashboardActivity for customers
                         Intent intent = new Intent(LoginActivity.this, UserDashboardActivity.class);
                         startActivity(intent);

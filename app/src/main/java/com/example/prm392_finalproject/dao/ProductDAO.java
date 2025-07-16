@@ -218,6 +218,50 @@ public class ProductDAO {
         return categoryCount;
     }
 
+    /**
+     * Trừ số lượng tồn kho của sản phẩm (quantity_in_stock và stock_quantity)
+     * @param productId id sản phẩm
+     * @param quantity số lượng cần trừ
+     * @return true nếu cập nhật thành công, false nếu lỗi hoặc không đủ hàng
+     */
+    public boolean decreaseProductStock(int productId, int quantity) {
+        Connection conn = connectionClass.CONN();
+        if (conn == null) {
+            Log.e("ProductDAO", "Connection is null in decreaseProductStock");
+            return false;
+        }
+        try {
+            // Kiểm tra tồn kho hiện tại
+            String selectSql = "SELECT quantity_in_stock, stock_quantity FROM Product WHERE product_id = ?";
+            PreparedStatement selectStmt = conn.prepareStatement(selectSql);
+            selectStmt.setInt(1, productId);
+            ResultSet rs = selectStmt.executeQuery();
+            if (!rs.next()) {
+                return false; // Không tìm thấy sản phẩm
+            }
+            int currentStock = rs.getInt("quantity_in_stock");
+            int currentStock2 = rs.getInt("stock_quantity");
+            if (currentStock < quantity || currentStock2 < quantity) {
+                return false; // Không đủ hàng
+            }
+            rs.close();
+            selectStmt.close();
+
+            // Trừ số lượng
+            String updateSql = "UPDATE Product SET quantity_in_stock = quantity_in_stock - ?, stock_quantity = stock_quantity - ? WHERE product_id = ?";
+            PreparedStatement updateStmt = conn.prepareStatement(updateSql);
+            updateStmt.setInt(1, quantity);
+            updateStmt.setInt(2, quantity);
+            updateStmt.setInt(3, productId);
+            int affected = updateStmt.executeUpdate();
+            updateStmt.close();
+            return affected > 0;
+        } catch (Exception e) {
+            Log.e("ProductDAO", "Error decreasing product stock: " + e.getMessage());
+            return false;
+        }
+    }
+
     private Product extractProduct(ResultSet rs) {
         try {
             System.out.println("ProductDAO: Extracting product from ResultSet");
