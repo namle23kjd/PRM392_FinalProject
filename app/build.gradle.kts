@@ -50,20 +50,20 @@ dependencies {
 
     // Firebase Analytics (optional but recommended)
     implementation("com.google.firebase:firebase-analytics")
-    implementation(fileTree(mapOf(
-        "dir" to "C:\\Users\\PC\\Documents\\Zalo Received Files",
-        "include" to listOf("*.aar", "*.jar"),
-        "exclude" to listOf("")
-    )))
 //    implementation(fileTree(mapOf(
-//
-//        "dir" to "C:\\Users\\Gia Bao\\Documents\\Zalo Received Files",
-//
-//        "dir" to "D:\\ZaloPay",
-//
+//        "dir" to "C:\\Users\\BINH\\OneDrive\\Desktop\\projectprm\\PRM392_FinalProject\\app\\zalopaylibs",
 //        "include" to listOf("*.aar", "*.jar"),
 //        "exclude" to listOf("")
 //    )))
+    implementation(fileTree(mapOf(
+
+        "dir" to "C:\\Users\\Gia Bao\\Documents\\Zalo Received Files",
+
+        "dir" to "D:\\ZaloPay",
+
+        "include" to listOf("*.aar", "*.jar"),
+        "exclude" to listOf("")
+    )))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
@@ -89,5 +89,15 @@ dependencies {
 
     // ===== MPANDROIDCHART FOR CHARTS =====
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    // RecyclerView (hiển thị danh sách chat)
+    implementation ("androidx.recyclerview:recyclerview:1.3.2")
+
+    // OkHttp (gửi request đến Coze API)
+    implementation ("com.squareup.okhttp3:okhttp:4.12.0")
+
+    // GSON (nếu cần parse JSON từ Coze API response)
+    implementation ("com.google.code.gson:gson:2.10.1")
+
 
 }

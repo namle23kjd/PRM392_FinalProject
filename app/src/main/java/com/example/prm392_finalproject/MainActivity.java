@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.prm392_finalproject.controllers.UserRepository;
 import com.example.prm392_finalproject.db.ConnectionClass;
+import com.example.prm392_finalproject.views.ChatBotActivity;
 import com.example.prm392_finalproject.views.LoginActivity;
 import com.example.prm392_finalproject.views.OrderManagementActivity;
 import com.example.prm392_finalproject.views.PaymentHistoryActivity;
@@ -26,6 +27,7 @@ import com.example.prm392_finalproject.views.ShippingActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -46,10 +48,13 @@ public class MainActivity extends AppCompatActivity {
     private Button btnShippingManagement;
     private Button btnProduct;
 
+    private FloatingActionButton chatbotFloatingButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -117,6 +122,12 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        // Setup chatbot button
+//        chatbotFloatingButton = findViewById(R.id.chatbotFloatingButton);
+//        chatbotFloatingButton.setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this, ChatBotActivity.class);
+//            startActivity(intent);
+//        });
         // Test database connection when app starts
         testDatabaseConnection();
     }
