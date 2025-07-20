@@ -4,66 +4,67 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.prm392_finalproject.R;
+import com.example.prm392_finalproject.controllers.ReviewController;
+import com.example.prm392_finalproject.dao.OrderDAO;
+import com.example.prm392_finalproject.dao.ReviewDAO;
 import com.example.prm392_finalproject.models.Product;
+import com.example.prm392_finalproject.models.Review;
 import com.example.prm392_finalproject.utils.CartManager;
+import com.example.prm392_finalproject.views.adapters.ReviewAdapter;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Locale;
 
 public class CustomerProductDetailActivity extends AppCompatActivity {
 
     private static final String TAG = "CustomerProductDetail";
 
-    // UI Components
+    // UI Components - Product
     private ImageView ivProductImage;
     private TextView tvProductName, tvProductPrice, tvProductCategory;
     private TextView tvStockStatus, tvStockQuantity;
     private TextView tvProductDescription, tvProductColor, tvProductOrigin, tvProductWarranty;
     private Button btnAddToCart, btnBuyNow;
 
+    // UI Components - Review
+    private RatingBar ratingBarInput;
+    private EditText edtComment;
+    private Button btnSubmitReview;
+    private RecyclerView recyclerViewReviews;
+    private TextView tvAverageRating;
+
+    // Others
     private Product product;
     private NumberFormat currencyFormat;
+    private ReviewController reviewController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_product_detail);
 
-        try {
-            // Initialize views
-            initViews();
+        initViews();
+        setupToolbar();
+        getProductFromIntent();
 
-            // Setup toolbar
-            setupToolbar();
-
-            // Get product from intent
-            getProductFromIntent();
-
-            // Display product data
-            if (product != null) {
-                displayProductData();
-            }
-
-        } catch (Exception e) {
-            Log.e(TAG, "Error in onCreate: " + e.getMessage());
-            e.printStackTrace();
-            Toast.makeText(this, "Error loading product details", Toast.LENGTH_SHORT).show();
-            finish();
+        if (product != null) {
+            displayProductData();
+            loadReviews();
         }
     }
 
     private void initViews() {
-        // Initialize UI components
+        // Product Views
         ivProductImage = findViewById(R.id.ivProductImage);
         tvProductName = findViewById(R.id.tvProductName);
         tvProductPrice = findViewById(R.id.tvProductPrice);
@@ -77,14 +78,22 @@ public class CustomerProductDetailActivity extends AppCompatActivity {
         btnAddToCart = findViewById(R.id.btnAddToCart);
         btnBuyNow = findViewById(R.id.btnBuyNow);
 
-        // Setup button listeners
+        // Review Views (Thêm Mới)
+        ratingBarInput = findViewById(R.id.ratingBarInput);
+        edtComment = findViewById(R.id.edtComment);
+        btnSubmitReview = findViewById(R.id.btnSubmitReview);
+        recyclerViewReviews = findViewById(R.id.recyclerViewReviews);
+        tvAverageRating = findViewById(R.id.tvAverageRating);
+
+        recyclerViewReviews.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewReviews.setNestedScrollingEnabled(false);
+
         btnAddToCart.setOnClickListener(v -> addToCart());
         btnBuyNow.setOnClickListener(v -> buyNow());
+        btnSubmitReview.setOnClickListener(v -> submitReview());
 
-        // Initialize currency format
         currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
-
-        Log.d(TAG, "Views initialized successfully");
+        reviewController = new ReviewController(new OrderDAO(), new ReviewDAO());
     }
 
     private void setupToolbar() {
@@ -115,83 +124,74 @@ public class CustomerProductDetailActivity extends AppCompatActivity {
     }
 
     private void displayProductData() {
-        try {
-            // Basic information
-            tvProductName.setText(product.getName());
-            tvProductPrice.setText(currencyFormat.format(product.getPrice()));
+        tvProductName.setText(product.getName());
+        tvProductPrice.setText(currencyFormat.format(product.getPrice()));
+        tvProductCategory.setText(product.getCategory() != null ? product.getCategory() : "General");
 
-            // Category
-            if (product.getCategory() != null && !product.getCategory().isEmpty()) {
-                tvProductCategory.setText(product.getCategory());
-            } else {
-                tvProductCategory.setText("General");
-            }
+        int stock = product.getQuantityInStock();
+        if (stock > 0) {
+            tvStockStatus.setText("In Stock");
+            tvStockStatus.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
+            tvStockQuantity.setText("(" + stock + " available)");
+            btnAddToCart.setEnabled(true);
+            btnBuyNow.setEnabled(true);
+        } else {
+            tvStockStatus.setText("Out of Stock");
+            tvStockStatus.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+            tvStockQuantity.setText("(Not available)");
+            btnAddToCart.setEnabled(false);
+            btnBuyNow.setEnabled(false);
+        }
 
-            // Stock status
-            int stock = product.getQuantityInStock();
-            if (stock > 0) {
-                tvStockStatus.setText("In Stock");
-                tvStockStatus.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
-                tvStockQuantity.setText("(" + stock + " available)");
+        tvProductDescription.setText(product.getDescription() != null ? product.getDescription() : "No description available.");
+        tvProductColor.setText(product.getColor() != null ? product.getColor() : "N/A");
+        tvProductOrigin.setText(product.getOriginCountry() != null ? product.getOriginCountry() : "N/A");
+        tvProductWarranty.setText(product.getWarrantyPeriod() != null ? product.getWarrantyPeriod() + " months" : "N/A");
 
-                // Enable buttons
-                btnAddToCart.setEnabled(true);
-                btnBuyNow.setEnabled(true);
-            } else {
-                tvStockStatus.setText("Out of Stock");
-                tvStockStatus.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
-                tvStockQuantity.setText("(Not available)");
+        ivProductImage.setImageResource(R.drawable.ic_menu_business);
 
-                // Disable buttons
-                btnAddToCart.setEnabled(false);
-                btnBuyNow.setEnabled(false);
-            }
-
-            // Description
-            if (product.getDescription() != null && !product.getDescription().isEmpty()) {
-                tvProductDescription.setText(product.getDescription());
-            } else {
-                tvProductDescription.setText("No description available.");
-            }
-
-            // Specifications
-            tvProductColor.setText(product.getColor() != null ? product.getColor() : "N/A");
-            tvProductOrigin.setText(product.getOriginCountry() != null ? product.getOriginCountry() : "N/A");
-
-            if (product.getWarrantyPeriod() != null) {
-                tvProductWarranty.setText(product.getWarrantyPeriod() + " months");
-            } else {
-                tvProductWarranty.setText("N/A");
-            }
-
-            // TODO: Load product image with Picasso or Glide
-            // For now, using default image
-            ivProductImage.setImageResource(R.drawable.ic_menu_business);
-
-            // Update toolbar title
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().setTitle(product.getName());
-            }
-
-            Log.d(TAG, "Product data displayed successfully");
-
-        } catch (Exception e) {
-            Log.e(TAG, "Error displaying product data: " + e.getMessage());
-            e.printStackTrace();
-            Toast.makeText(this, "Error displaying product information", Toast.LENGTH_SHORT).show();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(product.getName());
         }
     }
+
+    private void submitReview() {
+        float rating = ratingBarInput.getRating();
+        String comment = edtComment.getText().toString().trim();
+
+        if (rating == 0) {
+            Toast.makeText(this, "Please select a rating.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Review review = new Review(0, 1, product.getProductId(), rating, comment);  // Giả định userId = 1
+        reviewController.addReview(review);
+
+        Toast.makeText(this, "Thank you for your feedback!", Toast.LENGTH_SHORT).show();
+        edtComment.setText("");
+        ratingBarInput.setRating(0);
+
+        loadReviews();
+    }
+
+    private void loadReviews() {
+        List<Review> reviews = reviewController.getProductReviews(product.getProductId());
+
+        ReviewAdapter adapter = new ReviewAdapter(this, reviews);
+        recyclerViewReviews.setAdapter(adapter);
+
+        float avg = reviewController.getAverageRating(product.getProductId());
+        tvAverageRating.setText(String.format(Locale.US, "%.1f / 5", avg));
+    }
+
 
     private void addToCart() {
         try {
             if (product != null) {
                 CartManager.getInstance().addToCart(product);
                 Snackbar.make(btnAddToCart, "Added to cart: " + product.getName(), Snackbar.LENGTH_SHORT).show();
-                Log.d(TAG, "Product added to cart: " + product.getName());
             }
         } catch (Exception e) {
-            Log.e(TAG, "Error adding to cart: " + e.getMessage());
-            e.printStackTrace();
             Toast.makeText(this, "Error adding to cart", Toast.LENGTH_SHORT).show();
         }
     }
@@ -199,18 +199,11 @@ public class CustomerProductDetailActivity extends AppCompatActivity {
     private void buyNow() {
         try {
             if (product != null) {
-                // Add to cart first
                 CartManager.getInstance().addToCart(product);
-
-                // Navigate to CartActivity
                 Intent intent = new Intent(this, CartActivity.class);
                 startActivity(intent);
-
-                Log.d(TAG, "Buy now for product: " + product.getName());
             }
         } catch (Exception e) {
-            Log.e(TAG, "Error in buy now: " + e.getMessage());
-            e.printStackTrace();
             Toast.makeText(this, "Error processing purchase", Toast.LENGTH_SHORT).show();
         }
     }

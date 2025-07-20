@@ -4,20 +4,31 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.prm392_finalproject.R;
 import com.example.prm392_finalproject.controllers.ProductController;
+import com.example.prm392_finalproject.controllers.ReviewController;
+import com.example.prm392_finalproject.dao.OrderDAO;
+import com.example.prm392_finalproject.dao.ReviewDAO;
 import com.example.prm392_finalproject.models.Product;
+import com.example.prm392_finalproject.models.Review;
+import com.example.prm392_finalproject.views.adapters.ReviewAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,10 +41,21 @@ public class ProductDetailActivity extends AppCompatActivity {
     private TextView textViewWarranty, textViewOrigin, textViewReleaseDate;
     private TextView textViewStatus, textViewCreatedAt, textViewUpdatedAt;
 
+    private RecyclerView recyclerViewReviews;
+    private RatingBar ratingBarInput;
+    private EditText edtComment;
+    private Button btnSubmitReview;
+
+    private TextView tvAverageRating;
+    private RatingBar ratingBarAverage;
+
+
     private ProductController productController;
+    private ReviewController controller;
     private ExecutorService executorService;
     private Product currentProduct;
     private int productId;
+    private int userId = 1; // Cần thay thế bằng id người dùng thực tế nếu có
     private NumberFormat currencyFormat;
 
     @Override
@@ -46,6 +68,11 @@ public class ProductDetailActivity extends AppCompatActivity {
         setupExecutorService();
         getProductId();
         loadProductDetails();
+
+        recyclerViewReviews.setLayoutManager(new LinearLayoutManager(this));
+        controller = new ReviewController(new OrderDAO(), new ReviewDAO());
+        btnSubmitReview.setOnClickListener(v -> submitReview());
+        loadReviews();
     }
 
     private void initializeViews() {
@@ -66,9 +93,51 @@ public class ProductDetailActivity extends AppCompatActivity {
         textViewStatus = findViewById(R.id.textViewStatus);
         textViewCreatedAt = findViewById(R.id.textViewCreatedAt);
         textViewUpdatedAt = findViewById(R.id.textViewUpdatedAt);
+        recyclerViewReviews = findViewById(R.id.recyclerViewProductReviews);
+        ratingBarInput = findViewById(R.id.ratingBarInput);
+        edtComment = findViewById(R.id.edtComment);
+        btnSubmitReview = findViewById(R.id.btnSubmitReview);
+        tvAverageRating = findViewById(R.id.tvAverageRating);
+        ratingBarAverage = findViewById(R.id.ratingBarAverage);
+
 
         productController = new ProductController();
         currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+    }
+
+    private void loadReviews() {
+        List<Review> reviews = controller.getProductReviews(productId);
+
+        ReviewAdapter adapter = new ReviewAdapter(this, reviews);
+        recyclerViewReviews.setAdapter(adapter);
+
+        float avg = controller.getAverageRating(productId);
+
+        tvAverageRating.setText(String.format("%.1f / 5", avg));
+        ratingBarAverage.setRating(avg);
+    }
+
+
+    private void submitReview() {
+        float rating = ratingBarInput.getRating();
+        String comment = edtComment.getText().toString();
+        if (rating == 0) {
+            Toast.makeText(this, "Vui lòng chọn số sao.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Review review = new Review();
+        review.setProductId(productId);
+        review.setCustomerId(userId);
+        review.setRating(rating);
+        review.setReviewText(comment);
+
+        controller.addReview(review);
+
+        Toast.makeText(this, "Đã gửi đánh giá!", Toast.LENGTH_SHORT).show();
+        edtComment.setText("");
+        ratingBarInput.setRating(0);
+
+        loadReviews();  // Tải lại danh sách đánh giá
     }
 
     private void setupToolbar() {
@@ -159,7 +228,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         textViewStatus.setText("Status: " + (product.isActive() ? "Active" : "Inactive"));
         textViewCreatedAt.setText("Created: " + (product.getCreatedAt() != null ?
                 product.getCreatedAt() : "N/A"));
-        textViewUpdatedAt.setText("Updated: " + (product.getUpdatedAt() != null ?
+        textViewUpdatedAt.setText("U    pdated: " + (product.getUpdatedAt() != null ?
                 product.getUpdatedAt() : "N/A"));
 
         // Load product image
