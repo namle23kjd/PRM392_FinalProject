@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@android:color/white">
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="📦 NHẬP KHO"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#2c3e50"
+        android:gravity="center"
+        android:layout_marginBottom="24dp"
+        android:background="#ecf0f1"
+        android:padding="12dp" />
+
+    <!-- Product ID Input -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ID Sản phẩm:"
+        android:textSize="14sp"
+        android:textColor="#2c3e50"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/etProductId"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Nhập ID sản phẩm"
+        android:inputType="number"
+        android:background="@android:color/white"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp"
+        android:elevation="2dp" />
+
+    <!-- Quantity Input -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Số lượng nhập:"
+        android:textSize="14sp"
+        android:textColor="#2c3e50"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/etQuantity"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Nhập số lượng"
+        android:inputType="number"
+        android:background="@android:color/white"
+        android:padding="12dp"
+        android:layout_marginBottom="24dp"
+        android:elevation="2dp" />
+
+    <!-- Note -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:background="#ffeaa7"
+        android:padding="12dp"
+        android:text="⚠️ Lưu ý: Nhập đúng ID sản phẩm và số lượng cần thêm vào kho. Số lượng sẽ được cộng vào tồn kho hiện tại."
+        android:textColor="#BF360C"
+        android:textSize="12sp" />
+
+    <!-- Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:background="#95a5a6"
+            android:text="HỦY"
+            android:textColor="#3949AB"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnConfirm"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:background="#27ae60"
+            android:text="XÁC NHẬN"
+            android:textColor="#0D47A1"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</LinearLayout>
