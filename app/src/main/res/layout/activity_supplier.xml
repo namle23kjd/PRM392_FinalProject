@@ -6,79 +6,79 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".views.SupplierActivity"
-    android:layout_marginTop="40dp">
+    android:padding="16dp"
+    tools:context=".views.SupplierActivity">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnBackToHomeSupplier"
-        android:layout_width="0dp"
+    <!-- Tiêu đề -->
+    <TextView
+        android:id="@+id/tvSupplierTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Quay về trang chủ"
-        android:textAllCaps="false"
-        android:icon="@drawable/ic_search"
-        android:iconTint="@color/primary"
-        android:textColor="@color/primary"
-
-        app:cornerRadius="16dp"
+        android:text="Quản lý nhà cung cấp"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="16dp"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Ô tìm kiếm nhà cung cấp -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilSearchSupplier"
         android:layout_width="0dp"
-        android:layout_height="48dp"
-        app:layout_constraintTop_toBottomOf="@id/btnBackToHomeSupplier"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintTop_toBottomOf="@id/tvSupplierTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="4dp"
+        app:boxBackgroundMode="outline"
         app:boxCornerRadiusTopStart="12dp"
         app:boxCornerRadiusTopEnd="12dp"
         app:boxCornerRadiusBottomStart="12dp"
         app:boxCornerRadiusBottomEnd="12dp"
-
+        app:boxStrokeColor="@color/primary"
         app:boxStrokeWidth="1dp"
-        app:hintEnabled="false">
+        app:hintEnabled="true"
+        android:hint="Tìm kiếm nhà cung cấp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etSearchSupplier"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:hint="Tìm kiếm nhà cung cấp..."
-            android:drawableStart="@drawable/ic_search"
-            android:drawablePadding="6dp"
+            android:layout_height="wrap_content"
             android:inputType="text"
-            android:maxLines="1"
             android:textSize="14sp"
-            android:paddingStart="6dp"
-            android:paddingEnd="6dp"/>
+            android:maxLines="1"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="8dp"
+            android:padding="10dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Danh sách nhà cung cấp -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSupplierList"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingTop="8dp"
+        android:paddingBottom="16dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         app:layout_constraintTop_toBottomOf="@id/tilSearchSupplier"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:padding="8dp"
-        android:clipToPadding="false"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Nút Thêm nhà cung cấp -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddSupplier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="24dp"
         android:contentDescription="Thêm nhà cung cấp"
         app:srcCompat="@android:drawable/ic_input_add"
+        app:backgroundTint="@color/accent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="24dp"
-        app:backgroundTint="@color/accent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout> 
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,52 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tvOrderManagementTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Quản lý đơn hàng"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
-        android:paddingBottom="16dp" />
-
+    <!-- Nội dung chính -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="16dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCreateOrder"
-            android:layout_width="0dp"
+        <!-- Tiêu đề -->
+        <TextView
+            android:id="@+id/tvOrderManagementTitle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Tạo đơn hàng mới"
-            android:layout_marginEnd="8dp"
-            android:padding="12dp" />
+            android:text="Quản lý đơn hàng"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="16dp" />
 
+        <!-- Nút lịch sử thanh toán -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnPaymentHistory"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="Lịch sử thanh toán"
-            android:layout_marginStart="8dp"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:layout_marginBottom="16dp" />
 
+        <!-- Danh sách đơn hàng -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvOrders"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingBottom="16dp" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvOrders"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:paddingBottom="8dp"/>
+    <!-- Nút tạo đơn hàng mới (dạng FAB) -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnCreateOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:contentDescription="Tạo đơn hàng mới"
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:backgroundTint="@color/accent"
+        android:layout_gravity="bottom|end" />
 
-</LinearLayout> 
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

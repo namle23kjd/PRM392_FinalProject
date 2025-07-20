@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#f5f5f5">
+
+    <!-- Header -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="🏪 QUẢN LÝ NHÂN VIÊN"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#2c3e50"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"
+        android:background="#ecf0f1"
+        android:padding="12dp" />
+
+    <!-- Top Row: Product/Category Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="12dp">
+
+        <Button
+            android:id="@+id/btnViewProducts"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:layout_weight="1"
+            android:text="📦 SẢN PHẨM"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:background="#3498db"
+            android:layout_marginEnd="6dp" />
+
+        <Button
+            android:id="@+id/btnViewCategories"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:layout_weight="1"
+            android:background="#95a5a6"
+            android:text="📂 THỂ LOẠI"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_marginStart="6dp" />
+    </LinearLayout>
+
+    <!-- Middle Row: Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+        <!-- Add Stock Button -->
+        <Button
+            android:id="@+id/btnAddStock"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:layout_weight="1"
+            android:background="#27ae60"
+            android:text="📦 NHẬP KHO"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="4dp" />
+
+        <!-- Shipping Button -->
+        <Button
+            android:id="@+id/btnShipping"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:layout_weight="1"
+            android:text="🚚 VẬN CHUYỂN"
+            android:textStyle="bold"
+            android:textSize="11sp"
+            android:textColor="@android:color/white"
+            android:background="#9b59b6"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp" />
+
+        <!-- Logout Button -->
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:layout_weight="1"
+            android:text="🚪 ĐĂNG XUẤT"
+            android:textStyle="bold"
+            android:textSize="11sp"
+            android:textColor="@android:color/white"
+            android:background="#e74c3c"
+            android:layout_marginStart="4dp" />
+    </LinearLayout>
+
+    <!-- Search Label -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="🔍 TÌM KIẾM:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#2c3e50"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Search Bar -->
+    <EditText
+        android:id="@+id/etSearch"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Nhập từ khóa tìm kiếm..."
+        android:background="@android:color/white"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp"
+        android:elevation="2dp" />
+
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/white"
+        android:elevation="2dp"
+        android:padding="8dp" />
+
+</LinearLayout>

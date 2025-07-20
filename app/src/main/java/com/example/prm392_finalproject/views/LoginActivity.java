@@ -337,12 +337,45 @@ public class LoginActivity extends AppCompatActivity {
             new Thread(() -> {
                 User user = userRepository.getUserByEmail(firebaseUser.getEmail());
                 runOnUiThread(() -> {
-                    if (user != null && "admin".equalsIgnoreCase(user.getRole())) {
-                        Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
-                        intent.putExtra("currentUser", user);
-                        startActivity(intent);
+                    if (user != null) {
+                        String userRole = user.getRole().toLowerCase().trim();
+
+                        if ("admin".equals(userRole)) {
+                            // Navigate to AdminActivity for admin users
+                            Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
+                            intent.putExtra("currentUser", user);
+                            startActivity(intent);
+
+                        } else if ("staff".equals(userRole)) {
+                            // Navigate to StaffActivity for staff users
+                            Intent intent = new Intent(LoginActivity.this, StaffActivity.class);
+                            intent.putExtra("currentUser", user);
+
+                            // Lưu staff info vào SharedPreferences
+                            android.content.SharedPreferences prefs = getSharedPreferences("staff_session", MODE_PRIVATE);
+                            android.content.SharedPreferences.Editor editor = prefs.edit();
+                            editor.putInt("staff_id", user.getCustomerId()); // hoặc user.getUserId() nếu có
+                            editor.putString("staff_name", user.getFullName());
+                            editor.putString("staff_email", user.getEmail());
+                            editor.apply();
+
+                            startActivity(intent);
+
+                        } else {
+                            // Navigate to UserDashboardActivity for customer users
+                            // Lưu customer_id vào SharedPreferences cho customer
+                            android.content.SharedPreferences prefs = getSharedPreferences("customer_session", MODE_PRIVATE);
+                            android.content.SharedPreferences.Editor editor = prefs.edit();
+                            editor.putInt("customer_id", user.getCustomerId());
+                            editor.putString("customer_name", user.getFullName());
+                            editor.putString("customer_address", user.getAddress());
+                            editor.apply();
+
+                            Intent intent = new Intent(LoginActivity.this, UserDashboardActivity.class);
+                            startActivity(intent);
+                        }
                     } else {
-                        // Navigate to UserDashboardActivity for customers
+                      
                         Intent intent = new Intent(LoginActivity.this, UserDashboardActivity.class);
                         startActivity(intent);
                     }
@@ -350,6 +383,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }).start();
         } else {
+            // Không có Firebase user, redirect về customer dashboard
             Intent intent = new Intent(LoginActivity.this, UserDashboardActivity.class);
             startActivity(intent);
             finish();
