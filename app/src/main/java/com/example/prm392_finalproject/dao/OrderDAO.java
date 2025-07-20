@@ -1,5 +1,7 @@
 package com.example.prm392_finalproject.dao;
 
+import android.util.Log;
+
 import com.example.prm392_finalproject.db.ConnectionClass;
 import com.example.prm392_finalproject.models.zalopay.Order;
 
@@ -97,4 +99,29 @@ public class OrderDAO {
         }
         return monthCount;
     }
+
+
+    public boolean hasUserPurchasedProduct(int userId, int productId) {
+        boolean hasPurchased = false;
+
+        try (Connection conn = new ConnectionClass().CONN()) {
+            String sql = "SELECT COUNT(*) FROM Orders WHERE userId = ? AND productId = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, userId);
+            stmt.setInt(2, productId);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                hasPurchased = rs.getInt(1) > 0;
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (Exception e) {
+            Log.e("OrderDAO", e.getMessage());
+        }
+
+        return hasPurchased;
+    }
+
 } 
