@@ -375,7 +375,7 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(intent);
                         }
                     } else {
-                        // User không tồn tại trong database, redirect về customer dashboard
+                      
                         Intent intent = new Intent(LoginActivity.this, UserDashboardActivity.class);
                         startActivity(intent);
                     }
