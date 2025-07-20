@@ -130,4 +130,16 @@
         android:elevation="2dp"
         android:padding="8dp" />
 
+    <Button
+        android:id="@+id/btnUpdateProduct"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="✏️ CẬP NHẬT SẢN PHẨM"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:textSize="13sp"
+        android:background="#f39c12"
+        android:layout_marginBottom="16dp" />
+
+
 </LinearLayout>

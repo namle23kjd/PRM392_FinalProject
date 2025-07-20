@@ -1,5 +1,7 @@
 package com.example.prm392_finalproject.views.adapters;
 
+import android.util.Log;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.prm392_finalproject.R;
 import com.example.prm392_finalproject.models.Product;
 
@@ -17,10 +20,14 @@ import java.util.List;
 import java.util.Locale;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
-    
+
     private List<Product> productList;
     private OnProductClickListener listener;
     private OnAddToCartClickListener addToCartListener;
+
+
+    private OnProductLongClickListener longClickListener;
+
 
     public interface OnProductClickListener {
         void onProductClick(Product product);
@@ -33,6 +40,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         this.productList = productList;
         this.listener = listener;
         this.addToCartListener = addToCartListener;
+
     }
 
     @NonNull
@@ -69,6 +77,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             tvProductPrice = itemView.findViewById(R.id.tvProductPrice);
             tvProductDescription = itemView.findViewById(R.id.tvProductDescription);
             tvProductCategory = itemView.findViewById(R.id.tvProductCategory);
+
+            // Nút thêm vào giỏ hàng
             ImageView btnAddToCart = itemView.findViewById(R.id.btnAddToCart);
             btnAddToCart.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
@@ -76,22 +86,58 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                     addToCartListener.onAddToCartClick(productList.get(pos));
                 }
             });
+
+            // 👇 Nhấn giữ để cập nhật
+            itemView.setOnLongClickListener(v -> {
+                int pos = getAdapterPosition();
+                if (longClickListener != null && pos != RecyclerView.NO_POSITION) {
+                    v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                    longClickListener.onProductLongClick(productList.get(pos));
+                }
+                return true;
+            });
         }
+
+        
 
         public void bind(Product product) {
             tvProductName.setText(product.getName());
             tvProductPrice.setText(String.format(Locale.getDefault(), "$%.2f", product.getPrice()));
             tvProductDescription.setText(product.getDescription());
             tvProductCategory.setText(product.getCategory());
-            
+            // In log để kiểm tra URL ảnh
+            Log.d("ProductAdapter", "Image URL for product \"" + product.getName() + "\": " + product.getImageUrl());
             // Set default image for now (you can load actual images later)
-            ivProductImage.setImageResource(R.drawable.ic_menu_business);
-            
+            if (product.getImageUrl() != null && !product.getImageUrl().isEmpty()) {
+                Glide.with(itemView.getContext())
+                        .load(product.getImageUrl())
+                        .placeholder(R.drawable.ic_menu_business) // hoặc ảnh khác
+                        .error(R.drawable.ic_menu_business)               // hoặc ảnh khác
+                        .into(ivProductImage);
+            } else {
+                ivProductImage.setImageResource(R.drawable.ic_menu_business);
+            }
+
             cardView.setOnClickListener(v -> {
                 if (listener != null) {
                     listener.onProductClick(product);
                 }
             });
+
+
+            cardView.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onProductClick(product);
+                }
+            });
+
+
+
         }
+
     }
+    public interface OnProductLongClickListener {
+        void onProductLongClick(Product product);
+    }
+
 }

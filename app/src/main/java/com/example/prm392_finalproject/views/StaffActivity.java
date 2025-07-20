@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.prm392_finalproject.R;
 import com.example.prm392_finalproject.dao.ProductDAO;
 import com.example.prm392_finalproject.dao.CategoryDAO;
 import com.example.prm392_finalproject.models.Product;
@@ -31,7 +33,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import android.content.SharedPreferences;
 public class StaffActivity extends AppCompatActivity {
 
     private static final String TAG = "StaffActivity";
@@ -207,6 +213,7 @@ public class StaffActivity extends AppCompatActivity {
         Log.d(TAG, "UI created with separated sections");
     }
 
+
     private Button createButton(String text, int color) {
         Button button = new Button(this);
         button.setText(text);
@@ -247,10 +254,11 @@ public class StaffActivity extends AppCompatActivity {
             new AlertDialog.Builder(this)
                     .setTitle("Đăng xuất")
                     .setMessage("Bạn có chắc muốn đăng xuất?")
-                    .setPositiveButton("Có", (dialog, which) -> finish())
+                    .setPositiveButton("Có", (dialog, which) -> performLogout())
                     .setNegativeButton("Không", null)
                     .show();
         });
+
 
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -483,6 +491,8 @@ public class StaffActivity extends AppCompatActivity {
         LinearLayout colorContainer = createInputField("Màu sắc", "Nhập màu sắc");
         LinearLayout weightContainer = createNumberInputField("Trọng lượng (kg)", "Nhập trọng lượng");
         LinearLayout originContainer = createInputField("Xuất xứ", "Nhập xuất xứ");
+        LinearLayout imageUrlContainer = createInputField("URL hình ảnh", "Nhập đường dẫn hình ảnh");
+
 
         // Add fields to layout
         dialogLayout.addView(title);
@@ -495,6 +505,8 @@ public class StaffActivity extends AppCompatActivity {
         dialogLayout.addView(colorContainer);
         dialogLayout.addView(weightContainer);
         dialogLayout.addView(originContainer);
+        dialogLayout.addView(imageUrlContainer);
+
 
         // Note
         TextView note = new TextView(this);
@@ -526,6 +538,8 @@ public class StaffActivity extends AppCompatActivity {
                     EditText etColor = getEditTextFromContainer(colorContainer);
                     EditText etWeight = getEditTextFromContainer(weightContainer);
                     EditText etOrigin = getEditTextFromContainer(originContainer);
+                    EditText etImageUrl = getEditTextFromContainer(imageUrlContainer);
+
 
                     // Validate required fields
                     String name = etName.getText().toString().trim();
@@ -581,6 +595,126 @@ public class StaffActivity extends AppCompatActivity {
 
         dialog.show();
     }
+
+    private void showUpdateProductDialog(Product product) {
+        LinearLayout dialogLayout = new LinearLayout(this);
+        dialogLayout.setOrientation(LinearLayout.VERTICAL);
+        dialogLayout.setPadding(30, 30, 30, 30);
+
+        TextView title = new TextView(this);
+        title.setText("✏️ CẬP NHẬT SẢN PHẨM");
+        title.setTextSize(18f);
+        title.setTypeface(null, android.graphics.Typeface.BOLD);
+        title.setGravity(Gravity.CENTER);
+        title.setTextColor(0xFF2980B9);
+        title.setBackgroundColor(0xFFD6EAF8);
+        title.setPadding(20, 20, 20, 20);
+        LinearLayout.LayoutParams titleParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        titleParams.setMargins(0, 0, 0, 20);
+        title.setLayoutParams(titleParams);
+
+        // Input fields with pre-filled values
+        LinearLayout nameContainer = createInputField("Tên sản phẩm *", product.getName());
+        LinearLayout codeContainer = createInputField("Mã sản phẩm *", product.getProductCode());
+        LinearLayout descContainer = createInputField("Mô tả", product.getDescription());
+        LinearLayout priceContainer = createNumberInputField("Giá bán *", String.valueOf(product.getPrice()));
+        LinearLayout costContainer = createNumberInputField("Giá nhập", String.valueOf(product.getCost()));
+        LinearLayout quantityContainer = createNumberInputField("Số lượng *", String.valueOf(product.getQuantityInStock()));
+        LinearLayout colorContainer = createInputField("Màu sắc", product.getColor());
+        LinearLayout weightContainer = createNumberInputField("Trọng lượng (kg)", String.valueOf(product.getWeight()));
+        LinearLayout originContainer = createInputField("Xuất xứ", product.getOriginCountry());
+        LinearLayout imageUrlContainer = createInputField("URL hình ảnh", product.getImageUrl());
+
+        dialogLayout.addView(title);
+        dialogLayout.addView(nameContainer);
+        dialogLayout.addView(codeContainer);
+        dialogLayout.addView(descContainer);
+        dialogLayout.addView(priceContainer);
+        dialogLayout.addView(costContainer);
+        dialogLayout.addView(quantityContainer);
+        dialogLayout.addView(colorContainer);
+        dialogLayout.addView(weightContainer);
+        dialogLayout.addView(originContainer);
+        dialogLayout.addView(imageUrlContainer);
+
+        TextView note = new TextView(this);
+        note.setText("⚠️ Các trường có dấu (*) là bắt buộc");
+        note.setTextSize(12f);
+        note.setTextColor(0xFFE67E22);
+        note.setBackgroundColor(0xFFFFEAA7);
+        note.setPadding(15, 15, 15, 15);
+        LinearLayout.LayoutParams noteParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        noteParams.setMargins(0, 10, 0, 0);
+        note.setLayoutParams(noteParams);
+        dialogLayout.addView(note);
+
+        ScrollView scrollView = new ScrollView(this);
+        scrollView.addView(dialogLayout);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(scrollView)
+                .setPositiveButton("💾 LƯU", (d, which) -> {
+                    EditText etName = getEditTextFromContainer(nameContainer);
+                    EditText etCode = getEditTextFromContainer(codeContainer);
+                    EditText etDescription = getEditTextFromContainer(descContainer);
+                    EditText etPrice = getEditTextFromContainer(priceContainer);
+                    EditText etCost = getEditTextFromContainer(costContainer);
+                    EditText etQuantity = getEditTextFromContainer(quantityContainer);
+                    EditText etColor = getEditTextFromContainer(colorContainer);
+                    EditText etWeight = getEditTextFromContainer(weightContainer);
+                    EditText etOrigin = getEditTextFromContainer(originContainer);
+                    EditText etImageUrl = getEditTextFromContainer(imageUrlContainer);
+
+                    String name = etName.getText().toString().trim();
+                    String code = etCode.getText().toString().trim();
+                    String priceStr = etPrice.getText().toString().trim();
+                    String quantityStr = etQuantity.getText().toString().trim();
+
+                    if (name.isEmpty() || code.isEmpty() || priceStr.isEmpty() || quantityStr.isEmpty()) {
+                        Toast.makeText(this, "❌ Vui lòng nhập đầy đủ các trường bắt buộc", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    try {
+                        product.setName(name);
+                        product.setProductCode(code);
+                        product.setDescription(etDescription.getText().toString().trim());
+                        product.setPrice(Double.parseDouble(priceStr));
+
+                        String costStr = etCost.getText().toString().trim();
+                        if (!costStr.isEmpty()) {
+                            product.setCost(Double.parseDouble(costStr));
+                        }
+
+                        product.setQuantityInStock(Integer.parseInt(quantityStr));
+                        product.setColor(etColor.getText().toString().trim());
+
+                        String weightStr = etWeight.getText().toString().trim();
+                        if (!weightStr.isEmpty()) {
+                            product.setWeight(Double.parseDouble(weightStr));
+                        }
+
+                        product.setOriginCountry(etOrigin.getText().toString().trim());
+                        product.setImageUrl(etImageUrl.getText().toString().trim());
+
+                        // Update timestamp
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                        product.setUpdatedAt(sdf.format(new Date()));
+
+                        updateProduct(product); // Gọi hàm cập nhật trong cơ sở dữ liệu
+
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(this, "❌ Vui lòng nhập số hợp lệ cho giá và số lượng", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("❌ HỦY", null)
+                .create();
+
+        dialog.show();
+    }
+
 
     private void showIncreaseStockDialog() {
         // Show loading message
@@ -1002,6 +1136,30 @@ public class StaffActivity extends AppCompatActivity {
         }.execute();
     }
 
+    private void updateProduct(Product product) {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... voids) {
+                try {
+                    productDAO.updateProduct(product);
+                    return "✅ Đã cập nhật sản phẩm '" + product.getName() + "' thành công!";
+                } catch (Exception e) {
+                    Log.e(TAG, "❌ Lỗi khi cập nhật sản phẩm", e);
+                    return "❌ Lỗi cập nhật sản phẩm: " + e.getMessage();
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                Toast.makeText(StaffActivity.this, result, Toast.LENGTH_LONG).show();
+                if (result.startsWith("✅") && showingProducts) {
+                    loadProducts(); // Làm mới danh sách
+                }
+            }
+        }.execute();
+    }
+
+
     private void increaseStock(int productId, int quantity) {
         new AsyncTask<Void, Void, String>() {
             @Override
@@ -1039,6 +1197,7 @@ public class StaffActivity extends AppCompatActivity {
                 }
             }
         }.execute();
+
     }
 
     // Inner class for Product Adapter
@@ -1049,6 +1208,7 @@ public class StaffActivity extends AppCompatActivity {
         public StaffProductAdapter(List<Product> products) {
             this.products = products;
             this.currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+
         }
 
         @Override
@@ -1209,4 +1369,80 @@ public class StaffActivity extends AppCompatActivity {
             }
         }
     }
-}
+    private void performLogout() {
+        try {
+            // Show loading message
+            Toast.makeText(this, "Đang đăng xuất...", Toast.LENGTH_SHORT).show();
+
+            // 1. Logout khỏi Firebase Auth
+            FirebaseAuth.getInstance().signOut();
+            Log.d(TAG, "Firebase Auth signed out");
+
+            // 2. Logout khỏi Google Sign-In (nếu có)
+            try {
+                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(getString(R.string.default_web_client_id))
+                        .requestEmail()
+                        .build();
+                GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
+                googleSignInClient.signOut().addOnCompleteListener(this, task -> {
+                    Log.d(TAG, "Google Sign-In signed out: " + task.isSuccessful());
+                });
+            } catch (Exception e) {
+                Log.w(TAG, "Google sign out error (can be ignored): " + e.getMessage());
+            }
+
+            // 3. Xóa session data trong SharedPreferences
+            clearAllSessions();
+
+            // 4. Chuyển về LoginActivity và clear back stack
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+
+            // 5. Hiển thị thông báo logout thành công
+            Toast.makeText(this, "✅ Đăng xuất thành công!", Toast.LENGTH_SHORT).show();
+
+            // 6. Finish activity hiện tại
+            finish();
+
+            Log.d(TAG, "Logout completed successfully");
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error during logout", e);
+            Toast.makeText(this, "❌ Lỗi đăng xuất: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Xóa tất cả session data trong SharedPreferences
+     */
+    private void clearAllSessions() {
+        try {
+            // Clear staff session
+            SharedPreferences staffPrefs = getSharedPreferences("staff_session", MODE_PRIVATE);
+            staffPrefs.edit().clear().apply();
+            Log.d(TAG, "Staff session cleared");
+
+            // Clear customer session (nếu có)
+            SharedPreferences customerPrefs = getSharedPreferences("customer_session", MODE_PRIVATE);
+            customerPrefs.edit().clear().apply();
+            Log.d(TAG, "Customer session cleared");
+
+            // Clear any other app preferences if needed
+            SharedPreferences defaultPrefs = getSharedPreferences(getPackageName() + "_preferences", MODE_PRIVATE);
+            defaultPrefs.edit().clear().apply();
+            Log.d(TAG, "Default preferences cleared");
+
+            // Clear any login-related preferences
+            SharedPreferences loginPrefs = getSharedPreferences("login_prefs", MODE_PRIVATE);
+            loginPrefs.edit().clear().apply();
+
+            Log.d(TAG, "All sessions cleared successfully");
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error clearing sessions", e);
+        }
+    }
+
+} // KẾT THÚC StaffActivity

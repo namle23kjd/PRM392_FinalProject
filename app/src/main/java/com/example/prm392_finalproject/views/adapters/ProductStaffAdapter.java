@@ -28,6 +28,19 @@ public class ProductStaffAdapter extends RecyclerView.Adapter<ProductStaffAdapte
         this.currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
     }
 
+    public interface OnProductLongClickListener {
+        void onProductLongClick(Product product);
+    }
+    private OnProductLongClickListener longClickListener;
+
+    public ProductStaffAdapter(Context context, List<Product> productList, OnProductLongClickListener longClickListener) {
+        this.context = context;
+        this.productList = productList;
+        this.longClickListener = longClickListener;
+        this.currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+    }
+
+
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -46,6 +59,8 @@ public class ProductStaffAdapter extends RecyclerView.Adapter<ProductStaffAdapte
         params.setMargins(16, 8, 16, 8);
         view.setLayoutParams(params);
         view.setElevation(6f); // Tạo shadow effect
+
+
 
         return new ProductViewHolder(view);
     }
@@ -120,6 +135,14 @@ public class ProductStaffAdapter extends RecyclerView.Adapter<ProductStaffAdapte
         holder.subtitle.setText(subtitle.toString());
         holder.subtitle.setTextSize(12f);
         holder.subtitle.setTextColor(0xFF34495E);
+        holder.itemView.setOnLongClickListener(v -> {
+            if (longClickListener != null) {
+                longClickListener.onProductLongClick(product);
+                return true;
+            }
+            return false;
+        });
+
     }
 
     @Override
