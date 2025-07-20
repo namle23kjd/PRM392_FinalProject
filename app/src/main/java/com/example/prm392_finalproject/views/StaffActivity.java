@@ -1,6 +1,7 @@
 package com.example.prm392_finalproject.views;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -22,7 +23,8 @@ import com.example.prm392_finalproject.dao.ProductDAO;
 import com.example.prm392_finalproject.dao.CategoryDAO;
 import com.example.prm392_finalproject.models.Product;
 import com.example.prm392_finalproject.models.CategoryResponse;
-
+// Thêm vào đầu file StaffActivity.java
+import com.example.prm392_finalproject.views.ShippingActivity;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -127,7 +129,17 @@ public class StaffActivity extends AppCompatActivity {
                 0, 110, 1f); // Cao hơn một chút
         addStockParams.setMargins(0, 0, 10, 0);
         btnAddStock.setLayoutParams(addStockParams);
-
+// Shipping button - THÊM MỚI
+        Button btnShipping = new Button(this);
+        btnShipping.setText("🚚 VẬN CHUYỂN");
+        btnShipping.setTextColor(0xFFFFFFFF);
+        btnShipping.setBackgroundColor(0xFF9B59B6); // Màu tím
+        btnShipping.setTextSize(13f);
+        btnShipping.setTypeface(null, android.graphics.Typeface.BOLD);
+        btnShipping.setAllCaps(false);
+        LinearLayout.LayoutParams shippingParams = new LinearLayout.LayoutParams(0, 110, 1f);
+        shippingParams.setMargins(8, 0, 8, 0);
+        btnShipping.setLayoutParams(shippingParams);
         // Logout button
         btnLogout = new Button(this);
         btnLogout.setText("🚪 ĐĂNG XUẤT");
@@ -143,7 +155,13 @@ public class StaffActivity extends AppCompatActivity {
 
         actionButtonContainer.addView(btnAddStock);
         actionButtonContainer.addView(btnLogout);
-
+        actionButtonContainer.addView(btnShipping);
+        // Thêm click listener cho shipping button - THÊM MỚI
+        btnShipping.setOnClickListener(v -> {
+            Intent shippingIntent = new Intent(this, ShippingActivity.class);
+            startActivity(shippingIntent);
+            Log.d(TAG, "Opened ShippingActivity");
+        });
         // Search section với label rõ ràng
         TextView searchLabel = new TextView(this);
         searchLabel.setText("🔍 TÌM KIẾM:");
