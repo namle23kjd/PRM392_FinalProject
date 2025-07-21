@@ -51,7 +51,7 @@ dependencies {
     // Firebase Analytics (optional but recommended)
     implementation("com.google.firebase:firebase-analytics")
     implementation(fileTree(mapOf(
-        "dir" to "C:\\Users\\BINH\\OneDrive\\Desktop\\projectprm\\PRM392_FinalProject\\app\\zalopaylibs",
+        "dir" to "D:\\ZaloPay",
         "include" to listOf("*.aar", "*.jar"),
         "exclude" to listOf("")
     )))
