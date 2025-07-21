@@ -98,6 +98,6 @@ dependencies {
 
     // GSON (nếu cần parse JSON từ Coze API response)
     implementation ("com.google.code.gson:gson:2.10.1")
-
+    implementation ("com.github.bumptech.glide:glide:4.15.1")
 
 }
