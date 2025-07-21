@@ -38,6 +38,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import android.content.SharedPreferences;
+import android.view.HapticFeedbackConstants;
 public class StaffActivity extends AppCompatActivity {
 
     private static final String TAG = "StaffActivity";
@@ -481,32 +482,46 @@ public class StaffActivity extends AppCompatActivity {
         titleParams.setMargins(0, 0, 0, 20);
         title.setLayoutParams(titleParams);
 
-        // Create input field containers
+        // Create input field containers for ALL attributes
         LinearLayout nameContainer = createInputField("Tên sản phẩm *", "Nhập tên sản phẩm");
         LinearLayout codeContainer = createInputField("Mã sản phẩm *", "Nhập mã sản phẩm");
         LinearLayout descContainer = createInputField("Mô tả", "Nhập mô tả sản phẩm");
+        LinearLayout specificationsContainer = createInputField("Thông số kỹ thuật", "Nhập thông số kỹ thuật");
         LinearLayout priceContainer = createNumberInputField("Giá bán *", "Nhập giá bán");
         LinearLayout costContainer = createNumberInputField("Giá nhập", "Nhập giá nhập");
         LinearLayout quantityContainer = createNumberInputField("Số lượng *", "Nhập số lượng ban đầu");
+        LinearLayout stockContainer = createNumberInputField("Kho dự trữ", "Nhập số lượng kho dự trữ");
         LinearLayout colorContainer = createInputField("Màu sắc", "Nhập màu sắc");
         LinearLayout weightContainer = createNumberInputField("Trọng lượng (kg)", "Nhập trọng lượng");
+        LinearLayout dimensionsContainer = createInputField("Kích thước", "Nhập kích thước (VxDxR)");
+        LinearLayout warrantyContainer = createNumberInputField("Bảo hành (tháng)", "Nhập thời gian bảo hành");
         LinearLayout originContainer = createInputField("Xuất xứ", "Nhập xuất xứ");
+        LinearLayout releaseDateContainer = createInputField("Ngày phát hành", "YYYY-MM-DD");
+        LinearLayout qrCodeContainer = createInputField("Mã QR", "Nhập mã QR");
+        LinearLayout categoryIdContainer = createNumberInputField("ID Danh mục", "Nhập ID danh mục");
+        LinearLayout categoryContainer = createInputField("Tên danh mục", "Nhập tên danh mục");
         LinearLayout imageUrlContainer = createInputField("URL hình ảnh", "Nhập đường dẫn hình ảnh");
-
 
         // Add fields to layout
         dialogLayout.addView(title);
         dialogLayout.addView(nameContainer);
         dialogLayout.addView(codeContainer);
         dialogLayout.addView(descContainer);
+        dialogLayout.addView(specificationsContainer);
         dialogLayout.addView(priceContainer);
         dialogLayout.addView(costContainer);
         dialogLayout.addView(quantityContainer);
+        dialogLayout.addView(stockContainer);
         dialogLayout.addView(colorContainer);
         dialogLayout.addView(weightContainer);
+        dialogLayout.addView(dimensionsContainer);
+        dialogLayout.addView(warrantyContainer);
         dialogLayout.addView(originContainer);
+        dialogLayout.addView(releaseDateContainer);
+        dialogLayout.addView(qrCodeContainer);
+        dialogLayout.addView(categoryIdContainer);
+        dialogLayout.addView(categoryContainer);
         dialogLayout.addView(imageUrlContainer);
-
 
         // Note
         TextView note = new TextView(this);
@@ -532,14 +547,21 @@ public class StaffActivity extends AppCompatActivity {
                     EditText etName = getEditTextFromContainer(nameContainer);
                     EditText etCode = getEditTextFromContainer(codeContainer);
                     EditText etDescription = getEditTextFromContainer(descContainer);
+                    EditText etSpecifications = getEditTextFromContainer(specificationsContainer);
                     EditText etPrice = getEditTextFromContainer(priceContainer);
                     EditText etCost = getEditTextFromContainer(costContainer);
                     EditText etQuantity = getEditTextFromContainer(quantityContainer);
+                    EditText etStock = getEditTextFromContainer(stockContainer);
                     EditText etColor = getEditTextFromContainer(colorContainer);
                     EditText etWeight = getEditTextFromContainer(weightContainer);
+                    EditText etDimensions = getEditTextFromContainer(dimensionsContainer);
+                    EditText etWarranty = getEditTextFromContainer(warrantyContainer);
                     EditText etOrigin = getEditTextFromContainer(originContainer);
+                    EditText etReleaseDate = getEditTextFromContainer(releaseDateContainer);
+                    EditText etQrCode = getEditTextFromContainer(qrCodeContainer);
+                    EditText etCategoryId = getEditTextFromContainer(categoryIdContainer);
+                    EditText etCategory = getEditTextFromContainer(categoryContainer);
                     EditText etImageUrl = getEditTextFromContainer(imageUrlContainer);
-
 
                     // Validate required fields
                     String name = etName.getText().toString().trim();
@@ -553,11 +575,12 @@ public class StaffActivity extends AppCompatActivity {
                     }
 
                     try {
-                        // Create new product
+                        // Create new product with ALL attributes
                         Product newProduct = new Product();
                         newProduct.setName(name);
                         newProduct.setProductCode(code);
                         newProduct.setDescription(etDescription.getText().toString().trim());
+                        newProduct.setSpecifications(etSpecifications.getText().toString().trim());
                         newProduct.setPrice(Double.parseDouble(priceStr));
 
                         String costStr = etCost.getText().toString().trim();
@@ -567,7 +590,14 @@ public class StaffActivity extends AppCompatActivity {
 
                         int quantity = Integer.parseInt(quantityStr);
                         newProduct.setQuantityInStock(quantity);
-                        newProduct.setStockQuantity(quantity);
+
+                        String stockStr = etStock.getText().toString().trim();
+                        if (!stockStr.isEmpty()) {
+                            newProduct.setStockQuantity(Integer.parseInt(stockStr));
+                        } else {
+                            newProduct.setStockQuantity(quantity); // Default to same as quantity
+                        }
+
                         newProduct.setColor(etColor.getText().toString().trim());
 
                         String weightStr = etWeight.getText().toString().trim();
@@ -575,7 +605,24 @@ public class StaffActivity extends AppCompatActivity {
                             newProduct.setWeight(Double.parseDouble(weightStr));
                         }
 
+                        newProduct.setDimensions(etDimensions.getText().toString().trim());
+
+                        String warrantyStr = etWarranty.getText().toString().trim();
+                        if (!warrantyStr.isEmpty()) {
+                            newProduct.setWarrantyPeriod(Integer.parseInt(warrantyStr));
+                        }
+
                         newProduct.setOriginCountry(etOrigin.getText().toString().trim());
+                        newProduct.setReleaseDate(etReleaseDate.getText().toString().trim());
+                        newProduct.setQrCode(etQrCode.getText().toString().trim());
+
+                        String categoryIdStr = etCategoryId.getText().toString().trim();
+                        if (!categoryIdStr.isEmpty()) {
+                            newProduct.setCategoryId(Integer.parseInt(categoryIdStr));
+                        }
+
+                        newProduct.setCategory(etCategory.getText().toString().trim());
+                        newProduct.setImageUrl(etImageUrl.getText().toString().trim());
                         newProduct.setActive(true);
 
                         // Set timestamps
@@ -587,7 +634,7 @@ public class StaffActivity extends AppCompatActivity {
                         addNewProduct(newProduct);
 
                     } catch (NumberFormatException e) {
-                        Toast.makeText(this, "❌ Vui lòng nhập số hợp lệ cho giá và số lượng", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "❌ Vui lòng nhập số hợp lệ cho các trường số", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("❌ HỦY", null)
@@ -595,7 +642,6 @@ public class StaffActivity extends AppCompatActivity {
 
         dialog.show();
     }
-
     private void showUpdateProductDialog(Product product) {
         LinearLayout dialogLayout = new LinearLayout(this);
         dialogLayout.setOrientation(LinearLayout.VERTICAL);
@@ -614,35 +660,95 @@ public class StaffActivity extends AppCompatActivity {
         titleParams.setMargins(0, 0, 0, 20);
         title.setLayoutParams(titleParams);
 
-        // Input fields with pre-filled values
-        LinearLayout nameContainer = createInputField("Tên sản phẩm *", product.getName());
-        LinearLayout codeContainer = createInputField("Mã sản phẩm *", product.getProductCode());
-        LinearLayout descContainer = createInputField("Mô tả", product.getDescription());
-        LinearLayout priceContainer = createNumberInputField("Giá bán *", String.valueOf(product.getPrice()));
-        LinearLayout costContainer = createNumberInputField("Giá nhập", String.valueOf(product.getCost()));
-        LinearLayout quantityContainer = createNumberInputField("Số lượng *", String.valueOf(product.getQuantityInStock()));
-        LinearLayout colorContainer = createInputField("Màu sắc", product.getColor());
-        LinearLayout weightContainer = createNumberInputField("Trọng lượng (kg)", String.valueOf(product.getWeight()));
-        LinearLayout originContainer = createInputField("Xuất xứ", product.getOriginCountry());
-        LinearLayout imageUrlContainer = createInputField("URL hình ảnh", product.getImageUrl());
+        // Current product info
+        TextView currentInfo = new TextView(this);
+        currentInfo.setText("📦 Sản phẩm: " + product.getName() + " (ID: " + product.getProductId() + ")" +
+                "\n🏷️ Mã: " + (product.getProductCode() != null ? product.getProductCode() : "N/A") +
+                "\n💰 Giá: " + String.format(Locale.getDefault(), "%.0f VND", product.getPrice()) +
+                "\n📊 Tồn kho: " + product.getQuantityInStock());
+        currentInfo.setTextSize(14f);
+        currentInfo.setTextColor(0xFF2C3E50);
+        currentInfo.setBackgroundColor(0xFFECF0F1);
+        currentInfo.setPadding(15, 15, 15, 15);
+        LinearLayout.LayoutParams infoParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        infoParams.setMargins(0, 0, 0, 20);
+        currentInfo.setLayoutParams(infoParams);
 
+        // Input fields - pre-filled with current values using new methods
+        LinearLayout nameContainer = createInputFieldWithValue("Tên sản phẩm", product.getName());
+        LinearLayout codeContainer = createInputFieldWithValue("Mã sản phẩm", product.getProductCode());
+        LinearLayout descContainer = createInputFieldWithValue("Mô tả", product.getDescription());
+        LinearLayout specificationsContainer = createInputFieldWithValue("Thông số kỹ thuật", product.getSpecifications());
+        LinearLayout priceContainer = createNumberInputFieldWithValue("Giá bán", String.valueOf(product.getPrice()));
+        LinearLayout costContainer = createNumberInputFieldWithValue("Giá nhập",
+                product.getCost() != null ? String.valueOf(product.getCost()) : "");
+        LinearLayout quantityContainer = createNumberInputFieldWithValue("Số lượng", String.valueOf(product.getQuantityInStock()));
+        LinearLayout stockContainer = createNumberInputFieldWithValue("Kho dự trữ", String.valueOf(product.getStockQuantity()));
+        LinearLayout colorContainer = createInputFieldWithValue("Màu sắc", product.getColor());
+        LinearLayout weightContainer = createNumberInputFieldWithValue("Trọng lượng (kg)",
+                product.getWeight() != null ? String.valueOf(product.getWeight()) : "");
+        LinearLayout dimensionsContainer = createInputFieldWithValue("Kích thước", product.getDimensions());
+        LinearLayout warrantyContainer = createNumberInputFieldWithValue("Bảo hành (tháng)",
+                product.getWarrantyPeriod() != null ? String.valueOf(product.getWarrantyPeriod()) : "");
+        LinearLayout originContainer = createInputFieldWithValue("Xuất xứ", product.getOriginCountry());
+        LinearLayout releaseDateContainer = createInputFieldWithValue("Ngày phát hành", product.getReleaseDate());
+        LinearLayout qrCodeContainer = createInputFieldWithValue("Mã QR", product.getQrCode());
+        LinearLayout categoryIdContainer = createNumberInputFieldWithValue("ID Danh mục",
+                product.getCategoryId() != null ? String.valueOf(product.getCategoryId()) : "");
+        LinearLayout categoryContainer = createInputFieldWithValue("Tên danh mục", product.getCategory());
+        LinearLayout imageUrlContainer = createInputFieldWithValue("URL hình ảnh", product.getImageUrl());
+
+        // Active status toggle
+        LinearLayout activeContainer = new LinearLayout(this);
+        activeContainer.setOrientation(LinearLayout.HORIZONTAL);
+        activeContainer.setPadding(10, 10, 10, 10);
+
+        TextView activeLabel = new TextView(this);
+        activeLabel.setText("Trạng thái: ");
+        activeLabel.setTextSize(14f);
+        activeLabel.setTypeface(null, android.graphics.Typeface.BOLD);
+
+        android.widget.Switch activeSwitch = new android.widget.Switch(this);
+        activeSwitch.setChecked(product.isActive());
+        activeSwitch.setText(product.isActive() ? "Hoạt động" : "Tạm dừng");
+        activeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            buttonView.setText(isChecked ? "Hoạt động" : "Tạm dừng");
+        });
+
+        activeContainer.addView(activeLabel);
+        activeContainer.addView(activeSwitch);
+
+        // Add all fields to layout
         dialogLayout.addView(title);
+        dialogLayout.addView(currentInfo);
         dialogLayout.addView(nameContainer);
         dialogLayout.addView(codeContainer);
         dialogLayout.addView(descContainer);
+        dialogLayout.addView(specificationsContainer);
         dialogLayout.addView(priceContainer);
         dialogLayout.addView(costContainer);
         dialogLayout.addView(quantityContainer);
+        dialogLayout.addView(stockContainer);
         dialogLayout.addView(colorContainer);
         dialogLayout.addView(weightContainer);
+        dialogLayout.addView(dimensionsContainer);
+        dialogLayout.addView(warrantyContainer);
         dialogLayout.addView(originContainer);
+        dialogLayout.addView(releaseDateContainer);
+        dialogLayout.addView(qrCodeContainer);
+        dialogLayout.addView(categoryIdContainer);
+        dialogLayout.addView(categoryContainer);
         dialogLayout.addView(imageUrlContainer);
+        dialogLayout.addView(activeContainer);
 
         TextView note = new TextView(this);
-        note.setText("⚠️ Các trường có dấu (*) là bắt buộc");
+        note.setText("💡 Tất cả field đã được điền sẵn giá trị hiện tại\n" +
+                "🔄 Chỉnh sửa những gì bạn muốn thay đổi\n" +
+                "⚠️ Chỉ có tên sản phẩm là bắt buộc không được để trống");
         note.setTextSize(12f);
-        note.setTextColor(0xFFE67E22);
-        note.setBackgroundColor(0xFFFFEAA7);
+        note.setTextColor(0xFF7F8C8D);
+        note.setBackgroundColor(0xFFE8F6F3);
         note.setPadding(15, 15, 15, 15);
         LinearLayout.LayoutParams noteParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -655,58 +761,100 @@ public class StaffActivity extends AppCompatActivity {
 
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setView(scrollView)
-                .setPositiveButton("💾 LƯU", (d, which) -> {
-                    EditText etName = getEditTextFromContainer(nameContainer);
-                    EditText etCode = getEditTextFromContainer(codeContainer);
-                    EditText etDescription = getEditTextFromContainer(descContainer);
-                    EditText etPrice = getEditTextFromContainer(priceContainer);
-                    EditText etCost = getEditTextFromContainer(costContainer);
-                    EditText etQuantity = getEditTextFromContainer(quantityContainer);
-                    EditText etColor = getEditTextFromContainer(colorContainer);
-                    EditText etWeight = getEditTextFromContainer(weightContainer);
-                    EditText etOrigin = getEditTextFromContainer(originContainer);
-                    EditText etImageUrl = getEditTextFromContainer(imageUrlContainer);
-
-                    String name = etName.getText().toString().trim();
-                    String code = etCode.getText().toString().trim();
-                    String priceStr = etPrice.getText().toString().trim();
-                    String quantityStr = etQuantity.getText().toString().trim();
-
-                    if (name.isEmpty() || code.isEmpty() || priceStr.isEmpty() || quantityStr.isEmpty()) {
-                        Toast.makeText(this, "❌ Vui lòng nhập đầy đủ các trường bắt buộc", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
+                .setPositiveButton("💾 CẬP NHẬT", (d, which) -> {
                     try {
-                        product.setName(name);
-                        product.setProductCode(code);
-                        product.setDescription(etDescription.getText().toString().trim());
-                        product.setPrice(Double.parseDouble(priceStr));
+                        // Get values from EditTexts
+                        String newName = getEditTextFromContainer(nameContainer).getText().toString().trim();
+                        String newCode = getEditTextFromContainer(codeContainer).getText().toString().trim();
+                        String newDescription = getEditTextFromContainer(descContainer).getText().toString().trim();
+                        String newSpecifications = getEditTextFromContainer(specificationsContainer).getText().toString().trim();
+                        String newPriceStr = getEditTextFromContainer(priceContainer).getText().toString().trim();
+                        String newCostStr = getEditTextFromContainer(costContainer).getText().toString().trim();
+                        String newQuantityStr = getEditTextFromContainer(quantityContainer).getText().toString().trim();
+                        String newStockStr = getEditTextFromContainer(stockContainer).getText().toString().trim();
+                        String newColor = getEditTextFromContainer(colorContainer).getText().toString().trim();
+                        String newWeightStr = getEditTextFromContainer(weightContainer).getText().toString().trim();
+                        String newDimensions = getEditTextFromContainer(dimensionsContainer).getText().toString().trim();
+                        String newWarrantyStr = getEditTextFromContainer(warrantyContainer).getText().toString().trim();
+                        String newOrigin = getEditTextFromContainer(originContainer).getText().toString().trim();
+                        String newReleaseDate = getEditTextFromContainer(releaseDateContainer).getText().toString().trim();
+                        String newQrCode = getEditTextFromContainer(qrCodeContainer).getText().toString().trim();
+                        String newCategoryIdStr = getEditTextFromContainer(categoryIdContainer).getText().toString().trim();
+                        String newCategory = getEditTextFromContainer(categoryContainer).getText().toString().trim();
+                        String newImageUrl = getEditTextFromContainer(imageUrlContainer).getText().toString().trim();
 
-                        String costStr = etCost.getText().toString().trim();
-                        if (!costStr.isEmpty()) {
-                            product.setCost(Double.parseDouble(costStr));
+                        // Validate: only name is required
+                        if (newName.isEmpty()) {
+                            Toast.makeText(this, "❌ Tên sản phẩm không được để trống", Toast.LENGTH_SHORT).show();
+                            return;
                         }
 
-                        product.setQuantityInStock(Integer.parseInt(quantityStr));
-                        product.setColor(etColor.getText().toString().trim());
+                        // Update product object directly - no complex logic
+                        product.setName(newName);
+                        product.setProductCode(newCode.isEmpty() ? null : newCode);
+                        product.setDescription(newDescription.isEmpty() ? null : newDescription);
+                        product.setSpecifications(newSpecifications.isEmpty() ? null : newSpecifications);
 
-                        String weightStr = etWeight.getText().toString().trim();
-                        if (!weightStr.isEmpty()) {
-                            product.setWeight(Double.parseDouble(weightStr));
+                        if (!newPriceStr.isEmpty()) {
+                            product.setPrice(Double.parseDouble(newPriceStr));
                         }
 
-                        product.setOriginCountry(etOrigin.getText().toString().trim());
-                        product.setImageUrl(etImageUrl.getText().toString().trim());
+                        if (!newCostStr.isEmpty()) {
+                            product.setCost(Double.parseDouble(newCostStr));
+                        } else {
+                            product.setCost(null);
+                        }
+
+                        if (!newQuantityStr.isEmpty()) {
+                            product.setQuantityInStock(Integer.parseInt(newQuantityStr));
+                        }
+
+                        if (!newStockStr.isEmpty()) {
+                            product.setStockQuantity(Integer.parseInt(newStockStr));
+                        }
+
+                        product.setColor(newColor.isEmpty() ? null : newColor);
+
+                        if (!newWeightStr.isEmpty()) {
+                            product.setWeight(Double.parseDouble(newWeightStr));
+                        } else {
+                            product.setWeight(null);
+                        }
+
+                        product.setDimensions(newDimensions.isEmpty() ? null : newDimensions);
+
+                        if (!newWarrantyStr.isEmpty()) {
+                            product.setWarrantyPeriod(Integer.parseInt(newWarrantyStr));
+                        } else {
+                            product.setWarrantyPeriod(null);
+                        }
+
+                        product.setOriginCountry(newOrigin.isEmpty() ? null : newOrigin);
+                        product.setReleaseDate(newReleaseDate.isEmpty() ? null : newReleaseDate);
+                        product.setQrCode(newQrCode.isEmpty() ? null : newQrCode);
+
+                        if (!newCategoryIdStr.isEmpty()) {
+                            product.setCategoryId(Integer.parseInt(newCategoryIdStr));
+                        } else {
+                            product.setCategoryId(null);
+                        }
+
+                        product.setCategory(newCategory.isEmpty() ? null : newCategory);
+                        product.setImageUrl(newImageUrl.isEmpty() ? null : newImageUrl);
+                        product.setActive(activeSwitch.isChecked());
 
                         // Update timestamp
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                         product.setUpdatedAt(sdf.format(new Date()));
 
-                        updateProduct(product); // Gọi hàm cập nhật trong cơ sở dữ liệu
+                        // Save to database
+                        updateProduct(product);
 
                     } catch (NumberFormatException e) {
-                        Toast.makeText(this, "❌ Vui lòng nhập số hợp lệ cho giá và số lượng", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "❌ Vui lòng nhập số hợp lệ cho các trường số", Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Toast.makeText(this, "❌ Lỗi cập nhật: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "Error updating product", e);
                     }
                 })
                 .setNegativeButton("❌ HỦY", null)
@@ -1087,7 +1235,13 @@ public class StaffActivity extends AppCompatActivity {
         labelView.setLayoutParams(labelParams);
 
         EditText editText = new EditText(this);
-        editText.setHint(hint);
+        // Nếu hint không phải là hint thật mà là current value thì set text
+        if (hint != null && !hint.startsWith("Nhập") && !hint.startsWith("YYYY-MM-DD")) {
+            editText.setText(hint); // Set current value
+            editText.setHint("Chỉnh sửa " + label.toLowerCase());
+        } else {
+            editText.setHint(hint); // Set real hint
+        }
         editText.setBackgroundColor(0xFFFFFFFF);
         editText.setPadding(20, 20, 20, 20);
         editText.setTextSize(14f);
@@ -1107,7 +1261,48 @@ public class StaffActivity extends AppCompatActivity {
         editText.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
         return container;
     }
+    private LinearLayout createInputFieldWithValue(String label, String currentValue) {
+        LinearLayout container = new LinearLayout(this);
+        container.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams containerParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        containerParams.setMargins(0, 5, 0, 5);
+        container.setLayoutParams(containerParams);
 
+        TextView labelView = new TextView(this);
+        labelView.setText(label);
+        labelView.setTextSize(14f);
+        labelView.setTypeface(null, android.graphics.Typeface.BOLD);
+        labelView.setTextColor(0xFF2C3E50);
+        LinearLayout.LayoutParams labelParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        labelParams.setMargins(0, 0, 0, 8);
+        labelView.setLayoutParams(labelParams);
+
+        EditText editText = new EditText(this);
+        // Set current value, nếu null thì set empty string
+        editText.setText(currentValue != null ? currentValue : "");
+        editText.setHint("Chỉnh sửa " + label.toLowerCase());
+        editText.setBackgroundColor(0xFFFFFFFF);
+        editText.setPadding(20, 20, 20, 20);
+        editText.setTextSize(14f);
+        LinearLayout.LayoutParams inputParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 100);
+        editText.setLayoutParams(inputParams);
+
+        container.addView(labelView);
+        container.addView(editText);
+
+        return container;
+    }
+
+    // Method mới để tạo number input field với current value
+    private LinearLayout createNumberInputFieldWithValue(String label, String currentValue) {
+        LinearLayout container = createInputFieldWithValue(label, currentValue);
+        EditText editText = (EditText) container.getChildAt(1);
+        editText.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        return container;
+    }
     private EditText getEditTextFromContainer(LinearLayout container) {
         return (EditText) container.getChildAt(1);
     }
@@ -1201,6 +1396,7 @@ public class StaffActivity extends AppCompatActivity {
     }
 
     // Inner class for Product Adapter
+// Inner class for Product Adapter - WITH LONG CLICK SUPPORT
     private class StaffProductAdapter extends RecyclerView.Adapter<StaffProductAdapter.ProductViewHolder> {
         private List<Product> products;
         private NumberFormat currencyFormat;
@@ -1208,7 +1404,6 @@ public class StaffActivity extends AppCompatActivity {
         public StaffProductAdapter(List<Product> products) {
             this.products = products;
             this.currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-
         }
 
         @Override
@@ -1261,9 +1456,22 @@ public class StaffActivity extends AppCompatActivity {
 
             subtitle += " | " + (product.isActive() ? "🟢 Hoạt động" : "🔴 Tạm dừng");
 
+            // Add more details for complete information
+            if (product.getSpecifications() != null && !product.getSpecifications().trim().isEmpty()) {
+                subtitle += "\n🔧 " + product.getSpecifications().substring(0, Math.min(50, product.getSpecifications().length()));
+                if (product.getSpecifications().length() > 50) subtitle += "...";
+            }
+
+            if (product.getWarrantyPeriod() != null && product.getWarrantyPeriod() > 0) {
+                subtitle += "\n🛡️ Bảo hành: " + product.getWarrantyPeriod() + " tháng";
+            }
+
             holder.subtitle.setText(subtitle);
             holder.subtitle.setTextSize(12f);
             holder.subtitle.setTextColor(0xFF34495E);
+
+            // Setup click listeners for this item
+            holder.setupClickListeners(product);
         }
 
         @Override
@@ -1279,9 +1487,22 @@ public class StaffActivity extends AppCompatActivity {
                 title = itemView.findViewById(android.R.id.text1);
                 subtitle = itemView.findViewById(android.R.id.text2);
             }
+
+            void setupClickListeners(Product product) {
+                // Normal click to show detailed product info
+                itemView.setOnClickListener(v -> {
+                    showProductDetailsDialog(product);
+                });
+
+                // Long click to edit/update product
+                itemView.setOnLongClickListener(v -> {
+                    v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                    showUpdateProductDialog(product);
+                    return true;
+                });
+            }
         }
     }
-
     // Inner class for Category Adapter
     private class StaffCategoryAdapter extends RecyclerView.Adapter<StaffCategoryAdapter.CategoryViewHolder> {
         private List<CategoryResponse> categories;
@@ -1444,5 +1665,144 @@ public class StaffActivity extends AppCompatActivity {
             Log.e(TAG, "Error clearing sessions", e);
         }
     }
+    // Add this method to StaffActivity to show detailed product information
+    private void showProductDetailsDialog(Product product) {
+        LinearLayout dialogLayout = new LinearLayout(this);
+        dialogLayout.setOrientation(LinearLayout.VERTICAL);
+        dialogLayout.setPadding(30, 30, 30, 30);
 
+        // Title
+        TextView title = new TextView(this);
+        title.setText("📦 CHI TIẾT SẢN PHẨM");
+        title.setTextSize(18f);
+        title.setTypeface(null, android.graphics.Typeface.BOLD);
+        title.setGravity(Gravity.CENTER);
+        title.setTextColor(0xFF2980B9);
+        title.setBackgroundColor(0xFFD6EAF8);
+        title.setPadding(20, 20, 20, 20);
+        LinearLayout.LayoutParams titleParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        titleParams.setMargins(0, 0, 0, 20);
+        title.setLayoutParams(titleParams);
+
+        // Product details
+        TextView details = new TextView(this);
+        StringBuilder detailsText = new StringBuilder();
+
+        detailsText.append("🆔 ID: ").append(product.getProductId()).append("\n");
+        detailsText.append("📦 Tên: ").append(product.getName()).append("\n");
+        detailsText.append("🏷️ Mã: ").append(product.getProductCode() != null ? product.getProductCode() : "N/A").append("\n");
+        detailsText.append("💰 Giá bán: ").append(String.format(Locale.getDefault(), "%.2f VND", product.getPrice())).append("\n");
+
+        if (product.getCost() != null) {
+            detailsText.append("💵 Giá nhập: ").append(String.format(Locale.getDefault(), "%.2f VND", product.getCost())).append("\n");
+        }
+
+        detailsText.append("📊 Tồn kho: ").append(product.getQuantityInStock()).append("\n");
+        detailsText.append("🏪 Kho dự trữ: ").append(product.getStockQuantity()).append("\n");
+
+        if (product.getDescription() != null && !product.getDescription().trim().isEmpty()) {
+            detailsText.append("📝 Mô tả: ").append(product.getDescription()).append("\n");
+        }
+
+        if (product.getSpecifications() != null && !product.getSpecifications().trim().isEmpty()) {
+            detailsText.append("🔧 Thông số: ").append(product.getSpecifications()).append("\n");
+        }
+
+        if (product.getColor() != null && !product.getColor().trim().isEmpty()) {
+            detailsText.append("🎨 Màu sắc: ").append(product.getColor()).append("\n");
+        }
+
+        if (product.getWeight() != null) {
+            detailsText.append("⚖️ Trọng lượng: ").append(product.getWeight()).append(" kg\n");
+        }
+
+        if (product.getDimensions() != null && !product.getDimensions().trim().isEmpty()) {
+            detailsText.append("📏 Kích thước: ").append(product.getDimensions()).append("\n");
+        }
+
+        if (product.getWarrantyPeriod() != null && product.getWarrantyPeriod() > 0) {
+            detailsText.append("🛡️ Bảo hành: ").append(product.getWarrantyPeriod()).append(" tháng\n");
+        }
+
+        if (product.getOriginCountry() != null && !product.getOriginCountry().trim().isEmpty()) {
+            detailsText.append("🌍 Xuất xứ: ").append(product.getOriginCountry()).append("\n");
+        }
+
+        if (product.getReleaseDate() != null && !product.getReleaseDate().trim().isEmpty()) {
+            detailsText.append("📅 Ngày phát hành: ").append(product.getReleaseDate()).append("\n");
+        }
+
+        if (product.getQrCode() != null && !product.getQrCode().trim().isEmpty()) {
+            detailsText.append("📱 Mã QR: ").append(product.getQrCode()).append("\n");
+        }
+
+        if (product.getCategoryId() != null) {
+            detailsText.append("🆔 ID Danh mục: ").append(product.getCategoryId()).append("\n");
+        }
+
+        if (product.getCategory() != null && !product.getCategory().trim().isEmpty()) {
+            detailsText.append("📂 Danh mục: ").append(product.getCategory()).append("\n");
+        }
+
+        detailsText.append("🔄 Trạng thái: ").append(product.isActive() ? "Hoạt động" : "Tạm dừng").append("\n");
+
+        if (product.getCreatedAt() != null) {
+            detailsText.append("📅 Tạo lúc: ").append(product.getCreatedAt()).append("\n");
+        }
+
+        if (product.getUpdatedAt() != null) {
+            detailsText.append("🔄 Cập nhật: ").append(product.getUpdatedAt());
+        }
+
+        details.setText(detailsText.toString());
+        details.setTextSize(12f);
+        details.setTextColor(0xFF2C3E50);
+        details.setBackgroundColor(0xFFECF0F1);
+        details.setPadding(15, 15, 15, 15);
+
+        dialogLayout.addView(title);
+        dialogLayout.addView(details);
+
+        // Action buttons
+        LinearLayout buttonLayout = new LinearLayout(this);
+        buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
+        buttonLayout.setPadding(0, 20, 0, 0);
+
+        Button btnEdit = new Button(this);
+        btnEdit.setText("✏️ CHỈNH SỬA");
+        btnEdit.setTextColor(0xFFFFFFFF);
+        btnEdit.setBackgroundColor(0xFF3498DB);
+        LinearLayout.LayoutParams editParams = new LinearLayout.LayoutParams(0, 100, 1f);
+        editParams.setMargins(0, 0, 10, 0);
+        btnEdit.setLayoutParams(editParams);
+
+        Button btnClose = new Button(this);
+        btnClose.setText("❌ ĐÓNG");
+        btnClose.setTextColor(0xFFFFFFFF);
+        btnClose.setBackgroundColor(0xFF95A5A6);
+        LinearLayout.LayoutParams closeParams = new LinearLayout.LayoutParams(0, 100, 1f);
+        closeParams.setMargins(10, 0, 0, 0);
+        btnClose.setLayoutParams(closeParams);
+
+        buttonLayout.addView(btnEdit);
+        buttonLayout.addView(btnClose);
+        dialogLayout.addView(buttonLayout);
+
+        ScrollView scrollView = new ScrollView(this);
+        scrollView.addView(dialogLayout);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(scrollView)
+                .create();
+
+        btnEdit.setOnClickListener(v -> {
+            dialog.dismiss();
+            showUpdateProductDialog(product);
+        });
+
+        btnClose.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+    }
 } // KẾT THÚC StaffActivity

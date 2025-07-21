@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.bumptech.glide.Glide;
 import com.example.prm392_finalproject.R;
 import com.example.prm392_finalproject.models.Product;
 import com.example.prm392_finalproject.utils.CartManager;
@@ -164,9 +165,8 @@ public class CustomerProductDetailActivity extends AppCompatActivity {
                 tvProductWarranty.setText("N/A");
             }
 
-            // TODO: Load product image with Picasso or Glide
-            // For now, using default image
-            ivProductImage.setImageResource(R.drawable.ic_menu_business);
+            // Load product image from database using Glide
+            loadProductImage();
 
             // Update toolbar title
             if (getSupportActionBar() != null) {
@@ -179,6 +179,34 @@ public class CustomerProductDetailActivity extends AppCompatActivity {
             Log.e(TAG, "Error displaying product data: " + e.getMessage());
             e.printStackTrace();
             Toast.makeText(this, "Error displaying product information", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void loadProductImage() {
+        try {
+            // Log image URL for debugging
+            Log.d(TAG, "Loading image for product \"" + product.getName() + "\": " + product.getImageUrl());
+
+            // Load image with Glide from database imageUrl
+            if (product.getImageUrl() != null && !product.getImageUrl().trim().isEmpty()) {
+                Glide.with(this)
+                        .load(product.getImageUrl())
+                        .placeholder(R.drawable.ic_menu_business) // Show while loading
+                        .error(R.drawable.ic_menu_business) // Show if loading fails
+                        .centerCrop() // Scale image to fill the ImageView
+                        .into(ivProductImage);
+
+                Log.d(TAG, "Image loaded successfully from URL: " + product.getImageUrl());
+            } else {
+                // Use default image if no URL provided
+                ivProductImage.setImageResource(R.drawable.ic_menu_business);
+                Log.d(TAG, "No image URL provided, using default image");
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error loading product image: " + e.getMessage());
+            e.printStackTrace();
+            // Fallback to default image on error
+            ivProductImage.setImageResource(R.drawable.ic_menu_business);
         }
     }
 
