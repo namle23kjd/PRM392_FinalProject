@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true"
+    android:padding="30dp">
+
+    <LinearLayout
+        android:id="@+id/dialogLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tvDialogTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="20dp"
+            android:text="➕ THÊM SẢN PHẨM MỚI"
+            android:textColor="#FF27AE60"
+            android:background="#D5F4E6"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Input Fields -->
+        <!-- Bạn nên sử dụng layout include để tái sử dụng dialog_input_field.xml hoặc tự thêm từng nhóm -->
+
+        <include layout="@layout/dialog_input_field" />
+        <include layout="@layout/dialog_input_field" />
+        <include layout="@layout/dialog_input_field" />
+        <include layout="@layout/dialog_input_field" />
+        <include layout="@layout/dialog_input_field" />
+        <include layout="@layout/dialog_input_field" />
+        <include layout="@layout/dialog_input_field" />
+        <include layout="@layout/dialog_input_field" />
+        <include layout="@layout/dialog_input_field" />
+
+        <!-- Note -->
+        <TextView
+            android:id="@+id/tvNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="⚠️ Các trường có dấu (*) là bắt buộc"
+            android:textColor="#E67E22"
+            android:background="#FFEAA7"
+            android:textSize="12sp"
+            android:layout_marginTop="10dp" />
+    </LinearLayout>
+</ScrollView>
