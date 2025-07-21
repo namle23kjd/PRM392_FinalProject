@@ -50,10 +50,10 @@
             android:name=".views.LoginActivity"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+               <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+             <category android:name="android.intent.category.LAUNCHER" />
+           </intent-filter>
         </activity>
 
 
@@ -69,13 +69,13 @@
 
         <activity
             android:name=".views.ShippingActivity"/>
-        <!--            android:name=".views.ProductListActivity"-->
-        <!--            android:exported="true">-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="android.intent.action.MAIN" />-->
-        <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-        <!--            </intent-filter>-->
-        <!--        </activity>-->
+<!--            android:name=".views.ProductListActivity"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
 
         <activity
             android:name=".views.RegisterActivity"
@@ -90,13 +90,13 @@
         <activity android:name=".views.CartActivity" />
 
 
-        <!--        <activity-->
-        <!--            android:name=".views.AddEditProductActivity"-->
-        <!--            android:exported="true" />-->
+<!--        <activity-->
+<!--            android:name=".views.AddEditProductActivity"-->
+<!--            android:exported="true" />-->
 
-        <!--        <activity-->
-        <!--            android:name=".views.ProductDetailActivity"-->
-        <!--            android:exported="true" />-->
+<!--        <activity-->
+<!--            android:name=".views.ProductDetailActivity"-->
+<!--            android:exported="true" />-->
         <activity android:name=".views.ProductListActivity" />
 
 
@@ -115,13 +115,13 @@
         </activity>
 
 
-        <!--        <activity-->
-        <!--            android:name=".MainActivity"-->
-        <!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".MainActivity"-->
+<!--            android:exported="false" />-->
 
-        <!--        <activity-->
-        <!--            android:name=".views.AdminActivity"-->
-        <!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".views.AdminActivity"-->
+<!--            android:exported="false" />-->
 
         <activity
 
@@ -144,8 +144,7 @@
         <activity android:name=".views.UserProfileActivity" />
         <activity android:name=".views.UserListActivity" />
         <activity android:name=".views.DiscountManagementActivity" />
-        <activity android:name=".views.StaffActivity" />
-
+        <activity android:name=".views.ChatBotActivity" />
 
     </application>
 

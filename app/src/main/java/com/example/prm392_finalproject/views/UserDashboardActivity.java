@@ -228,6 +228,19 @@ public class UserDashboardActivity extends AppCompatActivity implements Navigati
             btnApplyFilters = findViewById(R.id.btnApplyFilters);
             layoutAdvancedFilters = findViewById(R.id.layoutAdvancedFilters);
 
+            FloatingActionButton fabChatbot = findViewById(R.id.fabChatbot);
+            if (fabChatbot == null) {
+                Log.e(TAG, "fabChatbot is null!");
+                throw new RuntimeException("fabChatbot not found");
+            }
+
+            fabChatbot.setOnClickListener(v -> {
+                Intent intent = new Intent(UserDashboardActivity.this, ChatBotActivity.class);
+                startActivity(intent);
+            });
+
+            Log.d(TAG, "Floating Action Button chatbot initialized successfully");
+
             Log.d(TAG, "Filter components initialized successfully");
         } catch (Exception e) {
             Log.e(TAG, "Error initializing views: " + e.getMessage());
@@ -853,4 +866,6 @@ public class UserDashboardActivity extends AppCompatActivity implements Navigati
             redirectToLogin();
         }
     }
+
+
 } 

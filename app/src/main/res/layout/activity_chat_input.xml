@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/chat_input_bg"
+    android:padding="8dp">
+
+    <EditText
+        android:id="@+id/messageInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:hint="Nhập tin nhắn..."
+        android:padding="10dp"
+        android:textSize="15sp"
+        android:background="@drawable/chat_input_field_bg"
+        android:textColor="#111827"
+        android:textColorHint="#9CA3AF" />
+
+    <ImageButton
+        android:id="@+id/sendButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:padding="8dp"
+        android:scaleType="centerInside"
+        android:background="@null"
+        android:src="@drawable/ic_send"
+        android:contentDescription="Gửi" />
+
+</LinearLayout>

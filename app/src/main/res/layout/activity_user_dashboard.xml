@@ -312,6 +312,18 @@
             android:contentDescription="Xem giỏ hàng"
             app:fabSize="normal" />
 
+        <!-- FAB Chatbot (góc trái dưới) -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabChatbot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="24dp"
+            android:src="@drawable/chatbot_avatar"
+            android:contentDescription="Mở chatbot"
+            app:backgroundTint="#6366F1" />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <!-- Navigation Drawer -->
