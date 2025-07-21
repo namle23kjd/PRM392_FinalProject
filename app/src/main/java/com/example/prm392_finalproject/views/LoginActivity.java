@@ -1,6 +1,7 @@
 package com.example.prm392_finalproject.views;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -423,5 +424,71 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(this, "Email not found or error occurred.", Toast.LENGTH_LONG).show();
                 }
             });
+    }
+    private void performLogout() {
+        try {
+            // Show loading message
+            Toast.makeText(this, "Đang đăng xuất...", Toast.LENGTH_SHORT).show();
+
+            // 1. Logout khỏi Firebase Auth
+            FirebaseAuth.getInstance().signOut();
+
+            // 2. Logout khỏi Google Sign-In (nếu có)
+            try {
+                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(getString(R.string.default_web_client_id))
+                        .requestEmail()
+                        .build();
+                GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
+                googleSignInClient.signOut();
+            } catch (Exception e) {
+                Log.w(TAG, "Google sign out error (can be ignored): " + e.getMessage());
+            }
+
+            // 3. Xóa session data trong SharedPreferences
+            clearAllSessions();
+
+            // 4. Chuyển về LoginActivity và clear back stack
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+
+            // 5. Hiển thị thông báo logout thành công
+            Toast.makeText(this, "✅ Đăng xuất thành công!", Toast.LENGTH_SHORT).show();
+
+            // 6. Finish activity hiện tại
+            finish();
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error during logout", e);
+            Toast.makeText(this, "❌ Lỗi đăng xuất: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+    private void clearAllSessions() {
+        try {
+            // Clear staff session
+            SharedPreferences staffPrefs = getSharedPreferences("staff_session", MODE_PRIVATE);
+            staffPrefs.edit().clear().apply();
+            Log.d(TAG, "Staff session cleared");
+
+            // Clear customer session (nếu có)
+            SharedPreferences customerPrefs = getSharedPreferences("customer_session", MODE_PRIVATE);
+            customerPrefs.edit().clear().apply();
+            Log.d(TAG, "Customer session cleared");
+
+            // Clear any other app preferences if needed
+            SharedPreferences defaultPrefs = getSharedPreferences(getPackageName() + "_preferences", MODE_PRIVATE);
+            defaultPrefs.edit().clear().apply();
+            Log.d(TAG, "Default preferences cleared");
+
+            // Clear any login-related preferences
+            SharedPreferences loginPrefs = getSharedPreferences("login_prefs", MODE_PRIVATE);
+            loginPrefs.edit().clear().apply();
+
+            Log.d(TAG, "All sessions cleared successfully");
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error clearing sessions", e);
+        }
     }
 } 
