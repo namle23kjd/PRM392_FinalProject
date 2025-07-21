@@ -50,20 +50,20 @@ dependencies {
 
     // Firebase Analytics (optional but recommended)
     implementation("com.google.firebase:firebase-analytics")
-//    implementation(fileTree(mapOf(
-//        "dir" to "C:\\Users\\BINH\\OneDrive\\Desktop\\projectprm\\PRM392_FinalProject\\app\\zalopaylibs",
-//        "include" to listOf("*.aar", "*.jar"),
-//        "exclude" to listOf("")
-//    )))
     implementation(fileTree(mapOf(
-
-        "dir" to "C:\\Users\\Gia Bao\\Documents\\Zalo Received Files",
-
-        "dir" to "D:\\ZaloPay",
-
+        "dir" to "C:\\Users\\BINH\\OneDrive\\Desktop\\projectprm\\PRM392_FinalProject\\app\\zalopaylibs",
         "include" to listOf("*.aar", "*.jar"),
         "exclude" to listOf("")
     )))
+//    implementation(fileTree(mapOf(
+//
+//        "dir" to "C:\\Users\\Gia Bao\\Documents\\Zalo Received Files",
+//
+//        "dir" to "D:\\ZaloPay",
+//
+//        "include" to listOf("*.aar", "*.jar"),
+//        "exclude" to listOf("")
+//    )))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
@@ -98,6 +98,6 @@ dependencies {
 
     // GSON (nếu cần parse JSON từ Coze API response)
     implementation ("com.google.code.gson:gson:2.10.1")
-
+    implementation ("com.github.bumptech.glide:glide:4.15.1")
 
 }

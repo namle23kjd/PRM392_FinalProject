@@ -4,7 +4,9 @@
     android:layout_height="match_parent"
     android:background="#F5F5F5"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:fitsSystemWindows="true"
+    >
 
     <!-- Customer Header -->
     <LinearLayout
