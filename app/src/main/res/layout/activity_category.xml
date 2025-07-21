@@ -6,7 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".views.CategoryActivity">
+    tools:context=".views.CategoryActivity"
+    android:fitsSystemWindows="true"
+    >
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnBackToHome"

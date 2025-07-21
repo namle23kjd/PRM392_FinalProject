@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:fitsSystemWindows="true"
+    >
 
     <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar

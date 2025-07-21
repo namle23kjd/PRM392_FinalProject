@@ -285,6 +285,9 @@ public class UserDashboardActivity extends AppCompatActivity implements Navigati
                 // Xem chi tiết sản phẩm
                 Intent intent = new Intent(UserDashboardActivity.this, CustomerProductDetailActivity.class);
                 intent.putExtra("product", product);
+                if (currentUser != null) {
+                    intent.putExtra("currentUser", currentUser);
+                }
                 startActivity(intent);
 
             }, product -> {

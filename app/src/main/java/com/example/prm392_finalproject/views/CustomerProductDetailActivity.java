@@ -5,18 +5,28 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.prm392_finalproject.R;
+import com.example.prm392_finalproject.dao.ReviewDAO;
 import com.example.prm392_finalproject.models.Product;
+import com.example.prm392_finalproject.models.Review;
+import com.example.prm392_finalproject.models.User;
 import com.example.prm392_finalproject.utils.CartManager;
 import com.google.android.material.snackbar.Snackbar;
+import com.example.prm392_finalproject.views.adapters.ReviewAdapter;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -31,9 +41,20 @@ public class CustomerProductDetailActivity extends AppCompatActivity {
     private TextView tvStockStatus, tvStockQuantity;
     private TextView tvProductDescription, tvProductColor, tvProductOrigin, tvProductWarranty;
     private Button btnAddToCart, btnBuyNow;
+    private EditText edtComment;
+    private RatingBar ratingBarInput;
+    private Button btnSubmitReview;
+    private User currentUser;
 
     private Product product;
     private NumberFormat currencyFormat;
+
+    private RecyclerView recyclerViewReviews;
+    private ReviewAdapter reviewAdapter;
+    private List<Review> reviewList = new ArrayList<>();
+
+    private TextView tvAverageRating;
+    private RatingBar ratingBarAverage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +71,14 @@ public class CustomerProductDetailActivity extends AppCompatActivity {
             // Get product from intent
             getProductFromIntent();
 
+            // Get current user from intent
+            currentUser = (User) getIntent().getSerializableExtra("currentUser");
+
             // Display product data
             if (product != null) {
                 displayProductData();
+                loadReviews();
+                loadAverageRating();
             }
 
         } catch (Exception e) {
@@ -77,10 +103,21 @@ public class CustomerProductDetailActivity extends AppCompatActivity {
         tvProductWarranty = findViewById(R.id.tvProductWarranty);
         btnAddToCart = findViewById(R.id.btnAddToCart);
         btnBuyNow = findViewById(R.id.btnBuyNow);
+        edtComment = findViewById(R.id.edtComment);
+        ratingBarInput = findViewById(R.id.ratingBarInput);
+        btnSubmitReview = findViewById(R.id.btnSubmitReview);
+        recyclerViewReviews = findViewById(R.id.recyclerViewReviews);
+        recyclerViewReviews.setLayoutManager(new LinearLayoutManager(this));
+        reviewAdapter = new ReviewAdapter(this, reviewList);
+        recyclerViewReviews.setAdapter(reviewAdapter);
+
+        tvAverageRating = findViewById(R.id.tvAverageRating);
+        ratingBarAverage = findViewById(R.id.ratingBarAverage);
 
         // Setup button listeners
         btnAddToCart.setOnClickListener(v -> addToCart());
         btnBuyNow.setOnClickListener(v -> buyNow());
+        btnSubmitReview.setOnClickListener(v -> submitReview());
 
         // Initialize currency format
         currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
@@ -241,6 +278,65 @@ public class CustomerProductDetailActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(this, "Error processing purchase", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void loadReviews() {
+        if (product == null) return;
+        new Thread(() -> {
+            List<Review> reviews = new ReviewDAO().getReviewsByProductId(product.getProductId());
+            runOnUiThread(() -> {
+                reviewList.clear();
+                if (reviews != null) reviewList.addAll(reviews);
+                reviewAdapter.notifyDataSetChanged();
+                loadAverageRating();
+            });
+        }).start();
+    }
+
+    private void loadAverageRating() {
+        if (product == null) return;
+        new Thread(() -> {
+            float avg = new ReviewDAO().getAverageRating(product.getProductId());
+            runOnUiThread(() -> {
+                tvAverageRating.setText(String.format(Locale.US, "%.1f / 5", avg));
+                ratingBarAverage.setRating(avg);
+            });
+        }).start();
+    }
+
+    private void submitReview() {
+        if (product == null || currentUser == null) {
+            Toast.makeText(this, "Cannot submit review: missing product or user", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String comment = edtComment.getText().toString().trim();
+        float rating = ratingBarInput.getRating();
+        if (rating == 0) {
+            Toast.makeText(this, "Please select a rating", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Review review = new Review();
+        review.setProductId(product.getProductId());
+        review.setCustomerId(currentUser.getCustomerId());
+        review.setRating(rating);
+        review.setReviewText(comment);
+        new Thread(() -> {
+            try {
+                new ReviewDAO().addReview(review);
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Review submitted!", Toast.LENGTH_SHORT).show();
+                    edtComment.setText("");
+                    ratingBarInput.setRating(0);
+                    loadReviews();
+                    loadAverageRating();
+                });
+            } catch (Exception e) {
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Failed to submit review", Toast.LENGTH_SHORT).show();
+                });
+                Log.e(TAG, "Error submitting review: " + e.getMessage());
+            }
+        }).start();
     }
 
     @Override
